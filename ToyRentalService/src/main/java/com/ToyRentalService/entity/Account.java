@@ -8,8 +8,10 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -18,10 +20,11 @@ import java.util.List;
 @Setter
 @Table(name = "users")
 public class Account implements UserDetails {
+    @Enumerated(EnumType.STRING)
+    Role role;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
     @NotBlank(message = "UserName can not be blank!")
     @Column(nullable = false, unique = true)
     private String username;
@@ -30,7 +33,7 @@ public class Account implements UserDetails {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Pattern(regexp = "(84|0[3|5|7|8|9]) + (\\d{8})", message = "Phone number invalid!")
+    @Pattern(regexp = "(84|0[3|5|7|8|9])+([0-9]{8})\\b", message = "Phone number invalid!")
     private String phone;
 
     @NotBlank(message = "UserName can not be blank!")
@@ -40,7 +43,9 @@ public class Account implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        if (this.role != null) authorities.add(new SimpleGrantedAuthority(this.role.toString()));
+        return authorities;
     }
 
     @Override

@@ -2,27 +2,53 @@ package com.ToyRentalService.service;
 
 import com.ToyRentalService.entity.Account;
 import com.ToyRentalService.exception.DuplicateEntity;
-import com.ToyRentalService.model.LoginRequestDto;
+import com.ToyRentalService.model.AccountResponse;
+import com.ToyRentalService.model.LoginRequest;
+import com.ToyRentalService.model.RegisterRequest;
 import com.ToyRentalService.repository.AccountRepository;
+import jakarta.persistence.EntityNotFoundException;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class AuthenticationService implements UserDetailsService {
+public class  AuthenticationService implements UserDetailsService {
     @Autowired
     AccountRepository accountRepository;
 
-    public Account register(Account account) {
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
+    @Autowired
+    ModelMapper modelMapper;
+
+    @Autowired
+    AuthenticationManager authenticationManager;
+
+    @Autowired
+    TokenService tokenService;
+
+    public AccountResponse register(RegisterRequest registerRequest) {
+        //System.out.println(registerRequest.getPhone());
+        Account account = modelMapper.map(registerRequest, Account.class);
         try{
+            String originPassword = registerRequest.getPassword();
+            account.setPassword(passwordEncoder.encode(originPassword));
             Account newAccount = accountRepository.save(account);
-            return newAccount;
+            return modelMapper.map(newAccount, AccountResponse.class);
         }catch (Exception ex){
-            if(ex.getMessage().contains(account.getEmail())){
+            System.out.println(ex.getMessage());
+            if(ex.getMessage().contains(registerRequest.getEmail())){
                 throw new DuplicateEntity("Duplicate Email!");
             }else{
                 throw new DuplicateEntity("Duplicate Phone!");
@@ -30,26 +56,30 @@ public class AuthenticationService implements UserDetailsService {
         }
     }
 
-    public List<Account> getAllUsers() {
+    public List<Account> getAllAccounts() {
         List<Account> accounts = accountRepository.findAll();
         return accounts;
     }
 
-    public Account loginUser(LoginRequestDto loginRequestDto) {
+    public AccountResponse login(LoginRequest loginRequest) {
         try{
-            Account account = accountRepository.findByEmail(loginRequestDto.getEmail());
+            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                    loginRequest.getEmail(),
+                    loginRequest.getPassword()
+            ));
 
-            if (account == null ) {
-                return null;
-            }
-            return account;
-        } catch (Exception e) {
-            return null;
+            Account account = (Account) authentication.getPrincipal();
+            AccountResponse accountResponse = modelMapper.map(account, AccountResponse.class);
+            accountResponse.setToken(tokenService.generateToken(account));
+            return accountResponse;
+        }catch (Exception ex){
+            ex.printStackTrace();
+            throw new EntityNotFoundException("Email or Password invalid!");
         }
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return null;
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        return accountRepository.findByEmail(email);
     }
 }

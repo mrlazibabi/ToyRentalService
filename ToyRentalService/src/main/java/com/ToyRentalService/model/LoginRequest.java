@@ -1,11 +1,9 @@
 package com.ToyRentalService.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
-public class LoginRequestDto {
+@Data
+public class LoginRequest {
     private String email;
     private String password;
 }

@@ -1,7 +1,11 @@
 package com.ToyRentalService.api;
 
 import com.ToyRentalService.entity.Account;
+import com.ToyRentalService.model.AccountResponse;
+import com.ToyRentalService.model.LoginRequest;
+import com.ToyRentalService.model.RegisterRequest;
 import com.ToyRentalService.service.AuthenticationService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +16,8 @@ import java.util.List;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/api")
+@RequestMapping("api")
+@SecurityRequirement(name = "api")
 public class AuthController {
     @Autowired
     AuthenticationService authenticationService;
@@ -21,27 +26,23 @@ public class AuthController {
     PasswordEncoder passwordEncoder;
 
     @PostMapping("/register")
-    public ResponseEntity register(@Valid @RequestBody Account account) {
+    public ResponseEntity register(@Valid @RequestBody RegisterRequest registerRequest) {
 
-        authenticationService.register(account);
-        return ResponseEntity.ok("User registered successfully");
+        AccountResponse newAcccount = authenticationService.register(registerRequest);
+        return ResponseEntity.ok(newAcccount);
     }
 
-    @GetMapping("/user")
-    public ResponseEntity getAllUsers(){
-        List<Account> accounts = authenticationService.getAllUsers();
+    @GetMapping("/account")
+    public ResponseEntity getAllAccounts(){
+        List<Account> accounts = authenticationService.getAllAccounts();
         return ResponseEntity.ok(accounts);
     }
 
-//    @PostMapping("/login")
-//    public ResponseEntity<String> loginUser(@RequestBody LoginRequestDto loginRequestDto) {
-//        User authenticatedUser = authenticationService.loginUser(loginRequestDto);
-//
-//        if (authenticatedUser == null) {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
-//        }
-//
-//        return ResponseEntity
-//    }
+    @PostMapping("/login")
+    public ResponseEntity login(@Valid @RequestBody LoginRequest loginRequest) {
+
+        AccountResponse newAcccount = authenticationService.login(loginRequest);
+        return ResponseEntity.ok(newAcccount);
+    }
 
 }
