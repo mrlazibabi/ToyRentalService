@@ -38,11 +38,11 @@ public class AuthController {
         return ResponseEntity.ok(accounts);
     }
 
-//    @PostMapping("/login")
-//    public ResponseEntity login(@Valid @RequestBody LoginRequest loginRequest) {
-//
-//        AccountResponse newAcccount = authenticationService.login(loginRequest);
-//        return ResponseEntity.ok(newAcccount);
-//    }
+    @PostMapping("/login")
+    public ResponseEntity login(@Valid @RequestBody LoginRequest loginRequest) {
+
+        AccountResponse newAcccount = authenticationService.login(loginRequest);
+        return ResponseEntity.ok(newAcccount);
+    }
 
 }

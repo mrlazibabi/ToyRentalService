@@ -61,22 +61,22 @@ public class  AuthenticationService implements UserDetailsService {
         return accounts;
     }
 
-//    public AccountResponse login(LoginRequest loginRequest) {
-//        try{
-//            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-//                    loginRequest.getEmail(),
-//                    loginRequest.getPassword()
-//            ));
-//
-//            Account account = (Account) authentication.getPrincipal();
-//            AccountResponse accountResponse = modelMapper.map(account, AccountResponse.class);
-//            accountResponse.setToken(tokenService.generateToken(account));
-//            return accountResponse;
-//        }catch (Exception ex){
-//            ex.printStackTrace();
-//            throw new EntityNotFoundException("Email or Password invalid!");
-//        }
-//    }
+    public AccountResponse login(LoginRequest loginRequest) {
+        try{
+            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                    loginRequest.getEmail(),
+                    loginRequest.getPassword()
+            ));
+
+            Account account = (Account) authentication.getPrincipal();
+            AccountResponse accountResponse = modelMapper.map(account, AccountResponse.class);
+            accountResponse.setToken(tokenService.generateToken(account));
+            return accountResponse;
+        }catch (Exception ex){
+            ex.printStackTrace();
+            throw new EntityNotFoundException("Email or Password invalid!");
+        }
+    }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
