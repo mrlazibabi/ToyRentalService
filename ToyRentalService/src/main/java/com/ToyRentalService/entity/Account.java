@@ -1,5 +1,6 @@
 package com.ToyRentalService.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -18,13 +19,13 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@Table(name = "users")
+@Table(name = "account")
 public class Account implements UserDetails {
-    @Enumerated(EnumType.STRING)
-    Role role;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private long id;
+
     @NotBlank(message = "UserName can not be blank!")
     @Column(nullable = false, unique = true)
     private String username;
@@ -40,6 +41,11 @@ public class Account implements UserDetails {
     @Size(min = 6, message = "Password must be at least 6 characters!")
     @Column(nullable = false)
     private String password;
+
+    @Enumerated(EnumType.STRING)
+    Role role;
+
+    private boolean isActive = true;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

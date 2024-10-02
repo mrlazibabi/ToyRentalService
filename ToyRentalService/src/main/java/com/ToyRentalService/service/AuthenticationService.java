@@ -1,7 +1,7 @@
 package com.ToyRentalService.service;
 
 import com.ToyRentalService.entity.Account;
-import com.ToyRentalService.exception.DuplicateEntity;
+import com.ToyRentalService.exception.exceptions.DuplicateEntity;
 import com.ToyRentalService.model.AccountResponse;
 import com.ToyRentalService.model.LoginRequest;
 import com.ToyRentalService.model.RegisterRequest;
@@ -9,7 +9,6 @@ import com.ToyRentalService.repository.AccountRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
