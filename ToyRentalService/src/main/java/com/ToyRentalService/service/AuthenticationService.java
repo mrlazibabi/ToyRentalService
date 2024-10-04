@@ -1,7 +1,7 @@
 package com.ToyRentalService.service;
 
 import com.ToyRentalService.entity.Account;
-import com.ToyRentalService.entity.Role;
+import com.ToyRentalService.enums.Role;
 import com.ToyRentalService.exception.exceptions.DuplicateEntity;
 import com.ToyRentalService.model.AccountResponse;
 import com.ToyRentalService.model.LoginRequest;
