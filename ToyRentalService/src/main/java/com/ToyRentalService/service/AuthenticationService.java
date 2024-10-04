@@ -1,7 +1,8 @@
 package com.ToyRentalService.service;
 
 import com.ToyRentalService.entity.Account;
-import com.ToyRentalService.exception.DuplicateEntity;
+import com.ToyRentalService.entity.Role;
+import com.ToyRentalService.exception.exceptions.DuplicateEntity;
 import com.ToyRentalService.model.AccountResponse;
 import com.ToyRentalService.model.LoginRequest;
 import com.ToyRentalService.model.RegisterRequest;
@@ -9,7 +10,6 @@ import com.ToyRentalService.repository.AccountRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -39,11 +39,12 @@ public class  AuthenticationService implements UserDetailsService {
     TokenService tokenService;
 
     public AccountResponse register(RegisterRequest registerRequest) {
-        //System.out.println(registerRequest.getPhone());
+        System.out.println(registerRequest.getPhone());
         Account account = modelMapper.map(registerRequest, Account.class);
         try{
             String originPassword = registerRequest.getPassword();
             account.setPassword(passwordEncoder.encode(originPassword));
+            account.setRole(Role.USER);
             Account newAccount = accountRepository.save(account);
             return modelMapper.map(newAccount, AccountResponse.class);
         }catch (Exception ex){
@@ -73,13 +74,12 @@ public class  AuthenticationService implements UserDetailsService {
             accountResponse.setToken(tokenService.generateToken(account));
             return accountResponse;
         }catch (Exception ex){
-            ex.printStackTrace();
             throw new EntityNotFoundException("Email or Password invalid!");
         }
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return accountRepository.findByEmail(email);
+    public UserDetails loadUserByUsername(String Email) throws UsernameNotFoundException {
+        return accountRepository.findByEmail(Email);
     }
 }
