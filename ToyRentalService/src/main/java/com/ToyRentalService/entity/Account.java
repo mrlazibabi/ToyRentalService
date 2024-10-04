@@ -1,5 +1,6 @@
 package com.ToyRentalService.entity;
 
+import com.ToyRentalService.enums.Role;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -30,7 +31,8 @@ public class Account implements UserDetails {
 
     @Pattern(regexp = "(84|0[3|5|7|8|9])+([0-9]{8})\\b", message = "Phone number invalid!")
     private String phone;
-
+    @Column(name = "status")
+    private Boolean status;
     @Email(message = "Invalid Email!")
     @Column(nullable = false, unique = true)
     private String email;

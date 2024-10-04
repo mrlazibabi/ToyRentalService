@@ -1,4 +1,4 @@
-package com.ToyRentalService.entity;
+package com.ToyRentalService.enums;
 
 public enum Role {
     ADMIN,
