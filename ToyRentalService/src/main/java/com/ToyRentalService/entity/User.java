@@ -16,12 +16,11 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "user")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private long UserId;
+    private long id;
 
     @NotBlank(message = "Name can not be blank!")
     private String name;

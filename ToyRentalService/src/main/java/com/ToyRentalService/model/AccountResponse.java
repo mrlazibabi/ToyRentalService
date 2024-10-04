@@ -2,13 +2,17 @@ package com.ToyRentalService.model;
 
 import lombok.Data;
 
+import java.util.Date;
+
 @Data
 public class AccountResponse {
     long id;
     String username;
-    String email;
     String phone;
+    String email;
+    String address;
+    Date dob;
+    String image;
     String token;
     String role;
-
 }
