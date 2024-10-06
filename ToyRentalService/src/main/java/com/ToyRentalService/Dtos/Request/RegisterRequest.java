@@ -1,12 +1,9 @@
-package com.ToyRentalService.model;
+package com.ToyRentalService.Dtos.Request;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.*;
 import lombok.Data;
-
-import java.util.Date;
 
 @Data
 public class RegisterRequest {
@@ -23,10 +20,6 @@ public class RegisterRequest {
 
     @NotBlank(message = "Address can not be blank!")
     private String address;
-
-//    @NotNull(message = "Date of birth can not be null!")
-//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-//    private Date dob;
 
     @JsonIgnore
     private String image;

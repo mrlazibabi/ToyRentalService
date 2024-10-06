@@ -2,9 +2,9 @@ package com.ToyRentalService.api;
 
 
 import com.ToyRentalService.entity.Account;
-import com.ToyRentalService.model.AccountResponse;
-import com.ToyRentalService.model.LoginRequest;
-import com.ToyRentalService.model.RegisterRequest;
+import com.ToyRentalService.Dtos.Request.AccountResponse;
+import com.ToyRentalService.Dtos.Request.LoginRequest;
+import com.ToyRentalService.Dtos.Request.RegisterRequest;
 import com.ToyRentalService.service.AuthenticationService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
