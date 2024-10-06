@@ -8,6 +8,9 @@ import com.ToyRentalService.exception.NotFoundException;
 import com.ToyRentalService.exception.exceptions.EntityNotFoundException;
 import com.ToyRentalService.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -66,14 +69,20 @@ public class AccountService {
     }
 
     // Lấy tất cả tài khoản
-    public List<Account> getAllAccounts() {
-        return accountRepository.findAll();
-    }
+//    public List<Account> getAllAccounts() {
+//        return accountRepository.findAll();
+//    }
 
     // Lấy tài khoản theo ID
     public Optional<Account> getAccountById(Long id) {
         return accountRepository.findById(id);
     }
+
+    public Page<Account> getAllAccounts(Role role, boolean isActive, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return accountRepository.findByRoleAndIsActive(role, isActive, pageable);
+    }
+
 
     // Cập nhật tài khoản
     public Account updateAccount(Long id, Account accountDetails) {

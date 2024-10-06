@@ -2,6 +2,8 @@ package com.ToyRentalService.repository;
 
 import com.ToyRentalService.entity.Account;
 import com.ToyRentalService.enums.Role;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -15,4 +17,5 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     Account findByEmail(String email);
     List<Account> findAllByStatusAndRole(Boolean status, Role role);
     Account findAccountById(long id);
+    Page<Account> findByRoleAndIsActive(Role role, boolean isActive, Pageable pageable);
 }

@@ -7,6 +7,7 @@ import com.ToyRentalService.service.AccountService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -39,13 +40,22 @@ public class AccountController {
 //    }
 
     // Lấy tất cả tài khoản
+//    @GetMapping
+//    public ResponseEntity<List<Account>> getAllAccounts() {
+//        List<Account> accounts = accountService.getAllAccounts();
+//        return ResponseEntity.ok(accounts);
+//    }
     @GetMapping
-    public ResponseEntity<List<Account>> getAllAccounts() {
-        List<Account> accounts = accountService.getAllAccounts();
-        return ResponseEntity.ok(accounts);
+    public Page<Account> getAllAccounts(
+            @RequestParam(required = false) Role role, // Đổi từ String sang Role
+            @RequestParam(defaultValue = "false") boolean isActive,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        return accountService.getAllAccounts(role, isActive, page, size);
     }
 
-    // Lấy tài khoản theo ID
+     //Lấy tài khoản theo ID
     @GetMapping("/{id}")
     public ResponseEntity<Account> getAccountById(@PathVariable Long id) {
         Optional<Account> account = accountService.getAccountById(id);
