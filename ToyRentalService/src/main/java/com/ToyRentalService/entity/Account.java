@@ -1,7 +1,9 @@
 package com.ToyRentalService.entity;
 
 import com.ToyRentalService.enums.Role;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
@@ -10,15 +12,18 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.print.DocFlavor;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import static javax.management.openmbean.SimpleType.STRING;
+
 @Entity
 @Getter
 @Setter
-@Table(name = "user")
+@Table(name = "Accounts")
 public class Account implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,9 +44,9 @@ public class Account implements UserDetails {
 
     @NotBlank(message = "Address can not be blank!")
     private String address;
-
-    @NotBlank(message = "Date of Birth can not be blank!")
-    private Date dob;
+//    @NotNull(message = "Date of birth can not be null!")
+//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+//    private Date dob;
 
     @Pattern(regexp = "(.*/)*.+\\.(png|jpg|gif|bmp|jpeg|PNG|JPG|GIF|BMP|JPEG)$", message = "File invalid!")
     private String image;
