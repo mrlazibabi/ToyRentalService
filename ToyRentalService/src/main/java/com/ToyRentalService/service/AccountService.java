@@ -1,13 +1,16 @@
 package com.ToyRentalService.service;
 
+import com.ToyRentalService.Dtos.Request.AccountUpdateRequest;
 import com.ToyRentalService.Dtos.Response.ResponseObject;
 import com.ToyRentalService.entity.Account;
 import com.ToyRentalService.enums.Role;
+import com.ToyRentalService.exception.NotFoundException;
 import com.ToyRentalService.exception.exceptions.EntityNotFoundException;
 import com.ToyRentalService.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,17 +28,21 @@ public class AccountService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseObject("failed", "Couldn't find users", null));
         }
     }
-    //Update
-    public Account updateAccount(long id, Account account){
-        Account updateAccount = accountRepository.findAccountById(id);
-        if(updateAccount == null){
-            throw new EntityNotFoundException("Account not found!");
+    public Account updateAccount(Long id, AccountUpdateRequest accountUpdateRequest) {
+        Optional<Account> optionalAccount = accountRepository.findById(id);
+        if (!optionalAccount.isPresent()) {
+            throw new NotFoundException("Account not found");
         }
-        updateAccount.setEmail(account.getEmail());
-        updateAccount.setPhone(account.getPhone());
-        updateAccount.setPassword(account.getPassword());
-        return accountRepository.save(updateAccount);
+        Account account = optionalAccount.get();
+        account.setUsername(accountUpdateRequest.getUsername());
+        account.setPhone(accountUpdateRequest.getPhone());
+        account.setEmail(accountUpdateRequest.getEmail());
+        account.setAddress(accountUpdateRequest.getAddress());
+        account.setPassword(accountUpdateRequest.getPassword());
+        account.setImage(accountUpdateRequest.getImage());
+        return accountRepository.save(account);
     }
+
 
     //Delete
     public Account removeAccount(long id){
@@ -85,7 +92,7 @@ public class AccountService {
         accountRepository.delete(account);
     }
 
-    // Khôi phục tài khoản (giả định tài khoản chỉ bị vô hiệu hóa)
+    // Khôi phục tài khoản
     public Account restoreAccount(Long id) {
         Account account = accountRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Account not found"));
