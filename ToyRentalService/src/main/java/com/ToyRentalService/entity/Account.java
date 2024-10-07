@@ -44,11 +44,7 @@ public class Account implements UserDetails {
 
     @NotBlank(message = "Address can not be blank!")
     private String address;
-//    @NotNull(message = "Date of birth can not be null!")
-//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-//    private Date dob;
 
-    @Pattern(regexp = "(.*/)*.+\\.(png|jpg|gif|bmp|jpeg|PNG|JPG|GIF|BMP|JPEG)$", message = "File invalid!")
     private String image;
 
     private int postCount;
@@ -57,7 +53,7 @@ public class Account implements UserDetails {
     @Max(value =0, message = "Score must be higher than 0")
     private float point;
 
-    @NotBlank(message = "UserName can not be blank!")
+    @NotBlank(message = "Password can not be blank!")
     @Size(min = 6, message = "Password must be at least 6 characters!")
     @Column(nullable = false)
     private String password;

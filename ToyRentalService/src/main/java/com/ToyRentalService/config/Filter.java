@@ -21,7 +21,6 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.RandomAccess;
 
 @Component
 public class Filter extends OncePerRequestFilter {
@@ -35,6 +34,7 @@ public class Filter extends OncePerRequestFilter {
             "/api/v1/account/{id}",
             "/api/v1/account",
             "/api/v1/account/users"
+
     );
     @Autowired
     TokenService tokenService;

@@ -3,7 +3,7 @@ package com.ToyRentalService.service;
 import com.ToyRentalService.entity.Account;
 import com.ToyRentalService.enums.Role;
 import com.ToyRentalService.exception.exceptions.DuplicateEntity;
-import com.ToyRentalService.Dtos.Response.AccountResponse;
+import com.ToyRentalService.Dtos.Request.AccountResponse;
 import com.ToyRentalService.Dtos.Request.LoginRequest;
 import com.ToyRentalService.Dtos.Request.RegisterRequest;
 import com.ToyRentalService.repository.AccountRepository;
@@ -46,6 +46,10 @@ public class  AuthenticationService implements UserDetailsService {
             account.setPassword(passwordEncoder.encode(originPassword));
             account.setRole(Role.USER);
             Account newAccount = accountRepository.save(account);
+
+            //sent mail
+
+
             return modelMapper.map(newAccount, AccountResponse.class);
         }catch (Exception ex){
             System.out.println(ex.getMessage());

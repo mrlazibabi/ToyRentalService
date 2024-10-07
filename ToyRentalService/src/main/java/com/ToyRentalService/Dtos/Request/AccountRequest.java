@@ -2,11 +2,14 @@ package com.ToyRentalService.Dtos.Request;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-public class RegisterRequest {
+public class AccountRequest {
     @NotBlank(message = "UserName can not be blank!")
     @Column(nullable = false, unique = true)
     private String username;
