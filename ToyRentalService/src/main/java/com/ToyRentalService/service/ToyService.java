@@ -1,5 +1,6 @@
 package com.ToyRentalService.service;
 
+import com.ToyRentalService.Dtos.Request.ToyUpdateRequest;
 import com.ToyRentalService.entity.Toy;
 import com.ToyRentalService.exception.exceptions.EntityNotFoundException;
 import com.ToyRentalService.repository.ToyRepository;
@@ -29,23 +30,23 @@ public class ToyService {
     }
 
     //Update
-    public Toy updateToy(long id, Toy toy){
-        Toy updateToy = toyRepository.findToyById(id);
+    public Toy updateToy(long toyId, ToyUpdateRequest toyUpdateRequest){
+        Toy updateToy = toyRepository.findToyById(toyId);
         if(updateToy == null){
-            throw new EntityNotFoundException("Account not found!");
+            throw new EntityNotFoundException("Toy not found!");
         }
-        updateToy.setToyName(toy.getToyName());
-        updateToy.setCategory(toy.getCategory());
-        updateToy.setQuantity(toy.getQuantity());
-        updateToy.setImage(toy.getImage());
-        updateToy.setPrice(toy.getPrice());
+        updateToy.setToyName(toyUpdateRequest.getToyName());
+        updateToy.setCategory(toyUpdateRequest.getCategory());
+        updateToy.setQuantity(toyUpdateRequest.getQuantity());
+        updateToy.setImage(toyUpdateRequest.getImage());
+        updateToy.setPrice(toyUpdateRequest.getPrice());
 
         return toyRepository.save(updateToy);
     }
 
     //Delete
-    public Toy removeToy(long id){
-        Toy removeToy = toyRepository.findToyById(id);
+    public Toy removeToy(long toyId){
+        Toy removeToy = toyRepository.findToyById(toyId);
         if(removeToy == null){
             throw new EntityNotFoundException("Toy not found!");
         }

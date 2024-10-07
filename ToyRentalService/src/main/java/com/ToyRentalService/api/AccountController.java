@@ -24,27 +24,6 @@ public class AccountController {
     @Autowired
     AccountService accountService;
 
-    // API lấy danh sách User
-//    @GetMapping("/users")
-//    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
-//    public ResponseEntity<List<Account>> getAllUsers() {
-//        List<Account> users = accountService.getAccountsByRole(Role.USER);
-//        return ResponseEntity.ok(users);
-//    }
-//    // API lấy danh sách Staff
-//    @GetMapping("/staffs")
-//    @PreAuthorize("hasRole('ADMIN')")
-//    public ResponseEntity<List<Account>> getAllStaffs() {
-//        List<Account> staffs = accountService.getAccountsByRole(Role.STAFF);
-//        return ResponseEntity.ok(staffs);
-//    }
-
-    // Lấy tất cả tài khoản
-//    @GetMapping
-//    public ResponseEntity<List<Account>> getAllAccounts() {
-//        List<Account> accounts = accountService.getAllAccounts();
-//        return ResponseEntity.ok(accounts);
-//    }
     @GetMapping
     public Page<Account> getAllAccounts(
             @RequestParam(required = false) Role role, // Đổi từ String sang Role

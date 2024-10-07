@@ -1,5 +1,8 @@
 package com.ToyRentalService.api;
 
+import com.ToyRentalService.Dtos.Request.AccountUpdateRequest;
+import com.ToyRentalService.Dtos.Request.ToyUpdateRequest;
+import com.ToyRentalService.entity.Account;
 import com.ToyRentalService.entity.Toy;
 import com.ToyRentalService.service.ToyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,23 +19,31 @@ public class ToyController {
     @Autowired
     ToyService toyService;
 
+    //get all
     @GetMapping
     public ResponseEntity<List<Toy>> getAllToys() {
         List<Toy> toys = toyService.getAllToys();
         return ResponseEntity.ok(toys);
     }
 
-    @GetMapping("{id}")
+    //get by id
+    @GetMapping("{toyId}")
     public ResponseEntity<Toy> getToyById(@PathVariable Long id) {
         Optional<Toy> toy = toyService.getToyById(id);
         return toy.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/{id}")
+    //update
+    @PutMapping("{toyId}")
+    public ResponseEntity<?> updateToy(@PathVariable Long id, @RequestBody ToyUpdateRequest toyUpdateRequest) {
+        Toy updatedToy = toyService.updateToy(id, toyUpdateRequest);
+        return ResponseEntity.ok("Toy updated successfully");
+    }
+
+    //detete
+    @DeleteMapping("{toyId}")
     public ResponseEntity<Void> removeToy(@PathVariable Long id) {
         toyService.removeToy(id);
         return ResponseEntity.noContent().build();
     }
-
-
 }

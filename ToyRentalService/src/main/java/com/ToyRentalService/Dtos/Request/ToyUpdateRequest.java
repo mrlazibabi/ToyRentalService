@@ -7,12 +7,9 @@ import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
 @Data
-public class ToyRequest {
-    @NotBlank(message = "ToyName can not be blank!")
-    @Column(nullable = false, unique = true)
+public class ToyUpdateRequest {
     private String toyName;
 
-    @NotBlank(message = "Category can not be blank!")
     private String category;
 
     @Min(value = 0, message = "Quantity must be non-negative")

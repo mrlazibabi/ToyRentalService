@@ -13,7 +13,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,7 +34,7 @@ public class AccountService {
     }
     public Account updateAccount(Long id, AccountUpdateRequest accountUpdateRequest) {
         Optional<Account> optionalAccount = accountRepository.findById(id);
-        if (!optionalAccount.isPresent()) {
+        if (optionalAccount.isEmpty()) {
             throw new NotFoundException("Account not found");
         }
         Account account = optionalAccount.get();
