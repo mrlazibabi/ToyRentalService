@@ -17,6 +17,8 @@ import java.util.Optional;
 public class AccountService {
     @Autowired
     AccountRepository accountRepository;
+
+    //Get All
     public ResponseEntity<ResponseObject> getAllUser() {
         try {
             var list = accountRepository.findAllByStatusAndRole(true, Role.USER);

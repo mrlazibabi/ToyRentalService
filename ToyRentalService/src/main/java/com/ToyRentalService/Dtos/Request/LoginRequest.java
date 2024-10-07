@@ -1,4 +1,4 @@
-package com.ToyRentalService.model;
+package com.ToyRentalService.Dtos.Request;
 
 import lombok.Data;
 

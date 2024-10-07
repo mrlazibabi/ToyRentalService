@@ -31,7 +31,10 @@ public class Filter extends OncePerRequestFilter {
             "/v3/api-docs/**",
             "/swagger-resources/**",
             "/api/login",
-            "/api/register"
+            "/api/register",
+            "/api/v1/account/{id}",
+            "/api/v1/account",
+            "/api/v1/account/users"
     );
     @Autowired
     TokenService tokenService;

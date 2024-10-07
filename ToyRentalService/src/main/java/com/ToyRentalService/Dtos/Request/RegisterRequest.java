@@ -1,12 +1,9 @@
-package com.ToyRentalService.model;
+package com.ToyRentalService.Dtos.Request;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.*;
 import lombok.Data;
-
-import java.util.Date;
 
 @Data
 public class RegisterRequest {
