@@ -2,7 +2,7 @@ package com.ToyRentalService.api;
 
 
 import com.ToyRentalService.entity.Account;
-import com.ToyRentalService.Dtos.Request.AccountResponse;
+import com.ToyRentalService.Dtos.Response.AccountResponse;
 import com.ToyRentalService.Dtos.Request.LoginRequest;
 import com.ToyRentalService.Dtos.Request.RegisterRequest;
 import com.ToyRentalService.service.AuthenticationService;

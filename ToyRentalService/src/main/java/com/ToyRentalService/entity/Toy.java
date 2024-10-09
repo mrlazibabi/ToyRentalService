@@ -1,6 +1,6 @@
 package com.ToyRentalService.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ToyRentalService.enums.Status;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -8,15 +8,15 @@ import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
-@Table(name = "Toys")
 public class Toy {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private long toyId;
+    private long id;
 
     @NotBlank(message = "ToyName can not be blank!")
     @Column(nullable = false, unique = true)
@@ -28,10 +28,18 @@ public class Toy {
     @Min(value = 0, message = "Quantity must be non-negative")
     private int quantity;
 
-    private String image;
+    private List<String> imageUrl;
+
+    @NotBlank(message = "Description can not be blank!")
+    private String description;
 
     @Positive(message = "Price must be positive")
-    private double price;
+    private double priceByTime;
+
+    @Positive(message = "Price must be positive")
+    private double depositFee;
 
     private boolean isDelete;
+
+    private Status status;
 }
