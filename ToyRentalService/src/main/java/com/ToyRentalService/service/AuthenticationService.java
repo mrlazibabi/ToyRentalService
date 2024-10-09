@@ -1,9 +1,10 @@
 package com.ToyRentalService.service;
 
+import com.ToyRentalService.Dtos.Request.EmailDetail;
 import com.ToyRentalService.entity.Account;
 import com.ToyRentalService.enums.Role;
 import com.ToyRentalService.exception.exceptions.DuplicateEntity;
-import com.ToyRentalService.Dtos.Request.AccountResponse;
+import com.ToyRentalService.Dtos.Response.AccountResponse;
 import com.ToyRentalService.Dtos.Request.LoginRequest;
 import com.ToyRentalService.Dtos.Request.RegisterRequest;
 import com.ToyRentalService.repository.AccountRepository;
@@ -38,6 +39,9 @@ public class  AuthenticationService implements UserDetailsService {
     @Autowired
     TokenService tokenService;
 
+    @Autowired
+    EmailService emailService;
+
     public AccountResponse register(RegisterRequest registerRequest) {
         System.out.println(registerRequest.getPhone());
         Account account = modelMapper.map(registerRequest, Account.class);
@@ -46,6 +50,14 @@ public class  AuthenticationService implements UserDetailsService {
             account.setPassword(passwordEncoder.encode(originPassword));
             account.setRole(Role.USER);
             Account newAccount = accountRepository.save(account);
+
+            //sent mail
+            EmailDetail emailDetail = new EmailDetail();
+            emailDetail.setReceiver(newAccount);
+            emailDetail.setSubject("Hello");
+            emailDetail.setLink("");
+            emailService.sendMail(emailDetail);
+
             return modelMapper.map(newAccount, AccountResponse.class);
         }catch (Exception ex){
             System.out.println(ex.getMessage());
