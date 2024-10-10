@@ -5,10 +5,12 @@ import com.ToyRentalService.entity.Toy;
 import com.ToyRentalService.service.ToyService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.print.Pageable;
+import org.springframework.data.domain.Pageable;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -20,7 +22,7 @@ public class ToyController {
     ToyService toyService;
 
     //make a post
-    @PostMapping
+    @PostMapping("/Toy")
     public ResponseEntity<Toy> postToy(@Valid @RequestBody Toy toy){
         Toy postToy = toyService.postToy(toy);
         return ResponseEntity.ok(postToy);
@@ -41,24 +43,24 @@ public class ToyController {
     }
 
     //search post
-    @GetMapping
-    public ResponseEntity<Optional<Toy>> searchPosts(
+    @GetMapping("/posts")
+    public ResponseEntity<Page<Toy>> searchPosts(
             @RequestParam(value = "toyName", required = false) String toyName,
             @RequestParam(value = "description", required = false) String description,
             Pageable pageable) {
-        Optional<Toy> toyPosts = toyService.searchToys(toyName, description, pageable);
+        Page toyPosts = toyService.searchToys(toyName, description, pageable);
         return ResponseEntity.ok(toyPosts);
     }
 
     //create
-    @PostMapping
+    @PostMapping("/toys")
     public ResponseEntity<Toy> createToy(@Valid @RequestBody Toy toy){
         Toy newToy = toyService.createToy(toy);
         return ResponseEntity.ok(toy);
     }
 
     //get all
-    @GetMapping
+    @GetMapping("/toys")
     public ResponseEntity<List<Toy>> getAllToys() {
         List<Toy> toys = toyService.getAllToys();
         return ResponseEntity.ok(toys);
