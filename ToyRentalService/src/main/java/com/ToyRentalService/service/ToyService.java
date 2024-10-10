@@ -7,9 +7,10 @@ import com.ToyRentalService.exception.NotFoundException;
 import com.ToyRentalService.exception.exceptions.EntityNotFoundException;
 import com.ToyRentalService.repository.ToyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Pageable;
 
-import java.awt.print.Pageable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -52,10 +53,14 @@ public class ToyService {
     }
 
     //search Post
-    public Optional<Toy> searchToys(String toyName, String description, Pageable pageable) {
-        // Sử dụng Spring Data JPA để tạo query tìm kiếm linh hoạt
+//    public Page<Toy> searchToys(String toyName, String description, Pageable pageable) {
+//        // Sử dụng Spring Data JPA để tạo query tìm kiếm linh hoạt
+//        return (Page<Toy>) toyRepository.findByToyNameOrDescription(toyName, description, pageable);
+//    }
+    public Page<Toy> searchToys(String toyName, String description, Pageable pageable) {
         return toyRepository.findByToyNameOrDescription(toyName, description, pageable);
     }
+
 
     //Create
     public Toy createToy(Toy toy){
