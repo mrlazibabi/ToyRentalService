@@ -9,6 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface ToyRepository extends JpaRepository<Toy, Long> {
-    Optional<Toy> findByToyNameOrDescription(String toyName, String description, Pageable pageable);
+    //Optional<Toy> findByToyNameOrDescription(String toyName, String description, Pageable pageable);
     Toy findToyById(long id);
 }

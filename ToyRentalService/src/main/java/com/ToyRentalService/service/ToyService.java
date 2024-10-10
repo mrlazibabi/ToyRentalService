@@ -52,10 +52,10 @@ public class ToyService {
     }
 
     //search Post
-    public Optional<Toy> searchToys(String toyName, String description, Pageable pageable) {
-        // Sử dụng Spring Data JPA để tạo query tìm kiếm linh hoạt
-        return toyRepository.findByToyNameOrDescription(toyName, description, pageable);
-    }
+//    public Optional<Toy> searchToys(String toyName, String description, Pageable pageable) {
+//        // Sử dụng Spring Data JPA để tạo query tìm kiếm linh hoạt
+//        return toyRepository.findByToyNameOrDescription(toyName, description, pageable);
+//    }
 
     //Create
     public Toy createToy(Toy toy){

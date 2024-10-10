@@ -52,11 +52,11 @@ public class  AuthenticationService implements UserDetailsService {
             Account newAccount = accountRepository.save(account);
 
             //sent mail
-            EmailDetail emailDetail = new EmailDetail();
-            emailDetail.setReceiver(newAccount);
-            emailDetail.setSubject("Hello");
-            emailDetail.setLink("");
-            emailService.sendMail(emailDetail);
+//            EmailDetail emailDetail = new EmailDetail();
+//            emailDetail.setReceiver(newAccount);
+//            emailDetail.setSubject("Hello");
+//            emailDetail.setLink("");
+//            emailService.sendMail(emailDetail);
 
             return modelMapper.map(newAccount, AccountResponse.class);
         }catch (Exception ex){
@@ -89,6 +89,8 @@ public class  AuthenticationService implements UserDetailsService {
             throw new EntityNotFoundException("Email or Password invalid!");
         }
     }
+
+
 
     @Override
     public UserDetails loadUserByUsername(String Email) throws UsernameNotFoundException {
