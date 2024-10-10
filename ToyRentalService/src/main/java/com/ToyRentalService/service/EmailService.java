@@ -21,6 +21,9 @@ public class EmailService {
     public void sendMail(EmailDetail emailDetail){
         try{
             Context context = new Context();
+            context.setVariable("name",emailDetail.getReceiver().getEmail());
+            context.setVariable("button","Go to Home Page");
+            context.setVariable("link",emailDetail.getLink());
 
             String template = templateEngine.process("welcome-template", context);
 
@@ -31,6 +34,7 @@ public class EmailService {
             mimeMessageHelper.setTo(emailDetail.getReceiver().getEmail());
             mimeMessageHelper.setText(template, true);
             mimeMessageHelper.setSubject(emailDetail.getSubject());
+            javaMailSender.send(mimeMessage);
         }catch (MessagingException ex){
             System.out.println("Sent mail error!!");
         }
