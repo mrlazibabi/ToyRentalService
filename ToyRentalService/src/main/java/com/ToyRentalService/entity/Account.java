@@ -31,7 +31,7 @@ public class Account implements UserDetails {
     private long id;
 
     @NotBlank(message = "UserName can not be blank!")
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = false)
     private String username;
 
     @Pattern(regexp = "(84|0[3|5|7|8|9])+([0-9]{8})\\b", message = "Phone number invalid!")

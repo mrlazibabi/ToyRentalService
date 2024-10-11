@@ -17,7 +17,7 @@ public class Toy {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
+ 
     @NotBlank(message = "ToyName can not be blank!")
     @Column(nullable = false, unique = true)
     private String toyName;

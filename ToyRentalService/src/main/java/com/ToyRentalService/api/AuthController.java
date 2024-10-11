@@ -1,6 +1,8 @@
 package com.ToyRentalService.api;
 
 
+import com.ToyRentalService.Dtos.Request.ForgotPasswordRequest;
+import com.ToyRentalService.Dtos.Request.ResetPasswordRequest;
 import com.ToyRentalService.entity.Account;
 import com.ToyRentalService.Dtos.Response.AccountResponse;
 import com.ToyRentalService.Dtos.Request.LoginRequest;
@@ -44,6 +46,18 @@ public class AuthController {
 
         AccountResponse newAcccount = authenticationService.login(loginRequest);
         return ResponseEntity.ok(newAcccount);
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity forgotPassword(@Valid @RequestBody ForgotPasswordRequest forgotPasswordRequest){
+        authenticationService.forgotPassword(forgotPasswordRequest);
+        return ResponseEntity.ok("Success");
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity resetPassword(@RequestBody ResetPasswordRequest resetPasswordRequest){
+        authenticationService.resetPassword(resetPasswordRequest);
+        return ResponseEntity.ok("Reset Password Successfully");
     }
 
 }
