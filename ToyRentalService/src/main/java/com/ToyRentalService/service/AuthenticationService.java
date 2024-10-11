@@ -55,7 +55,7 @@ public class  AuthenticationService implements UserDetailsService {
             EmailDetail emailDetail = new EmailDetail();
             emailDetail.setReceiver(newAccount);
             emailDetail.setSubject("Hello");
-            emailDetail.setLink("");
+            emailDetail.setLink("https://gg.com/");
             emailService.sendMail(emailDetail);
 
             return modelMapper.map(newAccount, AccountResponse.class);
