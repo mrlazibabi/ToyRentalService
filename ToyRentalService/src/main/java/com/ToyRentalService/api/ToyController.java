@@ -22,7 +22,7 @@ public class ToyController {
     ToyService toyService;
 
     //make a post
-    @PostMapping("/Toy")
+    @PostMapping("/post")
     public ResponseEntity<Toy> postToy(@Valid @RequestBody Toy toy){
         Toy postToy = toyService.postToy(toy);
         return ResponseEntity.ok(postToy);
@@ -44,20 +44,19 @@ public class ToyController {
 
     //search post
     @GetMapping("/posts")
-    public ResponseEntity<Page<Toy>> searchPosts(
+    public ResponseEntity<Optional  <Toy>> searchPosts(
             @RequestParam(value = "toyName", required = false) String toyName,
-            @RequestParam(value = "description", required = false) String description,
-            Pageable pageable) {
-        Page toyPosts = toyService.searchToys(toyName, description, pageable);
+            @RequestParam(value = "description", required = false) String description) {
+        Optional<Toy> toyPosts = toyService.searchToys(toyName, description);
         return ResponseEntity.ok(toyPosts);
     }
 
     //create
-    @PostMapping("/toys")
-    public ResponseEntity<Toy> createToy(@Valid @RequestBody Toy toy){
-        Toy newToy = toyService.createToy(toy);
-        return ResponseEntity.ok(toy);
-    }
+//    @PostMapping("/toys")
+//    public ResponseEntity<Toy> createToy(@Valid @RequestBody Toy toy){
+//        Toy newToy = toyService.createToy(toy);
+//        return ResponseEntity.ok(toy);
+//    }
 
     //get all
     @GetMapping("/toys")

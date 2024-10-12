@@ -57,8 +57,8 @@ public class ToyService {
 //        // Sử dụng Spring Data JPA để tạo query tìm kiếm linh hoạt
 //        return (Page<Toy>) toyRepository.findByToyNameOrDescription(toyName, description, pageable);
 //    }
-    public Page<Toy> searchToys(String toyName, String description, Pageable pageable) {
-        return toyRepository.findByToyNameOrDescription(toyName, description, pageable);
+    public Optional<Toy> searchToys(String toyName, String description) {
+        return toyRepository.findByToyNameOrDescription(toyName, description);
     }
 
 

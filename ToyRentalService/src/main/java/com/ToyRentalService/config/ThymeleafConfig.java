@@ -18,8 +18,8 @@ public class ThymeleafConfig {
 
     @Bean
     public TemplateEngine templateEngine(){
-        TemplateEngine templateEngine    = new TemplateEngine();
+        TemplateEngine templateEngine = new TemplateEngine();
         templateEngine.setTemplateResolver(templateResolver());
-        return  templateEngine;
+        return templateEngine;
     }
 }
