@@ -63,6 +63,9 @@ public class Account implements UserDetails {
 
     private boolean isActive = true;
 
+    @OneToMany(mappedBy = "customer")
+    List<OrderBuy>orderBuys;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
