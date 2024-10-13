@@ -1,6 +1,7 @@
 package com.ToyRentalService.entity;
 
 import com.ToyRentalService.enums.Status;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -9,11 +10,12 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
 @Setter
-public class Toy {
+public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -22,8 +24,8 @@ public class Toy {
     @Column(nullable = false, unique = true)
     private String toyName;
 
-    @NotBlank(message = "Category can not be blank!")
-    private String category;
+//    @NotBlank(message = "Category can not be blank!")
+//    private String category;
 
     @Min(value = 0, message = "Quantity must be non-negative")
     private int quantity;
@@ -42,4 +44,15 @@ public class Toy {
     private boolean isDelete;
 
     private Status status;
+
+    @ManyToMany
+    @JoinTable(name = "Post_Category",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+            )
+    @JsonIgnore
+    Set<Category> categories;
+
+    @ManyToMany
+    Set<Account> accounts;
 }

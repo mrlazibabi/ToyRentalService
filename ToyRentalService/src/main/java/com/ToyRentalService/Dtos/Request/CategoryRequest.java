@@ -1,20 +1,11 @@
-package com.ToyRentalService.entity;
+package com.ToyRentalService.Dtos.Request;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-import java.util.Set;
-
-@Entity
-@Getter
-@Setter
-public class Category {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
+@Data
+public class CategoryRequest {
     @NotBlank(message = "ToyName can not be blank!")
     @Column(nullable = false, unique = true)
     private String categoryName;
@@ -23,7 +14,4 @@ public class Category {
     private String description;
 
     private boolean isDelete = false;
-
-    @ManyToMany
-    Set<Post> posts;
 }

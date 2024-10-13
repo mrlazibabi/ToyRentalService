@@ -34,10 +34,10 @@ public class Filter extends OncePerRequestFilter {
             "/api/v1/account/{id}",
             "/api/v1/account",
             "/api/v1/account/users",
-            "/api/v1/toy",
-            "/api/v1/toy/post",
-            "/api/v1/toy/{id}/approve",
-            "/api/v1/toy/posts"
+            "/api/category",
+            "/api/post",
+            "/api/post/{id}/approve",
+            "/api/post/{id}/reject"
     );
     @Autowired
     TokenService tokenService;

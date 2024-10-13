@@ -1,16 +1,17 @@
 package com.ToyRentalService.Dtos.Request;
 
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
+import java.util.Set;
+
 @Data
-public class ToyUpdateRequest {
+public class PostRequest {
     private String toyName;
 
-    private String category;
+    //private String category;
 
     @Min(value = 0, message = "Quantity must be non-negative")
     private int quantity;
@@ -25,4 +26,6 @@ public class ToyUpdateRequest {
 
     @Positive(message = "Price must be positive")
     private double depositFee;
+
+    Set<Long> categoryId;
 }

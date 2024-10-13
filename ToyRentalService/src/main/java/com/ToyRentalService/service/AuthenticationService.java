@@ -51,11 +51,11 @@ public class  AuthenticationService implements UserDetailsService {
             Account newAccount = accountRepository.save(account);
 
             //sent mail
-//            EmailDetail emailDetail = new EmailDetail();
-//            emailDetail.setReceiver(newAccount);
-//            emailDetail.setSubject("Hello give me your email password");
-//            emailDetail.setLink("https://www.google.com");
-//            emailService.sendMail(emailDetail);
+            EmailDetail emailDetail = new EmailDetail();
+            emailDetail.setReceiver(newAccount);
+            emailDetail.setSubject("Hello give me your email password");
+            emailDetail.setLink("https://www.google.com");
+            emailService.sendMail(emailDetail);
 
             return modelMapper.map(newAccount, AccountResponse.class);
         }catch (Exception ex){

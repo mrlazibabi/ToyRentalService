@@ -13,10 +13,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.print.DocFlavor;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static javax.management.openmbean.SimpleType.STRING;
 
@@ -89,4 +86,11 @@ public class Account implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    @ManyToMany
+    @JoinTable(name = "User_Post",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "post_id")
+    )
+    Set<Post> posts;
 }
