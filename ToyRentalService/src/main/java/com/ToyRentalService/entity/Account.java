@@ -1,9 +1,7 @@
 package com.ToyRentalService.entity;
 
 import com.ToyRentalService.enums.Role;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
@@ -12,13 +10,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.print.DocFlavor;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
-
-import static javax.management.openmbean.SimpleType.STRING;
 
 @Entity
 @Getter
@@ -65,6 +59,9 @@ public class Account implements UserDetails {
 
     @OneToMany(mappedBy = "customer")
     List<OrderBuy>orderBuys;
+
+    @OneToMany(mappedBy = "account")
+    private List<RentalPackage> packages;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
