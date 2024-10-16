@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -61,6 +62,20 @@ public class AccountController {
     public ResponseEntity<Account> restoreAccount(@PathVariable Long id) {
         Account restoredAccount = accountService.restoreAccount(id);
         return ResponseEntity.ok(restoredAccount);
+    }
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/staff")
+    public ResponseEntity<List<Account>> getAllStaff() {
+        List<Account> staffAccounts = accountService.getAccountsByRoles(Role.STAFF);
+        System.out.println("Staff Accounts: " + staffAccounts); // Ghi log
+        return ResponseEntity.ok(staffAccounts);
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity<List<Account>> getAllUsers() {
+        List<Account> userAccounts = accountService.getAccountsByRoles(Role.USER);
+        System.out.println("User Accounts: " + userAccounts); // Ghi log
+        return ResponseEntity.ok(userAccounts);
     }
 }
 
