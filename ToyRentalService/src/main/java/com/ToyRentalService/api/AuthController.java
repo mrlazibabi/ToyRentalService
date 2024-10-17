@@ -1,12 +1,12 @@
 package com.ToyRentalService.api;
 
 
-import com.ToyRentalService.Dtos.Request.ForgotPasswordRequest;
-import com.ToyRentalService.Dtos.Request.ResetPasswordRequest;
+import com.ToyRentalService.Dtos.Request.AccountRequest.ForgotPasswordRequest;
+import com.ToyRentalService.Dtos.Request.AccountRequest.ResetPasswordRequest;
 import com.ToyRentalService.entity.Account;
 import com.ToyRentalService.Dtos.Response.AccountResponse;
-import com.ToyRentalService.Dtos.Request.LoginRequest;
-import com.ToyRentalService.Dtos.Request.RegisterRequest;
+import com.ToyRentalService.Dtos.Request.AccountRequest.LoginRequest;
+import com.ToyRentalService.Dtos.Request.AccountRequest.RegisterRequest;
 import com.ToyRentalService.service.AuthenticationService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;

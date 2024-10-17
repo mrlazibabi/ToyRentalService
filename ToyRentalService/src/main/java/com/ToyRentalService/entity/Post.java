@@ -6,44 +6,55 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @Entity
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
  
-    @NotBlank(message = "ToyName can not be blank!")
+    
     @Column(nullable = false, unique = true)
     private String toyName;
 
-//    @NotBlank(message = "Category can not be blank!")
-//    private String category;
 
-    @Min(value = 0, message = "Quantity must be non-negative")
     private int quantity;
 
-    private List<String> imageUrl;
+    private String imageUrl;
 
-    @NotBlank(message = "Description can not be blank!")
+
     private String description;
 
-    @Positive(message = "Price must be positive")
-    private double priceByTime;
 
-    @Positive(message = "Price must be positive")
+    @Column(nullable = true)
+    private double price;
+
+
+    @Column(nullable = true)
+    private double priceByDay;
+
+
+    @Column(nullable = true)
     private double depositFee;
 
     private boolean isDelete;
 
+    @Enumerated(EnumType.STRING)
     private Status status;
+
+
 
     @ManyToMany
     @JoinTable(name = "Post_Category",
@@ -51,8 +62,12 @@ public class Post {
             inverseJoinColumns = @JoinColumn(name = "category_id")
             )
     @JsonIgnore
-    Set<Category> categories;
+    Set<Category> categories = new HashSet<>();
 
     @ManyToMany
     Set<Account> accounts;
+
+    @OneToMany(mappedBy = "post")
+    @JsonIgnore
+    List<OrderItem> orderItems;
 }

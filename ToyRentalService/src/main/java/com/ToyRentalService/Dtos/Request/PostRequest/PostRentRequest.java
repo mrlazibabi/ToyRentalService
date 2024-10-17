@@ -1,4 +1,4 @@
-package com.ToyRentalService.Dtos.Request;
+package com.ToyRentalService.Dtos.Request.PostRequest;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -8,7 +8,7 @@ import lombok.Data;
 import java.util.Set;
 
 @Data
-public class PostRequest {
+public class PostRentRequest {
     private String toyName;
 
     //private String category;
@@ -22,7 +22,7 @@ public class PostRequest {
     private String description;
 
     @Positive(message = "Price must be positive")
-    private double priceByTime;
+    private double priceByDay;
 
     @Positive(message = "Price must be positive")
     private double depositFee;

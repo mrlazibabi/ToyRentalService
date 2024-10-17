@@ -1,18 +1,15 @@
 package com.ToyRentalService.api;
 
-import com.ToyRentalService.Dtos.Request.AccountUpdateRequest;
+import com.ToyRentalService.Dtos.Request.AccountRequest.AccountUpdateRequest;
 import com.ToyRentalService.entity.Account;
 import com.ToyRentalService.enums.Role;
 import com.ToyRentalService.service.AccountService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController

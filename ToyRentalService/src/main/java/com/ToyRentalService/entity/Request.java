@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class Request {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
     @ManyToOne
     @JoinColumn(name = "accountId")
@@ -22,7 +22,7 @@ public class Request {
 
     @ManyToOne
     @JoinColumn(name = "toyId")
-    private Toy toy;
+    private Post toy;
 
     private String requestType;
     private Status status;

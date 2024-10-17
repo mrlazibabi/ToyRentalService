@@ -1,6 +1,7 @@
 package com.ToyRentalService.service;
 
-import com.ToyRentalService.Dtos.Request.PostRequest;
+import com.ToyRentalService.Dtos.Request.PostRequest.PostBuyRequest;
+import com.ToyRentalService.Dtos.Request.PostRequest.PostRentRequest;
 import com.ToyRentalService.entity.Category;
 import com.ToyRentalService.entity.Post;
 import com.ToyRentalService.enums.Status;
@@ -25,20 +26,44 @@ public class PostService {
     @Autowired
     ModelMapper modelMapper;
 
-    //make a post
-    public Post postToy(PostRequest postRequest){
-        //Post newPost = modelMapper.map(postRequest, Post.class);
+    //make a rent post
+    public Post postRent(PostRentRequest postRentRequest){
         Post newPost = new Post();
-        newPost.setToyName(newPost.getToyName());
-        //newPost.setCategory(newPost.getCategory());
-        newPost.setQuantity(newPost.getQuantity());
-        newPost.setImageUrl(newPost.getImageUrl());
-        newPost.setDescription(newPost.getDescription());
-        newPost.setPriceByTime(newPost.getPriceByTime());
-        newPost.setDepositFee(newPost.getDepositFee());
+        newPost.setToyName(postRentRequest.getToyName());
+        newPost.setQuantity(postRentRequest.getQuantity());
+        newPost.setImageUrl(postRentRequest.getImageUrl());
+        newPost.setDescription(postRentRequest.getDescription());
+        newPost.setPriceByDay(postRentRequest.getPriceByDay());
+        newPost.setDepositFee(postRentRequest.getDepositFee());
 
         Set<Category> categories = new HashSet<>();
-        for(Long idCategory: postRequest.getCategoryId()){
+        for(Long idCategory: postRentRequest.getCategoryId()){
+            Category category = categoryRepository.findById(idCategory)
+                    .orElseThrow(() -> new NotFoundException("Category don't exist"));
+            categories.add(category);
+        }
+        newPost.setCategories(categories);
+
+        try{
+            newPost.setStatus(Status.WAITING_FOR_APPROVAL);
+            postRepository.save(newPost);
+            return  newPost;
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    //make a rent post
+    public Post postBuy(PostBuyRequest postBuyRequest){
+        Post newPost = new Post();
+        newPost.setToyName(postBuyRequest.getToyName());
+        newPost.setQuantity(postBuyRequest.getQuantity());
+        newPost.setImageUrl(postBuyRequest.getImageUrl());
+        newPost.setDescription(postBuyRequest.getDescription());
+        newPost.setPrice(postBuyRequest.getPrice());
+
+        Set<Category> categories = new HashSet<>();
+        for(Long idCategory: postBuyRequest.getCategoryId()){
             Category category = categoryRepository.findById(idCategory)
                     .orElseThrow(() -> new NotFoundException("Category don't exist"));
             categories.add(category);
@@ -60,7 +85,6 @@ public class PostService {
         if (postOptional.isPresent()) {
             Post post = postOptional.get();
             post.setStatus(Status.APPROVED);
-
             return postRepository.save(post);
         } else {
             throw new NotFoundException("Bài đăng không tồn tại");
@@ -80,11 +104,6 @@ public class PostService {
         }
     }
 
-    //search Post
-//    public Page<Post> searchToys(String toyName, String description, Pageable pageable) {
-//        // Sử dụng Spring Data JPA để tạo query tìm kiếm linh hoạt
-//        return (Page<Post>) postRepository.findPostByNameOrDescription(toyName, description, pageable);
-//    }
     public Optional<Post> searchToys(String toyName, String description) {
         return postRepository.findPostByToyNameOrDescription(toyName, description);
     }
@@ -99,18 +118,17 @@ public class PostService {
     }
 
     //Update
-    public Post updatePost(long id, PostRequest postRequest){
+    public Post updatePost(long id, PostRentRequest postRentRequest){
         Post updatePost = postRepository.findPostById(id);
         if(updatePost == null){
             throw new EntityNotFoundException("Post not found!");
         }
-        updatePost.setToyName(postRequest.getToyName());
-        //updatePost.setCategory(postRequest.getCategory());
-        updatePost.setQuantity(postRequest.getQuantity());
-        updatePost.setImageUrl(Collections.singletonList(postRequest.getImageUrl()));
-        updatePost.setDescription(postRequest.getDescription());
-        updatePost.setPriceByTime(postRequest.getPriceByTime());
-        updatePost.setDepositFee(postRequest.getDepositFee());
+        updatePost.setToyName(postRentRequest.getToyName());
+        updatePost.setQuantity(postRentRequest.getQuantity());
+        updatePost.setImageUrl(postRentRequest.getImageUrl());
+        updatePost.setDescription(postRentRequest.getDescription());
+        updatePost.setPriceByDay(postRentRequest.getPriceByDay());
+        updatePost.setDepositFee(postRentRequest.getDepositFee());
 
         return postRepository.save(updatePost);
     }

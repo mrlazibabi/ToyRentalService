@@ -8,7 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
-//    Optional<Post> findPostByNameOrDescription(String toyName, String description, Pageable pageable);
     Optional<Post> findPostByToyNameOrDescription(String toyName, String description);
     Post findPostById(long id);
 }

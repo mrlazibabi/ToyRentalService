@@ -14,7 +14,7 @@ public class Payment {
     private Long id;
     @ManyToOne
     @JoinColumn(name = "orderId")
-    private OrderBuy order;
+    private Orders order;
     private float price;
     private String paymentMethod;
     private String paymentStatus;

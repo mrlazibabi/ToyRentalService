@@ -1,6 +1,6 @@
 package com.ToyRentalService.service;
 
-import com.ToyRentalService.Dtos.Request.AccountUpdateRequest;
+import com.ToyRentalService.Dtos.Request.AccountRequest.AccountUpdateRequest;
 import com.ToyRentalService.Dtos.Response.ResponseObject;
 import com.ToyRentalService.entity.Account;
 import com.ToyRentalService.enums.Role;
