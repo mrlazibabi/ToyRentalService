@@ -1,17 +1,16 @@
 package com.ToyRentalService.api;
 
 
-import com.ToyRentalService.Dtos.Request.AccountRequest.ForgotPasswordRequest;
-import com.ToyRentalService.Dtos.Request.AccountRequest.ResetPasswordRequest;
+import com.ToyRentalService.Dtos.Request.*;
 import com.ToyRentalService.entity.Account;
 import com.ToyRentalService.Dtos.Response.AccountResponse;
-import com.ToyRentalService.Dtos.Request.AccountRequest.LoginRequest;
-import com.ToyRentalService.Dtos.Request.AccountRequest.RegisterRequest;
 import com.ToyRentalService.service.AuthenticationService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -59,5 +58,11 @@ public class AuthController {
         authenticationService.resetPassword(resetPasswordRequest);
         return ResponseEntity.ok("Reset Password Successfully");
     }
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PostMapping("/staff")
+    public ResponseEntity createStaff(@Valid @RequestBody RegisterRequest registerRequest) {
 
+        AccountResponse newAcccount = authenticationService.createStaff(registerRequest);
+        return ResponseEntity.ok(newAcccount);
+    }
 }
