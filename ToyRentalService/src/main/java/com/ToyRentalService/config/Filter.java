@@ -31,16 +31,22 @@ public class Filter extends OncePerRequestFilter {
             "/swagger-resources/**",
             "/api/login",
             "/api/register",
+            "/api/forgot-password",
+            "/api/reset-password",
             "/api/v1/account/{id}",
+            "/api/v1/account/staff/user",
             "/api/v1/account",
             "/api/v1/account/users",
-            "/api/v1/toy",
-            "/api/v1/toy/post",
-            "/api/v1/toy/{id}/approve",
-            "/api/v1/toy/posts",
-            "/api/v1/packages",
-            "/api/v1/packages/{id}",
-            "/api/v1/packages/customer/{customerId}"
+            "/api/post",
+            "/api/post/posts",
+            "/api/post/{id}/approve",
+            "/api/post/{id}/reject",
+            "/api/post/{id}/getPost",
+            "/api/{id}/getPost",
+            "/api/{id}/update",
+            "/api/{id}/remove",
+            "/api/packages",
+            "/api/packages/{id}"
     );
     @Autowired
     TokenService tokenService;

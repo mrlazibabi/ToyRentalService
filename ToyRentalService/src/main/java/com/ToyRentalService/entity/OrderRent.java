@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "OrderRent")
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 public class OrderRent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
     private LocalDateTime createAt;
     private LocalDateTime startDate;
@@ -21,7 +22,7 @@ public class OrderRent {
 
     @ManyToOne
     @JoinColumn(name = "toyId")
-    private Toy toy;
+    private Post toy;
 
     @ManyToOne
     @JoinColumn(name = "accountId")

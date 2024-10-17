@@ -1,6 +1,5 @@
-package com.ToyRentalService.Dtos.Request;
+package com.ToyRentalService.Dtos.Request.AccountRequest;
 
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.NoArgsConstructor;

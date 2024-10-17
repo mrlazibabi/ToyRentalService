@@ -4,16 +4,15 @@ import com.ToyRentalService.Dtos.Request.PackageRequest;
 import com.ToyRentalService.Dtos.Response.ResponseObject;
 import com.ToyRentalService.entity.RentalPackage;
 import com.ToyRentalService.service.PackageService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-
 @RestController
-@RequestMapping("/api/v1/packages")
+@RequestMapping("/api/packages")
+@SecurityRequirement(name = "api")
 public class PackageController {
     @Autowired
     private PackageService packageService;

@@ -1,18 +1,20 @@
 package com.ToyRentalService.service;
 
-import com.ToyRentalService.Dtos.Request.AccountUpdateRequest;
+import com.ToyRentalService.Dtos.Request.AccountRequest.AccountUpdateRequest;
 import com.ToyRentalService.Dtos.Response.ResponseObject;
 import com.ToyRentalService.entity.Account;
 import com.ToyRentalService.enums.Role;
 import com.ToyRentalService.exception.NotFoundException;
 import com.ToyRentalService.exception.exceptions.EntityNotFoundException;
 import com.ToyRentalService.repository.AccountRepository;
+import org.hibernate.validator.internal.util.stereotypes.Lazy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,7 +24,6 @@ import java.util.Optional;
 public class AccountService {
     @Autowired
     AccountRepository accountRepository;
-
     //Get All
     public ResponseEntity<ResponseObject> getAllUser() {
         try {
@@ -46,8 +47,6 @@ public class AccountService {
         account.setImage(accountUpdateRequest.getImage());
         return accountRepository.save(account);
     }
-
-
     //Delete
     public Account removeAccount(long id){
         Account removeAccount = accountRepository.findAccountById(id);
@@ -68,12 +67,6 @@ public class AccountService {
     public Account createAccount(Account account) {
         return accountRepository.save(account);
     }
-
-    // Lấy tất cả tài khoản
-//    public List<Account> getAllAccounts() {
-//        return accountRepository.findAll();
-//    }
-
     // Lấy tài khoản theo ID
     public Optional<Account> getAccountById(Long id) {
         return accountRepository.findById(id);
@@ -108,5 +101,8 @@ public class AccountService {
                 .orElseThrow(() -> new EntityNotFoundException("Account not found"));
         account.setActive(true);
         return accountRepository.save(account);
+    }
+    public List<Account> getAccountsByRoles(Role role) {
+        return accountRepository.findByRole(role);
     }
 }

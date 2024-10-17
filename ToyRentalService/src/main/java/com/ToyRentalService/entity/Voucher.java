@@ -20,5 +20,5 @@ public class Voucher {
 
     @ManyToOne
     @JoinColumn(name = "orderId")
-    private OrderBuy orderBuy;
+    private Orders orders;
 }

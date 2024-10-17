@@ -17,7 +17,7 @@ public class CartItem {
 
     @ManyToOne
     @JoinColumn(name = "toyId")
-    private Toy toy;
+    private Post toy;
 
     @ManyToOne
     @JoinColumn(name = "cartId")

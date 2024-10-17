@@ -1,4 +1,4 @@
-package com.ToyRentalService.Dtos.Request;
+package com.ToyRentalService.Dtos.Request.AccountRequest;
 
 import jakarta.validation.constraints.Email;
 import lombok.Data;

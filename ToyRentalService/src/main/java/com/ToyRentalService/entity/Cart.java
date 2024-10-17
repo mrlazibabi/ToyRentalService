@@ -11,7 +11,7 @@ import lombok.Setter;
 public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
     private Integer quantity;
     private Double totalPrice;

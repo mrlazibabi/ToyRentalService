@@ -1,4 +1,4 @@
-package com.ToyRentalService.Dtos.Request;
+package com.ToyRentalService.Dtos.Request.AccountRequest;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
@@ -21,7 +21,6 @@ public class AccountRequest {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @NotBlank(message = "Address can not be blank!")
     private String address;
 
     @JsonIgnore

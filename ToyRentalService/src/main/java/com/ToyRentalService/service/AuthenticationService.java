@@ -1,6 +1,10 @@
 package com.ToyRentalService.service;
 
 import com.ToyRentalService.Dtos.Request.*;
+import com.ToyRentalService.Dtos.Request.AccountRequest.ForgotPasswordRequest;
+import com.ToyRentalService.Dtos.Request.AccountRequest.LoginRequest;
+import com.ToyRentalService.Dtos.Request.AccountRequest.RegisterRequest;
+import com.ToyRentalService.Dtos.Request.AccountRequest.ResetPasswordRequest;
 import com.ToyRentalService.entity.Account;
 import com.ToyRentalService.enums.Role;
 import com.ToyRentalService.exception.NotFoundException;
@@ -10,6 +14,7 @@ import com.ToyRentalService.repository.AccountRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -28,6 +33,7 @@ public class  AuthenticationService implements UserDetailsService {
     AccountRepository accountRepository;
 
     @Autowired
+    @Lazy
     PasswordEncoder passwordEncoder;
 
     @Autowired
@@ -51,12 +57,31 @@ public class  AuthenticationService implements UserDetailsService {
             Account newAccount = accountRepository.save(account);
 
             //sent mail
-//            EmailDetail emailDetail = new EmailDetail();
-//            emailDetail.setReceiver(newAccount);
-//            emailDetail.setSubject("Hello give me your email password");
-//            emailDetail.setLink("https://www.google.com");
-//            emailService.sendMail(emailDetail);
+            EmailDetail emailDetail = new EmailDetail();
+            emailDetail.setReceiver(newAccount);
+            emailDetail.setSubject("Hello give me your email password");
+            emailDetail.setLink("https://www.google.com");
+            emailService.sendMail(emailDetail);
 
+            return modelMapper.map(newAccount, AccountResponse.class);
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+            if(ex.getMessage().contains(registerRequest.getEmail())){
+                throw new DuplicateEntity("Duplicate Email!");
+            }else if (ex.getMessage().contains(registerRequest.getPhone())){
+                throw new DuplicateEntity("Duplicate Phone!");
+            }else {
+                throw new DuplicateEntity("Error!");
+            }
+        }
+    }
+    public AccountResponse createStaff(RegisterRequest registerRequest) {
+        Account account = modelMapper.map(registerRequest, Account.class);
+        try{
+            String originPassword = registerRequest.getPassword();
+            account.setPassword(passwordEncoder.encode(originPassword));
+            account.setRole(Role.STAFF);
+            Account newAccount = accountRepository.save(account);
             return modelMapper.map(newAccount, AccountResponse.class);
         }catch (Exception ex){
             System.out.println(ex.getMessage());
@@ -120,4 +145,5 @@ public class  AuthenticationService implements UserDetailsService {
         account.setPassword(passwordEncoder.encode(resetPasswordRequest.getPassword()));
         accountRepository.save(account);
     }
+
 }

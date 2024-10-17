@@ -1,6 +1,7 @@
 package com.ToyRentalService.entity;
 
 import com.ToyRentalService.enums.Role;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -10,9 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Getter
@@ -36,7 +35,6 @@ public class Account implements UserDetails {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @NotBlank(message = "Address can not be blank!")
     private String address;
 
     private String image;
@@ -56,12 +54,6 @@ public class Account implements UserDetails {
     Role role;
 
     private boolean isActive = true;
-
-    @OneToMany(mappedBy = "customer")
-    List<OrderBuy>orderBuys;
-
-    @OneToMany(mappedBy = "account")
-    private List<RentalPackage> packages;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -89,4 +81,15 @@ public class Account implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    @ManyToMany
+    @JoinTable(name = "Account_Post",
+            joinColumns = @JoinColumn(name = "account_id"),
+            inverseJoinColumns = @JoinColumn(name = "post_id")
+    )
+    @JsonIgnore
+    Set<Post> posts;
+
+    @OneToMany(mappedBy = "customer")
+    List<Orders> orders;
 }

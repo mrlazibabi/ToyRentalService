@@ -30,7 +30,7 @@ public class EmailService {
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
 
-            mimeMessageHelper.setFrom("anhltse@fpt.edu.vn");
+            mimeMessageHelper.setFrom("anhltse170584@fpt.edu.vn");
             mimeMessageHelper.setTo(emailDetail.getReceiver().getEmail());
             mimeMessageHelper.setText(template, true);
             mimeMessageHelper.setSubject(emailDetail.getSubject());
