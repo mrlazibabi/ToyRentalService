@@ -82,14 +82,9 @@ public class Account implements UserDetails {
         return true;
     }
 
-    @ManyToMany
-    @JoinTable(name = "Account_Post",
-            joinColumns = @JoinColumn(name = "account_id"),
-            inverseJoinColumns = @JoinColumn(name = "post_id")
-    )
-    @JsonIgnore
-    Set<Post> posts;
-
     @OneToMany(mappedBy = "customer")
     List<Orders> orders;
+
+    @OneToMany(mappedBy = "customer")
+    List<Post> posts;
 }
