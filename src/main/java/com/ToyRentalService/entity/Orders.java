@@ -19,9 +19,12 @@ public class Orders {
     private long id;
 
     private Date createAt;
+
     @Enumerated(EnumType.STRING)
     private OrderType type;
+
     private int quantity;
+
     private double totalPrice;
 
     @ManyToOne

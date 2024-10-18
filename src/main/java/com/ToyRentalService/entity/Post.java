@@ -70,4 +70,9 @@ public class Post {
     @OneToMany(mappedBy = "post")
     @JsonIgnore
     List<OrderItem> orderItems;
+
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    @JsonIgnore
+    private Account customer;
 }

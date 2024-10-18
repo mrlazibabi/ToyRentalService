@@ -2,6 +2,10 @@ package com.ToyRentalService.api;
 
 
 import com.ToyRentalService.Dtos.Request.*;
+import com.ToyRentalService.Dtos.Request.AccountRequest.ForgotPasswordRequest;
+import com.ToyRentalService.Dtos.Request.AccountRequest.LoginRequest;
+import com.ToyRentalService.Dtos.Request.AccountRequest.RegisterRequest;
+import com.ToyRentalService.Dtos.Request.AccountRequest.ResetPasswordRequest;
 import com.ToyRentalService.entity.Account;
 import com.ToyRentalService.Dtos.Response.AccountResponse;
 import com.ToyRentalService.service.AuthenticationService;
