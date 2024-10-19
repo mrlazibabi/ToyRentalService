@@ -36,4 +36,11 @@ public class OrderController {
         Orders orders = orderService.createOrderPostTicket(orderPostTicketRequest);
         return ResponseEntity.ok(orders);
     }
+    @PostMapping("payment")
+    public ResponseEntity<String> create(@RequestParam long orderId) throws Exception {
+        String vnPayURL = orderService.createUrl(orderId);
+        return ResponseEntity.ok(vnPayURL);
+    }
+
+
 }
