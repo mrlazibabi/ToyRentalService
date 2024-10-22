@@ -47,10 +47,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         req -> req
                                 .requestMatchers("/api/staff").hasAuthority("ADMIN")
-                                .requestMatchers("/**")
-                                .permitAll()
-                                .anyRequest()
-                                .authenticated()
+                                .requestMatchers("/api/cart/**").authenticated().anyRequest().permitAll()
+//                                .requestMatchers("/**")
+//                                .permitAll()
+//                                .anyRequest()
+//                                .authenticated()
                 )
                 .userDetailsService(authenticationService)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

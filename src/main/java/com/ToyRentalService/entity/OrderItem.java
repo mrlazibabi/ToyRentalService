@@ -1,5 +1,6 @@
 package com.ToyRentalService.entity;
 
+import com.ToyRentalService.enums.OrderType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -28,4 +29,8 @@ public class OrderItem {
     @ManyToOne
     @JoinColumn(name = "post_id")
     Post post;
+
+    @Enumerated(EnumType.STRING)
+    private OrderType type;
+
 }

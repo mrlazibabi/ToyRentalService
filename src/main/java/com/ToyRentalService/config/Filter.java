@@ -33,20 +33,8 @@ public class Filter extends OncePerRequestFilter {
             "/api/register",
             "/api/forgot-password",
             "/api/reset-password",
-            "/api/v1/account/{id}",
-            "/api/v1/account/staff/user",
-            "/api/v1/account",
-            "/api/v1/account/users",
-            "/api/post",
-            "/api/post/posts",
-            "/api/post/{id}/approve",
-            "/api/post/{id}/reject",
-            "/api/post/{id}/getPost",
-            "/api/{id}/getPost",
-            "/api/{id}/update",
-            "/api/{id}/remove",
-            "/api/packages",
-            "/api/packages/{id}"
+            "/api/post"
+
     );
     @Autowired
     TokenService tokenService;
