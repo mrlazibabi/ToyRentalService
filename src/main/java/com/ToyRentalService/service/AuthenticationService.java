@@ -121,10 +121,25 @@ public class  AuthenticationService implements UserDetailsService {
         return accountRepository.findByEmail(Email);
     }
 
-    public Account getCurrentAccount(){
-        Account account = (Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return accountRepository.findAccountById(account.getId());
+//    public Account getCurrentAccount(){
+//        Account account = (Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        return accountRepository.findAccountById(account.getId());
+//    }
+public Account getCurrentAccount() {
+    Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+    if (principal instanceof Account) {
+        return (Account) principal;
+    } else if (principal instanceof String && principal.equals("anonymousUser")) {
+        throw new RuntimeException("User is not authenticated");
+    } else {
+        throw new RuntimeException("Invalid authentication principal");
     }
+}
+
+
+
+
 
     public void forgotPassword(ForgotPasswordRequest forgotPasswordRequest){
         Account account = accountRepository.findByEmail(forgotPasswordRequest.getEmail());

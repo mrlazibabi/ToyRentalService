@@ -30,6 +30,15 @@ public class AuthController {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+    @GetMapping("/current-user")
+    public ResponseEntity<?> getCurrentUser() {
+        try {
+            Account account = authenticationService.getCurrentAccount();
+            return ResponseEntity.ok(account);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        }
+    }
 
     @PostMapping("/register")
     public ResponseEntity register(@Valid @RequestBody RegisterRequest registerRequest) {
