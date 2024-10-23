@@ -1,11 +1,8 @@
-package com.ToyRentalService.Dtos.Request;
+package com.ToyRentalService.Dtos.Request.AccountRequest;
 
 import com.ToyRentalService.entity.Account;
-import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.experimental.FieldDefaults;
 
 @Data
 @NoArgsConstructor

@@ -75,4 +75,8 @@ public class Post {
     @JoinColumn(name = "customer_id")
     @JsonIgnore
     private Account customer;
+
+    @OneToMany(mappedBy = "post")
+    @JsonIgnore
+    Set<Feedback> post_feedbacks;
 }

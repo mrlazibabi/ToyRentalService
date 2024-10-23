@@ -1,6 +1,6 @@
 package com.ToyRentalService.service;
 
-import com.ToyRentalService.Dtos.Request.EmailDetail;
+import com.ToyRentalService.Dtos.Request.AccountRequest.EmailDetail;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
