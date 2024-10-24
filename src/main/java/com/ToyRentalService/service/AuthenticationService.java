@@ -99,7 +99,7 @@ public class  AuthenticationService implements UserDetailsService {
     public AccountResponse login(LoginRequest loginRequest) {
         try{
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                    loginRequest.getEmail(),
+                    loginRequest.getUsername(),
                     loginRequest.getPassword()
             ));
 
@@ -108,13 +108,13 @@ public class  AuthenticationService implements UserDetailsService {
             accountResponse.setToken(tokenService.generateToken(account));
             return accountResponse;
         }catch (Exception ex){
-            throw new EntityNotFoundException("Email or Password invalid!");
+            throw new EntityNotFoundException("Username or Password invalid!");
         }
     }
 
     @Override
-    public UserDetails loadUserByUsername(String Email) throws UsernameNotFoundException {
-        return accountRepository.findByEmail(Email);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return accountRepository.findByUsername(username);
     }
 
 //    public Account getCurrentAccount(){
