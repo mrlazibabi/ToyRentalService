@@ -87,4 +87,8 @@ public class Account implements UserDetails {
 
     @OneToMany(mappedBy = "customer")
     List<Post> posts;
+
+    @OneToMany(mappedBy = "customer")
+    Set<Feedback> customer_feedbacks;
+
 }

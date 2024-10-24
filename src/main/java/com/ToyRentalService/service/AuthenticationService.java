@@ -1,10 +1,6 @@
 package com.ToyRentalService.service;
 
-import com.ToyRentalService.Dtos.Request.*;
-import com.ToyRentalService.Dtos.Request.AccountRequest.ForgotPasswordRequest;
-import com.ToyRentalService.Dtos.Request.AccountRequest.LoginRequest;
-import com.ToyRentalService.Dtos.Request.AccountRequest.RegisterRequest;
-import com.ToyRentalService.Dtos.Request.AccountRequest.ResetPasswordRequest;
+import com.ToyRentalService.Dtos.Request.AccountRequest.*;
 import com.ToyRentalService.entity.Account;
 import com.ToyRentalService.enums.Role;
 import com.ToyRentalService.exception.NotFoundException;
@@ -103,7 +99,7 @@ public class  AuthenticationService implements UserDetailsService {
     public AccountResponse login(LoginRequest loginRequest) {
         try{
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                    loginRequest.getEmail(),
+                    loginRequest.getUsername(),
                     loginRequest.getPassword()
             ));
 
@@ -112,13 +108,13 @@ public class  AuthenticationService implements UserDetailsService {
             accountResponse.setToken(tokenService.generateToken(account));
             return accountResponse;
         }catch (Exception ex){
-            throw new EntityNotFoundException("Email or Password invalid!");
+            throw new EntityNotFoundException("Username or Password invalid!");
         }
     }
 
     @Override
-    public UserDetails loadUserByUsername(String Email) throws UsernameNotFoundException {
-        return accountRepository.findByEmail(Email);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return accountRepository.findByUsername(username);
     }
 
 //    public Account getCurrentAccount(){

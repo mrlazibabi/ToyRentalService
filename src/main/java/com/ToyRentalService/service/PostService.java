@@ -2,6 +2,7 @@ package com.ToyRentalService.service;
 
 import com.ToyRentalService.Dtos.Request.PostRequest.PostBuyRequest;
 import com.ToyRentalService.Dtos.Request.PostRequest.PostRentRequest;
+import com.ToyRentalService.entity.Account;
 import com.ToyRentalService.entity.Category;
 import com.ToyRentalService.entity.Post;
 import com.ToyRentalService.enums.Status;
@@ -26,8 +27,12 @@ public class PostService {
     @Autowired
     ModelMapper modelMapper;
 
+    @Autowired
+    AuthenticationService authenticationService;
+
     //make a rent post
     public Post postRent(PostRentRequest postRentRequest){
+        Account customer = authenticationService.getCurrentAccount();
         Post newPost = new Post();
         newPost.setToyName(postRentRequest.getToyName());
         newPost.setQuantity(postRentRequest.getQuantity());
@@ -55,7 +60,10 @@ public class PostService {
 
     //make a rent post
     public Post postBuy(PostBuyRequest postBuyRequest){
+        Account customer = authenticationService.getCurrentAccount();
         Post newPost = new Post();
+        newPost.setCustomer(customer);
+
         newPost.setToyName(postBuyRequest.getToyName());
         newPost.setQuantity(postBuyRequest.getQuantity());
         newPost.setImageUrl(postBuyRequest.getImageUrl());

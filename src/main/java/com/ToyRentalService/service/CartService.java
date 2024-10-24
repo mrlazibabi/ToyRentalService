@@ -38,7 +38,7 @@ public class CartService {
                     Cart newCart = new Cart();
                     newCart.setCustomer(customer);
                     newCart.setCartItems(new ArrayList<>());
-                    return newCart;
+                    return cartRepository.save(newCart);  // Lưu Cart mới vào cơ sở dữ liệu
                 });
 
         // Kiểm tra xem item đã có trong cart chưa
@@ -65,7 +65,7 @@ public class CartService {
             newItem.setPost(post);
             newItem.setQuantity(quantity);
             newItem.setType(type);
-            newItem.setCart(cart);
+            newItem.setCart(cart);  // Liên kết Cart với CartItem
 
             if (type == OrderType.RENTTOY) {
                 newItem.setDayToRent(dayToRent);
@@ -86,8 +86,7 @@ public class CartService {
         double totalPrice = cart.getCartItems().stream().mapToDouble(CartItem::getPrice).sum();
 
         cart.setTotalPrice(totalPrice);
-        // Lưu lại giỏ hàng
-        cartRepository.save(cart);
+        cartRepository.save(cart);  // Lưu lại giỏ hàng sau khi cập nhật
     }
 
     public Cart getCart() {

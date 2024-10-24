@@ -13,5 +13,5 @@ public class CategoryRequest {
     @NotBlank(message = "description can not be blank!")
     private String description;
 
-    private boolean isDelete = false;
+    //private boolean isDelete = false;
 }

@@ -50,7 +50,7 @@ public class AccountController {
 
 
     // Xóa tài khoản
-    @DeleteMapping("/{id}/delete")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAccount(@PathVariable Long id) {
         accountService.removeAccount(id);
         return ResponseEntity.noContent().build();
