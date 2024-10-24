@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin("*")
 @SecurityRequirement(name = "api")
 @RequestMapping("/api/cart")
 public class CartController {
