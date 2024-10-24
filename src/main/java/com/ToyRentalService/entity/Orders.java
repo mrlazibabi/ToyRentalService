@@ -32,8 +32,10 @@ public class Orders {
     @JsonIgnore
     private Account customer;
 
-
     @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL)
     @JsonIgnore
     List<OrderItem> orderItems;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<OrderHistory> orderHistories;
 }

@@ -47,12 +47,16 @@
 
 
 package com.ToyRentalService.api;
+import com.ToyRentalService.entity.OrderHistory;
 import com.ToyRentalService.entity.Orders;
+import com.ToyRentalService.enums.OrderType;
 import com.ToyRentalService.service.OrderService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @CrossOrigin("*")
@@ -81,6 +85,11 @@ public class OrderController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    @GetMapping("/history/type")
+    public List<OrderHistory> getOrderHistoryByType(@RequestParam("type") OrderType type) {
+        return orderService.getOrderHistoryByType(type);
     }
 
     @PostMapping("/update-post-count/{orderId}")

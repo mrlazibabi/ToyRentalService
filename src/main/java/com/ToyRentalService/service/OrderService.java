@@ -254,10 +254,7 @@ package com.ToyRentalService.service;
 import com.ToyRentalService.Dtos.Request.OrderRequest.*;
 import com.ToyRentalService.entity.*;
 import com.ToyRentalService.enums.OrderType;
-import com.ToyRentalService.repository.AccountRepository;
-import com.ToyRentalService.repository.CartRepository;
-import com.ToyRentalService.repository.OrderRepository;
-import com.ToyRentalService.repository.PostRepository;
+import com.ToyRentalService.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -280,6 +277,9 @@ public class OrderService {
 
     @Autowired
     private OrderRepository orderRepository;
+
+    @Autowired
+    private OrderHistoryRepository orderHistoryRepository;
 
     @Autowired
     private AccountRepository accountRepository;
@@ -330,9 +330,25 @@ public class OrderService {
         cart.getCartItems().clear();  // Xóa các mục trong giỏ
         cart.setTotalPrice(0);  // Đặt TotalPrice về 0
         cartRepository.save(cart);  // Lưu lại giỏ hàng
+
+        // Thêm lịch sử đơn hàng sau khi đơn hàng được tạo
+        addOrderHistory(savedOrder, "CREATED", "Order created for purchasing toys.");
         return savedOrder;
     }
 
+    public void addOrderHistory(Orders order, String status, String description) {
+        OrderHistory orderHistory = new OrderHistory();
+        orderHistory.setOrder(order);
+        orderHistory.setOrderDate(new Date());
+        orderHistory.setStatus(status);
+        orderHistory.setDescription(description);
+
+        orderHistoryRepository.save(orderHistory);
+    }
+
+    public List<OrderHistory> getOrderHistoryByType(OrderType type) {
+        return orderHistoryRepository.findByOrderType(type);
+    }
 
     public String createUrl(long orderId) throws Exception {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
