@@ -284,7 +284,7 @@ public class OrderService {
     @Autowired
     private AccountRepository accountRepository;
 
-    public Orders createOrderFromCart() throws Exception {
+    public String createOrderFromCart() throws Exception {
         // Lấy thông tin tài khoản hiện tại
         Account customer = authenticationService.getCurrentAccount();
         Cart cart = cartRepository.findByCustomer(customer)
@@ -333,7 +333,11 @@ public class OrderService {
 
         // Thêm lịch sử đơn hàng sau khi đơn hàng được tạo
         addOrderHistory(savedOrder, "CREATED", "Order created for purchasing toys.");
-        return savedOrder;
+        // Gọi hàm createUrl để tạo URL thanh toán sau khi đơn hàng được lưu
+        String paymentUrl = createUrl(savedOrder.getId());
+
+        // Trả về URL thanh toán
+        return paymentUrl;
     }
 
     public void addOrderHistory(Orders order, String status, String description) {
@@ -366,7 +370,7 @@ public class OrderService {
         String tmnCode = "P5CWZRAS";
         String secretKey = "74FW426Y4BRBGGIZ9HCR40EGGFXJ70IV";
         String vnpUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-        String returnUrl = "https://www.facebook.com/" + orders.getId();
+        String returnUrl = "http://localhost:5173/success?orderID=" + orders.getId();
         String currCode = "VND";
 
         Map<String, String> vnpParams = new TreeMap<>();

@@ -68,12 +68,15 @@ public class OrderController {
     private OrderService orderService;
 
     @PostMapping("/create-from-cart")
-    public ResponseEntity<Orders> createOrderFromCart() {
+    public ResponseEntity<String> createOrderFromCart() {
         try {
-            Orders order = orderService.createOrderFromCart();
-            return ResponseEntity.ok(order);
+            // Gọi service để tạo đơn hàng và trả về URL thanh toán
+            String paymentUrl = orderService.createOrderFromCart();
+            // Trả về URL thanh toán dưới dạng ResponseEntity
+            return ResponseEntity.ok(paymentUrl);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(null);
+            // Trả về lỗi 400 nếu có ngoại lệ xảy ra
+            return ResponseEntity.badRequest().body("Failed to create order: " + e.getMessage());
         }
     }
 
