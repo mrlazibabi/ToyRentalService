@@ -6,7 +6,7 @@ import com.ToyRentalService.entity.Account;
 import com.ToyRentalService.entity.Category;
 import com.ToyRentalService.entity.Post;
 import com.ToyRentalService.enums.Status;
-import com.ToyRentalService.exception.NotFoundException;
+import com.ToyRentalService.exception.exceptions.NotFoundException;
 import com.ToyRentalService.exception.exceptions.EntityNotFoundException;
 import com.ToyRentalService.repository.CategoryRepository;
 import com.ToyRentalService.repository.PostRepository;
@@ -77,7 +77,6 @@ public class PostService {
             categories.add(category);
         }
         newPost.setCategories(categories);
-
         try{
             newPost.setStatus(Status.WAITING_FOR_APPROVAL);
             postRepository.save(newPost);

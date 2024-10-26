@@ -1,4 +1,4 @@
-package com.ToyRentalService.exception;
+package com.ToyRentalService.exception.exceptions;
 
 public class NotFoundException extends RuntimeException{
     public NotFoundException(String message){

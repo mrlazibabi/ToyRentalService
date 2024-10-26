@@ -1,9 +1,8 @@
 package com.ToyRentalService.service;
 import com.ToyRentalService.Dtos.Request.PackageRequest;
 import com.ToyRentalService.Dtos.Response.ResponseObject;
-import com.ToyRentalService.entity.Account;
 import com.ToyRentalService.entity.RentalPackage;
-import com.ToyRentalService.exception.NotFoundException;
+import com.ToyRentalService.exception.exceptions.NotFoundException;
 import com.ToyRentalService.repository.AccountRepository;
 import com.ToyRentalService.repository.RentalPackageRepository;
 import org.springframework.beans.factory.annotation.Autowired;

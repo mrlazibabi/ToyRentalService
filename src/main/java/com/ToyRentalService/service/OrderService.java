@@ -254,10 +254,7 @@ package com.ToyRentalService.service;
 import com.ToyRentalService.Dtos.Request.OrderRequest.*;
 import com.ToyRentalService.entity.*;
 import com.ToyRentalService.enums.OrderType;
-import com.ToyRentalService.repository.AccountRepository;
-import com.ToyRentalService.repository.CartRepository;
-import com.ToyRentalService.repository.OrderRepository;
-import com.ToyRentalService.repository.PostRepository;
+import com.ToyRentalService.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -282,9 +279,12 @@ public class OrderService {
     private OrderRepository orderRepository;
 
     @Autowired
+    private OrderHistoryRepository orderHistoryRepository;
+
+    @Autowired
     private AccountRepository accountRepository;
 
-    public Orders createOrderFromCart() throws Exception {
+    public String createOrderFromCart() throws Exception {
         // Lấy thông tin tài khoản hiện tại
         Account customer = authenticationService.getCurrentAccount();
         Cart cart = cartRepository.findByCustomer(customer)
@@ -330,9 +330,33 @@ public class OrderService {
         cart.getCartItems().clear();  // Xóa các mục trong giỏ
         cart.setTotalPrice(0);  // Đặt TotalPrice về 0
         cartRepository.save(cart);  // Lưu lại giỏ hàng
-        return savedOrder;
+
+        // Thêm lịch sử đơn hàng sau khi đơn hàng được tạo
+        addOrderHistory(savedOrder, "CREATED", "Order created for purchasing toys.");
+        // Gọi hàm createUrl để tạo URL thanh toán sau khi đơn hàng được lưu
+        String paymentUrl = createUrl(savedOrder.getId());
+
+        // Trả về URL thanh toán
+        return paymentUrl;
     }
 
+    public void addOrderHistory(Orders order, String status, String description) {
+        OrderHistory orderHistory = new OrderHistory();
+        orderHistory.setOrder(order);
+        orderHistory.setOrderDate(new Date());
+        orderHistory.setStatus(status);
+        orderHistory.setDescription(description);
+
+        orderHistoryRepository.save(orderHistory);
+    }
+
+    public List<OrderHistory> getOrderHistoryByType(OrderType type) {
+        return orderHistoryRepository.findByOrderType(type);
+    }
+
+    public List<OrderHistory> getOrderHistoryByAccount(Long accountId) {
+        return orderHistoryRepository.findByOrderCustomerId(accountId);
+    }
 
     public String createUrl(long orderId) throws Exception {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
@@ -350,7 +374,7 @@ public class OrderService {
         String tmnCode = "P5CWZRAS";
         String secretKey = "74FW426Y4BRBGGIZ9HCR40EGGFXJ70IV";
         String vnpUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-        String returnUrl = "https://www.facebook.com/" + orders.getId();
+        String returnUrl = "http://localhost:5173/success?orderID=" + orders.getId();
         String currCode = "VND";
 
         Map<String, String> vnpParams = new TreeMap<>();

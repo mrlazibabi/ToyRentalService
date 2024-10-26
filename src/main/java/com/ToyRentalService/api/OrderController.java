@@ -47,12 +47,16 @@
 
 
 package com.ToyRentalService.api;
+import com.ToyRentalService.entity.OrderHistory;
 import com.ToyRentalService.entity.Orders;
+import com.ToyRentalService.enums.OrderType;
 import com.ToyRentalService.service.OrderService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @CrossOrigin("*")
@@ -64,12 +68,15 @@ public class OrderController {
     private OrderService orderService;
 
     @PostMapping("/create-from-cart")
-    public ResponseEntity<Orders> createOrderFromCart() {
+    public ResponseEntity<String> createOrderFromCart() {
         try {
-            Orders order = orderService.createOrderFromCart();
-            return ResponseEntity.ok(order);
+            // Gọi service để tạo đơn hàng và trả về URL thanh toán
+            String paymentUrl = orderService.createOrderFromCart();
+            // Trả về URL thanh toán dưới dạng ResponseEntity
+            return ResponseEntity.ok(paymentUrl);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(null);
+            // Trả về lỗi 400 nếu có ngoại lệ xảy ra
+            return ResponseEntity.badRequest().body("Failed to create order: " + e.getMessage());
         }
     }
 
@@ -81,6 +88,16 @@ public class OrderController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    @GetMapping("/history/type")
+    public List<OrderHistory> getOrderHistoryByType(@RequestParam("type") OrderType type) {
+        return orderService.getOrderHistoryByType(type);
+    }
+
+    @GetMapping("/history/{accountId}")
+    public List<OrderHistory> getOrderHistoryByAccount(@PathVariable Long accountId) {
+        return orderService.getOrderHistoryByAccount(accountId);
     }
 
     @PostMapping("/update-post-count/{orderId}")

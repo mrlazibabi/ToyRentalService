@@ -3,7 +3,7 @@ package com.ToyRentalService.service;
 import com.ToyRentalService.Dtos.Request.AccountRequest.*;
 import com.ToyRentalService.entity.Account;
 import com.ToyRentalService.enums.Role;
-import com.ToyRentalService.exception.NotFoundException;
+import com.ToyRentalService.exception.exceptions.NotFoundException;
 import com.ToyRentalService.exception.exceptions.DuplicateEntity;
 import com.ToyRentalService.Dtos.Response.AccountResponse;
 import com.ToyRentalService.repository.AccountRepository;
@@ -55,7 +55,7 @@ public class  AuthenticationService implements UserDetailsService {
             //sent mail
             EmailDetail emailDetail = new EmailDetail();
             emailDetail.setReceiver(newAccount);
-            emailDetail.setSubject("Hello give me your email password");
+            emailDetail.setSubject("Hello, We are happy to have you as our newest member!");
             emailDetail.setLink("https://www.google.com");
             emailService.sendMail(emailDetail);
 

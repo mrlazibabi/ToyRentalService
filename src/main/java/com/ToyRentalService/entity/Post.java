@@ -29,14 +29,12 @@ public class Post {
     @Column(nullable = false, unique = true)
     private String toyName;
 
-
     private int quantity;
 
+    @Column(nullable = true)
     private String imageUrl;
 
-
     private String description;
-
 
     @Column(nullable = true)
     private double price;
