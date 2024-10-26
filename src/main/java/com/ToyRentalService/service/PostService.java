@@ -77,7 +77,6 @@ public class PostService {
             categories.add(category);
         }
         newPost.setCategories(categories);
-
         try{
             newPost.setStatus(Status.WAITING_FOR_APPROVAL);
             postRepository.save(newPost);

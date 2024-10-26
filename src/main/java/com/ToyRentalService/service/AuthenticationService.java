@@ -55,7 +55,7 @@ public class  AuthenticationService implements UserDetailsService {
             //sent mail
             EmailDetail emailDetail = new EmailDetail();
             emailDetail.setReceiver(newAccount);
-            emailDetail.setSubject("Hello give me your email password");
+            emailDetail.setSubject("Hello, We are happy to have you as our newest member!");
             emailDetail.setLink("https://www.google.com");
             emailService.sendMail(emailDetail);
 
