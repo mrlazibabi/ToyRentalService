@@ -35,7 +35,7 @@ public class AccountController {
     }
 
      //Lấy tài khoản theo ID
-    @GetMapping("/{id}")
+    @GetMapping("/user/{id}")
     public ResponseEntity<Account> getAccountById(@PathVariable Long id) {
         Optional<Account> account = accountService.getAccountById(id);
         return account.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());

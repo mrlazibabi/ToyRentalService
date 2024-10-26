@@ -47,6 +47,7 @@
 
 
 package com.ToyRentalService.api;
+import com.ToyRentalService.entity.Account;
 import com.ToyRentalService.entity.OrderHistory;
 import com.ToyRentalService.entity.Orders;
 import com.ToyRentalService.enums.OrderType;
@@ -95,9 +96,9 @@ public class OrderController {
         return orderService.getOrderHistoryByType(type);
     }
 
-    @GetMapping("/history/{accountId}")
-    public List<OrderHistory> getOrderHistoryByAccount(@PathVariable Long accountId) {
-        return orderService.getOrderHistoryByAccount(accountId);
+    @GetMapping("/history")
+    public List<OrderHistory> getOrderHistoryByAccount() {
+        return orderService.getOrderHistoryForCurrentUser();
     }
 
     @PostMapping("/update-post-count/{orderId}")

@@ -354,8 +354,12 @@ public class OrderService {
         return orderHistoryRepository.findByOrderType(type);
     }
 
-    public List<OrderHistory> getOrderHistoryByAccount(Long accountId) {
-        return orderHistoryRepository.findByOrderCustomerId(accountId);
+    public List<OrderHistory> getOrderHistoryForCurrentUser() {
+        // Get the currently logged-in user
+        Account currentUser = authenticationService.getCurrentAccount();
+
+        // Fetch OrderHistory records for the current user's account
+        return orderHistoryRepository.findByOrderCustomer(currentUser);
     }
 
     public String createUrl(long orderId) throws Exception {
