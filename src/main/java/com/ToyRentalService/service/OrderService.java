@@ -354,6 +354,10 @@ public class OrderService {
         return orderHistoryRepository.findByOrderType(type);
     }
 
+    public List<OrderHistory> getOrderHistoryByAccount(Long accountId) {
+        return orderHistoryRepository.findByOrderCustomerId(accountId);
+    }
+
     public String createUrl(long orderId) throws Exception {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
         LocalDateTime createDate = LocalDateTime.now();

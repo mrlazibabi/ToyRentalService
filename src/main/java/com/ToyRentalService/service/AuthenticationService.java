@@ -3,7 +3,7 @@ package com.ToyRentalService.service;
 import com.ToyRentalService.Dtos.Request.AccountRequest.*;
 import com.ToyRentalService.entity.Account;
 import com.ToyRentalService.enums.Role;
-import com.ToyRentalService.exception.NotFoundException;
+import com.ToyRentalService.exception.exceptions.NotFoundException;
 import com.ToyRentalService.exception.exceptions.DuplicateEntity;
 import com.ToyRentalService.Dtos.Response.AccountResponse;
 import com.ToyRentalService.repository.AccountRepository;

@@ -95,6 +95,11 @@ public class OrderController {
         return orderService.getOrderHistoryByType(type);
     }
 
+    @GetMapping("/history/{accountId}")
+    public List<OrderHistory> getOrderHistoryByAccount(@PathVariable Long accountId) {
+        return orderService.getOrderHistoryByAccount(accountId);
+    }
+
     @PostMapping("/update-post-count/{orderId}")
     public ResponseEntity<Void> updatePostCount(@PathVariable long orderId) {
         try {

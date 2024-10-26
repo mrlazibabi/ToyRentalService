@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface OrderHistoryRepository extends JpaRepository<OrderHistory, Long> {
     List<OrderHistory> findByOrderType(OrderType type);
+    List<OrderHistory> findByOrderCustomerId(Long accountId);
 }
