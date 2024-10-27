@@ -128,30 +128,6 @@ public class PostService {
 //        return postRepository.findAll();
 //    }
 
-
-//    public Page<Post> getAllPosts(String type, Status status, double minPrice, double maxPrice, Pageable pageable) {
-//        Specification<Post> specification = (root, query, criteriaBuilder) -> {
-//            List<Predicate> predicates = new ArrayList<>();
-//
-//            if (type != null) {
-//                predicates.add(criteriaBuilder.equal(root.get("type"), OrderType.valueOf(type.toUpperCase())));
-//            }
-//            if (status != null) {
-//                predicates.add(criteriaBuilder.equal(root.get("status"), status));
-//            }
-//            if (minPrice >= 0) {
-//                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("price"), minPrice));
-//            }
-//            if (maxPrice > 0) {
-//                predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("price"), maxPrice));
-//            }
-//
-//            // Chuyển đổi danh sách predicates thành mảng Predicate[] trước khi sử dụng criteriaBuilder.and()
-//            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
-//        };
-//
-//        return postRepository.findAll(specification, pageable);
-//    }
 public List<Post> getAllPosts(Status status, OrderType type, Double minPrice, Double maxPrice, int page, int size) {
     Pageable pageable = PageRequest.of(page, size);
     return postRepository.findAll((root, query, criteriaBuilder) -> {

@@ -47,13 +47,16 @@
 
 
 package com.ToyRentalService.api;
+import com.ToyRentalService.Dtos.Request.OrderRequest.OrderPostTicketRequest;
 import com.ToyRentalService.entity.Account;
 import com.ToyRentalService.entity.OrderHistory;
 import com.ToyRentalService.entity.Orders;
+import com.ToyRentalService.enums.OrderStatus;
 import com.ToyRentalService.enums.OrderType;
 import com.ToyRentalService.service.OrderService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -71,25 +74,32 @@ public class OrderController {
     @PostMapping("/create-from-cart")
     public ResponseEntity<String> createOrderFromCart() {
         try {
-            // Gọi service để tạo đơn hàng và trả về URL thanh toán
             String paymentUrl = orderService.createOrderFromCart();
-            // Trả về URL thanh toán dưới dạng ResponseEntity
             return ResponseEntity.ok(paymentUrl);
         } catch (Exception e) {
-            // Trả về lỗi 400 nếu có ngoại lệ xảy ra
             return ResponseEntity.badRequest().body("Failed to create order: " + e.getMessage());
         }
     }
-
-    @GetMapping("/payment-url/{orderId}")
-    public ResponseEntity<String> createPaymentUrl(@PathVariable long orderId) {
+    @PostMapping("/buy-post")
+    public ResponseEntity<String> createOrderForPost(@RequestBody OrderPostTicketRequest orderPostTicketRequest) {
         try {
-            String paymentUrl = orderService.createUrl(orderId);
+            Orders order = orderService.createOrderPostTicket(orderPostTicketRequest);
+            String paymentUrl = orderService.createUrl(order.getId());
             return ResponseEntity.ok(paymentUrl);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body("Failed to create order for post: " + e.getMessage());
         }
     }
+
+//    @GetMapping("/payment-url/{orderId}")
+//    public ResponseEntity<String> createPaymentUrl(@PathVariable long orderId) {
+//        try {
+//            String paymentUrl = orderService.createUrl(orderId);
+//            return ResponseEntity.ok(paymentUrl);
+//        } catch (Exception e) {
+//            return ResponseEntity.badRequest().body(e.getMessage());
+//        }
+//    }
 
     @GetMapping("/history/type")
     public List<OrderHistory> getOrderHistoryByType(@RequestParam("type") OrderType type) {
@@ -108,6 +118,32 @@ public class OrderController {
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
+        }
+    }
+    @PostMapping("/update-stock/{orderId}")
+    public ResponseEntity<Void> updateStockAfterPayment(@PathVariable long orderId) {
+        try {
+            orderService.updateStockAfterPayment(orderId);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+    @PostMapping("/update-status")
+    public ResponseEntity<String> updateOrderStatusAfterPayment(@RequestParam long orderId, @RequestParam OrderStatus status) {
+        try {
+            orderService.updateOrderStatusAfterPayment(orderId, status);
+
+            if (status == OrderStatus.COMPLETED) {
+                orderService.updatePostCountAfterPayment(orderId);
+            }
+            if (status == OrderStatus.COMPLETED) {
+                orderService.updateStockAfterPayment(orderId);
+            }
+
+            return ResponseEntity.ok("Order status and relevant data updated successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update order status: " + e.getMessage());
         }
     }
 }

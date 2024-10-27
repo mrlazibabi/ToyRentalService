@@ -51,11 +51,6 @@ public class Post {
 
     @Enumerated(EnumType.STRING)
     private Status status;
-
-
-
-
-
     @ManyToMany
     @JoinTable(name = "Post_Category",
             joinColumns = @JoinColumn(name = "post_id"),
@@ -79,4 +74,12 @@ public class Post {
     @OneToMany(mappedBy = "post")
     @JsonIgnore
     Set<Feedback> post_feedbacks;
+
+    public void decrementQuantity(int amount) {
+        if (this.quantity >= amount) {
+            this.quantity -= amount;
+        } else {
+            throw new IllegalArgumentException("Not enough stock available.");
+        }
+    }
 }
