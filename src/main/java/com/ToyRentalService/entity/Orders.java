@@ -1,5 +1,6 @@
 package com.ToyRentalService.entity;
 
+import com.ToyRentalService.enums.OrderStatus;
 import com.ToyRentalService.enums.OrderType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -22,6 +23,9 @@ public class Orders {
 
     @Enumerated(EnumType.STRING)
     private OrderType type;
+
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
 
     private int quantity;
 
