@@ -5,6 +5,7 @@ import com.ToyRentalService.Dtos.Request.PostRequest.PostRentRequest;
 import com.ToyRentalService.entity.Account;
 import com.ToyRentalService.entity.Category;
 import com.ToyRentalService.entity.Post;
+import com.ToyRentalService.enums.OrderType;
 import com.ToyRentalService.enums.Status;
 import com.ToyRentalService.exception.exceptions.NotFoundException;
 import com.ToyRentalService.exception.exceptions.EntityNotFoundException;
@@ -12,6 +13,13 @@ import com.ToyRentalService.repository.CategoryRepository;
 import com.ToyRentalService.repository.PostRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+import jakarta.persistence.criteria.Predicate;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -116,9 +124,55 @@ public class PostService {
     }
 
     //Read
-    public List<Post> getAllPosts(){
-        return postRepository.findAll();
-    }
+//    public List<Post> getAllPosts(){
+//        return postRepository.findAll();
+//    }
+
+
+//    public Page<Post> getAllPosts(String type, Status status, double minPrice, double maxPrice, Pageable pageable) {
+//        Specification<Post> specification = (root, query, criteriaBuilder) -> {
+//            List<Predicate> predicates = new ArrayList<>();
+//
+//            if (type != null) {
+//                predicates.add(criteriaBuilder.equal(root.get("type"), OrderType.valueOf(type.toUpperCase())));
+//            }
+//            if (status != null) {
+//                predicates.add(criteriaBuilder.equal(root.get("status"), status));
+//            }
+//            if (minPrice >= 0) {
+//                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("price"), minPrice));
+//            }
+//            if (maxPrice > 0) {
+//                predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("price"), maxPrice));
+//            }
+//
+//            // Chuyển đổi danh sách predicates thành mảng Predicate[] trước khi sử dụng criteriaBuilder.and()
+//            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+//        };
+//
+//        return postRepository.findAll(specification, pageable);
+//    }
+public List<Post> getAllPosts(Status status, OrderType type, Double minPrice, Double maxPrice, int page, int size) {
+    Pageable pageable = PageRequest.of(page, size);
+    return postRepository.findAll((root, query, criteriaBuilder) -> {
+        List<Predicate> predicates = new ArrayList<>();
+
+        if (status != null) {
+            predicates.add(criteriaBuilder.equal(root.get("status"), status));
+        }
+        if (type != null) {
+            predicates.add(criteriaBuilder.equal(root.get("type"), type));
+        }
+        if (minPrice != null) {
+            predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("price"), minPrice));
+        }
+        if (maxPrice != null) {
+            predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("price"), maxPrice));
+        }
+
+        return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+    }, pageable).getContent();
+}
 
     public Optional<Post> getPostById(long id) {
         return postRepository.findById(id);

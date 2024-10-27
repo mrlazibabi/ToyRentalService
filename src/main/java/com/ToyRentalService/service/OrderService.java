@@ -403,7 +403,7 @@ public class OrderService {
             signDataBuilder.append(URLEncoder.encode(entry.getValue(), StandardCharsets.UTF_8.toString()));
             signDataBuilder.append("&");
         }
-        signDataBuilder.deleteCharAt(signDataBuilder.length() - 1); // Xóa '&' cuối cùng
+        signDataBuilder.deleteCharAt(signDataBuilder.length() - 1);
 
         String signData = signDataBuilder.toString();
         String signed = generateHMAC(secretKey, signData);

@@ -54,6 +54,8 @@ public class Post {
 
 
 
+
+
     @ManyToMany
     @JoinTable(name = "Post_Category",
             joinColumns = @JoinColumn(name = "post_id"),
