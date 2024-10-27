@@ -91,16 +91,6 @@ public class OrderController {
         }
     }
 
-//    @GetMapping("/payment-url/{orderId}")
-//    public ResponseEntity<String> createPaymentUrl(@PathVariable long orderId) {
-//        try {
-//            String paymentUrl = orderService.createUrl(orderId);
-//            return ResponseEntity.ok(paymentUrl);
-//        } catch (Exception e) {
-//            return ResponseEntity.badRequest().body(e.getMessage());
-//        }
-//    }
-
     @GetMapping("/history/type")
     public List<OrderHistory> getOrderHistoryByType(@RequestParam("type") OrderType type) {
         return orderService.getOrderHistoryByType(type);
@@ -109,25 +99,6 @@ public class OrderController {
     @GetMapping("/history")
     public List<OrderHistory> getOrderHistoryByAccount() {
         return orderService.getOrderHistoryForCurrentUser();
-    }
-
-    @PostMapping("/update-post-count/{orderId}")
-    public ResponseEntity<Void> updatePostCount(@PathVariable long orderId) {
-        try {
-            orderService.updatePostCountAfterPayment(orderId);
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
-    }
-    @PostMapping("/update-stock/{orderId}")
-    public ResponseEntity<Void> updateStockAfterPayment(@PathVariable long orderId) {
-        try {
-            orderService.updateStockAfterPayment(orderId);
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
     }
     @PostMapping("/update-status")
     public ResponseEntity<String> updateOrderStatusAfterPayment(@RequestParam long orderId, @RequestParam OrderStatus status) {

@@ -325,7 +325,7 @@ public String createOrderFromCart() throws Exception {
         Orders order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new Exception("Order not found"));
 
-        if (order.getStatus() == OrderStatus.COMPLETED) {
+        if (order.getStatus() == OrderStatus.COMPLETED && order.getType() != OrderType.BUYPOST) {
             for (OrderItem item : order.getOrderItems()) {
                 Post post = item.getPost();
                 if (post != null) {
