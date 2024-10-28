@@ -352,10 +352,7 @@ public String createOrderFromCart() throws Exception {
     }
 
     public List<OrderHistory> getOrderHistoryForCurrentUser() {
-        // Get the currently logged-in user
         Account currentUser = authenticationService.getCurrentAccount();
-
-        // Fetch OrderHistory records for the current user's account
         return orderHistoryRepository.findByOrderCustomer(currentUser);
     }
 

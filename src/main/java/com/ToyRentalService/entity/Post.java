@@ -1,5 +1,6 @@
 package com.ToyRentalService.entity;
 
+import com.ToyRentalService.enums.PostType;
 import com.ToyRentalService.enums.Status;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -48,7 +49,8 @@ public class Post {
     private double depositFee;
 
     private boolean isDelete;
-
+    @Enumerated(EnumType.STRING)
+    private PostType postType;
     @Enumerated(EnumType.STRING)
     private Status status;
     @ManyToMany
