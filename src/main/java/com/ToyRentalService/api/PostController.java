@@ -5,6 +5,7 @@ import com.ToyRentalService.Dtos.Request.PostRequest.PostRentRequest;
 import com.ToyRentalService.entity.Category;
 import com.ToyRentalService.entity.Post;
 import com.ToyRentalService.enums.OrderType;
+import com.ToyRentalService.enums.PostType;
 import com.ToyRentalService.enums.Status;
 import com.ToyRentalService.service.PostService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -60,7 +61,7 @@ public class PostController {
     @GetMapping
     public ResponseEntity<List<Post>> getAllPosts(
             @RequestParam(required = false) Status status,
-            @RequestParam(required = false) OrderType type,
+            @RequestParam(required = false) PostType type,
             @RequestParam(required = false) Double minPrice,
             @RequestParam(required = false) Double maxPrice,
             @RequestParam(defaultValue = "0") int page,

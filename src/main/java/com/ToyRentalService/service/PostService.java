@@ -6,6 +6,7 @@ import com.ToyRentalService.entity.Account;
 import com.ToyRentalService.entity.Category;
 import com.ToyRentalService.entity.Post;
 import com.ToyRentalService.enums.OrderType;
+import com.ToyRentalService.enums.PostType;
 import com.ToyRentalService.enums.Status;
 import com.ToyRentalService.exception.exceptions.NotFoundException;
 import com.ToyRentalService.exception.exceptions.EntityNotFoundException;
@@ -128,27 +129,28 @@ public class PostService {
 //        return postRepository.findAll();
 //    }
 
-public List<Post> getAllPosts(Status status, OrderType type, Double minPrice, Double maxPrice, int page, int size) {
-    Pageable pageable = PageRequest.of(page, size);
-    return postRepository.findAll((root, query, criteriaBuilder) -> {
-        List<Predicate> predicates = new ArrayList<>();
+    public List<Post> getAllPosts(Status status, PostType postType, Double minPrice, Double maxPrice, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return postRepository.findAll((root, query, criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<>();
 
-        if (status != null) {
-            predicates.add(criteriaBuilder.equal(root.get("status"), status));
-        }
-        if (type != null) {
-            predicates.add(criteriaBuilder.equal(root.get("type"), type));
-        }
-        if (minPrice != null) {
-            predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("price"), minPrice));
-        }
-        if (maxPrice != null) {
-            predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("price"), maxPrice));
-        }
+            if (status != null) {
+                predicates.add(criteriaBuilder.equal(root.get("status"), status));
+            }
+            if (postType != null) {
+                predicates.add(criteriaBuilder.equal(root.get("postType"), postType));
+            }
+            if (minPrice != null) {
+                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("price"), minPrice));
+            }
+            if (maxPrice != null) {
+                predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("price"), maxPrice));
+            }
 
-        return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
-    }, pageable).getContent();
-}
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        }, pageable).getContent();
+    }
+
 
     public Optional<Post> getPostById(long id) {
         return postRepository.findById(id);
