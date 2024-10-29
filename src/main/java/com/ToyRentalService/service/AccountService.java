@@ -22,6 +22,7 @@ import java.util.Optional;
 public class AccountService {
     @Autowired
     AccountRepository accountRepository;
+
     //Get All
     public ResponseEntity<ResponseObject> getAllUser() {
         try {
@@ -31,6 +32,7 @@ public class AccountService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseObject("failed", "Couldn't find users", null));
         }
     }
+
     public Account updateAccount(Long id, AccountUpdateRequest accountUpdateRequest) {
         Optional<Account> optionalAccount = accountRepository.findById(id);
         if (optionalAccount.isEmpty()) {
@@ -45,6 +47,7 @@ public class AccountService {
         account.setImage(accountUpdateRequest.getImage());
         return accountRepository.save(account);
     }
+
     //Delete
     public Account removeAccount(long id){
         Account removeAccount = accountRepository.findAccountById(id);
@@ -61,6 +64,7 @@ public class AccountService {
         }
         return accounts;
     }
+
     // Tạo tài khoản mới
     public Account createAccount(Account account) {
         return accountRepository.save(account);

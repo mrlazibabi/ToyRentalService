@@ -134,9 +134,6 @@ public Account getCurrentAccount() {
 }
 
 
-
-
-
     public void forgotPassword(ForgotPasswordRequest forgotPasswordRequest){
         Account account = accountRepository.findByEmail(forgotPasswordRequest.getEmail());
         if(account == null){
