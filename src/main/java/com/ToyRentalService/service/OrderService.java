@@ -152,6 +152,7 @@
 package com.ToyRentalService.service;
 import com.ToyRentalService.Dtos.Request.OrderRequest.OrderPostTicketItemRequest;
 import com.ToyRentalService.Dtos.Request.OrderRequest.OrderPostTicketRequest;
+import com.ToyRentalService.Dtos.Response.OrderHistoryResponse;
 import com.ToyRentalService.entity.*;
 import com.ToyRentalService.enums.OrderStatus;
 import com.ToyRentalService.enums.OrderType;
@@ -282,7 +283,7 @@ public String createOrderFromCart() throws Exception {
     cart.setTotalPrice(0);
     cartRepository.save(cart);
 
-    addOrderHistory(savedOrder, "CREATED", "Order created for purchasing toys.");
+    //addOrderHistory(savedOrder, OrderStatus.CREATED, "Order created for purchasing toys.");
     String paymentUrl = createUrl(savedOrder.getId());
 
     return paymentUrl;
@@ -295,7 +296,7 @@ public String createOrderFromCart() throws Exception {
         orderRepository.save(order);
 
         String description = status == OrderStatus.COMPLETED ? "Payment completed successfully." : "Payment failed or canceled.";
-        addOrderHistory(order, status.name(), description);
+        addOrderHistory(order, status, description);
     }
         public Orders createOrderPostTicket(OrderPostTicketRequest orderPostTicketRequest){
         Account customer = authenticationService.getCurrentAccount();
@@ -337,12 +338,13 @@ public String createOrderFromCart() throws Exception {
             }
         }
     }
-    public void addOrderHistory(Orders order, String status, String description) {
-        OrderHistory orderHistory = new OrderHistory();
-        orderHistory.setOrder(order);
-        orderHistory.setOrderDate(new Date());
-        orderHistory.setStatus(status);
-        orderHistory.setDescription(description);
+    public void addOrderHistory(Orders order, OrderStatus status, String description) {
+        OrderHistory orderHistory = OrderHistory.builder()
+                .order(order)
+                .orderDate(new Date())
+                .description(description)
+                .status(status)
+                .build();
 
         orderHistoryRepository.save(orderHistory);
     }
@@ -351,9 +353,27 @@ public String createOrderFromCart() throws Exception {
         return orderHistoryRepository.findByOrderType(type);
     }
 
-    public List<OrderHistory> getOrderHistoryForCurrentUser() {
+    public List<OrderHistoryResponse> getOrderHistoryForCurrentUser() {
         Account currentUser = authenticationService.getCurrentAccount();
-        return orderHistoryRepository.findByOrderCustomer(currentUser);
+        List<OrderHistory> orderHistory = orderHistoryRepository.findByOrderCustomer(currentUser);
+        List<Post> posts = new ArrayList<>();
+        List<OrderHistoryResponse> orderHistoryResponse = new ArrayList<>();
+        for (OrderHistory orderHistoryItem : orderHistory){
+            for(OrderItem orderItem : orderHistoryItem.getOrder().getOrderItems()){
+                posts.add(orderItem.getPost());
+            }
+            OrderHistoryResponse  orderHistoryResponse1 = OrderHistoryResponse.builder()
+                    .orderType(orderHistoryItem.getOrder().getType())
+                    .orderId(orderHistoryItem.getId())
+                    .orderDate(orderHistoryItem.getOrderDate())
+                    .posts(posts)
+                    .build();
+            if (orderHistoryItem.getStatus() == OrderStatus.COMPLETED) {
+                orderHistoryResponse.add(orderHistoryResponse1);
+            }
+        }
+
+        return orderHistoryResponse;
     }
 
     public String createUrl(long orderId) throws Exception {

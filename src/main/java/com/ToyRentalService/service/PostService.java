@@ -60,6 +60,7 @@ public class PostService {
 
         try{
             newPost.setStatus(Status.WAITING_FOR_APPROVAL);
+            newPost.setPostType(PostType.RENT);
             postRepository.save(newPost);
             return  newPost;
         } catch (RuntimeException e) {
@@ -88,6 +89,7 @@ public class PostService {
         newPost.setCategories(categories);
         try{
             newPost.setStatus(Status.WAITING_FOR_APPROVAL);
+            newPost.setPostType(PostType.SELL);
             postRepository.save(newPost);
             return  newPost;
         } catch (RuntimeException e) {

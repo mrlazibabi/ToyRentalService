@@ -48,6 +48,7 @@
 
 package com.ToyRentalService.api;
 import com.ToyRentalService.Dtos.Request.OrderRequest.OrderPostTicketRequest;
+import com.ToyRentalService.Dtos.Response.OrderHistoryResponse;
 import com.ToyRentalService.entity.OrderHistory;
 import com.ToyRentalService.entity.Orders;
 import com.ToyRentalService.enums.OrderStatus;
@@ -96,8 +97,8 @@ public class OrderController {
     }
 
     @GetMapping("/history")
-    public List<OrderHistory> getOrderHistoryByAccount() {
-        return orderService.getOrderHistoryForCurrentUser();
+    public ResponseEntity  getOrderHistoryByAccount() {
+        return ResponseEntity.ok(orderService.getOrderHistoryForCurrentUser());
     }
     @PostMapping("/update-status")
     public ResponseEntity<String> updateOrderStatusAfterPayment(@RequestParam long orderId, @RequestParam OrderStatus status) {

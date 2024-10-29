@@ -27,12 +27,11 @@ public class Post {
     private long id;
  
     
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String toyName;
 
     private int quantity;
-
-    @Column(nullable = true)
+    
     private String imageUrl;
 
     private String description;
@@ -49,8 +48,10 @@ public class Post {
     private double depositFee;
 
     private boolean isDelete;
+
     @Enumerated(EnumType.STRING)
     private PostType postType;
+
     @Enumerated(EnumType.STRING)
     private Status status;
     @ManyToMany
@@ -68,6 +69,7 @@ public class Post {
     @JsonIgnore
     List<OrderItem> orderItems;
 
+
     @ManyToOne
     @JoinColumn(name = "customer_id")
     @JsonIgnore
@@ -76,6 +78,7 @@ public class Post {
     @OneToMany(mappedBy = "post")
     @JsonIgnore
     Set<Feedback> post_feedbacks;
+
 
     public void decrementQuantity(int amount) {
         if (this.quantity >= amount) {
