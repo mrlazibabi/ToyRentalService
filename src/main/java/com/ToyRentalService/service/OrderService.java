@@ -1,154 +1,3 @@
-//    public Orders createOrderFromCart() throws Exception {
-//        Account customer = authenticationService.getCurrentAccount();
-//        Cart cart = cartRepository.findByCustomer(customer)
-//                .orElseThrow(() -> new Exception("Cart not found"));
-//
-//        if (cart.getCartItems().isEmpty()) {
-//            throw new Exception("Cart is empty");
-//        }
-//
-//        Orders order = new Orders();
-//        order.setCustomer(customer);
-//        order.setCreateAt(new Date());
-//        List<OrderItem> orderItems = new ArrayList<>();
-//        double total = 0;
-//
-//        for (CartItem cartItem : cart.getCartItems()) {
-//            OrderItem orderItem = new OrderItem();
-//            orderItem.setQuantity(cartItem.getQuantity());
-//            orderItem.setPost(cartItem.getPost());
-//            orderItem.setOrders(order);
-//            orderItem.setType(cartItem.getType());
-//            orderItem.setPrice(cartItem.getPrice());
-//            orderItem.setDayToRent(cartItem.getDayToRent());
-//            orderItems.add(orderItem);
-//            total += cartItem.getPrice() * cartItem.getQuantity();
-//        }
-//
-//        order.setOrderItems(orderItems);
-//        order.setTotalPrice(total);
-//        order.setType(cart.getCartItems().get(0).getType()); // Lấy loại đơn hàng từ item đầu tiên trong giỏ
-//
-//        Orders savedOrder = orderRepository.save(order);
-//
-//        // Sau khi tạo đơn hàng, xóa các mục trong giỏ hàng
-//        cart.getCartItems().clear();
-//        cartRepository.save(cart);
-//
-//        return savedOrder;
-//    }
-//
-//    public Orders createOrders(Orders order) {
-//        return orderRepository.save(order);
-//    }
-//    public Orders createOrderBuy(OrderBuyRequest orderBuyRequest){
-//        Account customer = authenticationService.getCurrentAccount();
-//        Orders orders = new Orders();
-//        List<OrderItem> orderItems= new ArrayList<>();
-//        double total = 0;
-//
-//        orders.setCustomer(customer);
-//        orders.setCreateAt(new Date());
-//
-//        for (OrderBuyItemRequest orderBuyItemRequest : orderBuyRequest.getItem()){
-//            Post post = postRepository.findPostById(orderBuyItemRequest.getPostId());
-//            OrderItem orderItem = new OrderItem();
-//            orderItem.setQuantity(orderBuyItemRequest.getQuantity());
-//            orderItem.setPrice(post.getPrice());
-//            orderItem.setOrders(orders);
-//            orderItem.setPost(post);
-//            orderItems.add(orderItem);
-//            total +=post.getPrice() * orderBuyItemRequest.getQuantity();
-//        }
-//
-//        orders.setOrderItems(orderItems);
-//        orders.setTotalPrice(total);
-//        orders.setType(OrderType.BUYTOY);
-//        return orderRepository.save(orders);
-//    }
-//
-//
-//    public Orders createOrderRent(OrderRentRequest orderRentRequest){
-//        Account customer = authenticationService.getCurrentAccount();
-//        Orders orders = new Orders();
-//        List<OrderItem> orderItems= new ArrayList<>();
-//        double total = 0;
-//
-//        orders.setCustomer(customer);
-//        orders.setCreateAt(new Date());
-//
-//        for (OrderRentItemRequest orderRentItemRequest : orderRentRequest.getItem()){
-//            Post post = postRepository.findPostById(orderRentItemRequest.getPostId());
-//            OrderItem orderItem = new OrderItem();
-//            orderItem.setQuantity(orderRentItemRequest.getQuantity());
-//            orderItem.setDayToRent(orderRentItemRequest.getDayToRent());
-//            orderItem.setOrders(orders);
-//            orderItem.setPost(post);
-//            double price = post.getDepositFee() + post.getPriceByDay()*orderRentItemRequest.getDayToRent();
-//            orderItem.setPrice(price);
-//
-//            orderItems.add(orderItem);
-//            total += orderItem.getPrice()* orderRentItemRequest.getQuantity();
-//        }
-//
-//        orders.setOrderItems(orderItems);
-//        orders.setTotalPrice(total);
-//        orders.setType(OrderType.RENTTOY);
-//        return orderRepository.save(orders);
-//    }
-//
-//    public Orders createOrderPostTicket(OrderPostTicketRequest orderPostTicketRequest){
-//        Account customer = authenticationService.getCurrentAccount();
-//        Orders orders = new Orders();
-//        List<OrderItem> orderItems= new ArrayList<>();
-//        double total = 0;
-//
-//        orders.setCustomer(customer);
-//        orders.setCreateAt(new Date());
-//        double postTicketPrice = 10000;
-//        for (OrderPostTicketItemRequest orderPostTicketItemRequest : orderPostTicketRequest.getItem()){
-//            OrderItem orderItem = new OrderItem();
-//            orderItem.setQuantity(orderPostTicketItemRequest.getQuantity());
-//
-//            orderItem.setOrders(orders);
-//
-//            orderItems.add(orderItem);
-//            total += postTicketPrice * orderPostTicketItemRequest.getQuantity();
-//        }
-//
-//        orders.setOrderItems(orderItems);
-//        orders.setTotalPrice(total);
-//        orders.setType(OrderType.BUYPOST);
-//        return orderRepository.save(orders);
-//    }
-//    public void updatePostCountAfterPayment(long orderId) throws Exception {
-//        Orders order = orderRepository.findById(orderId)
-//                .orElseThrow(() -> new Exception("Order not found"));
-//        if (order.getType() == OrderType.BUYPOST) {
-//            Account customer = order.getCustomer();
-//            int totalPostCount = order.getOrderItems().stream()
-//                    .mapToInt(OrderItem::getQuantity)
-//                    .sum();
-//            customer.setPostCount(customer.getPostCount() + totalPostCount);
-//            accountRepository.save(customer);
-//        }
-//    }
-//    public Orders createOrder(Orders order) {
-//        return orderRepository.save(order);
-//    }
-//    private String generateHMAC(String secretKey, String signData) throws NoSuchAlgorithmException, InvalidKeyException {
-//        Mac hmacSha512 = Mac.getInstance("HmacSHA512");
-//        SecretKeySpec keySpec = new SecretKeySpec(secretKey.getBytes(StandardCharsets.UTF_8), "HmacSHA512");
-//        hmacSha512.init(keySpec);
-//        byte[] hmacBytes = hmacSha512.doFinal(signData.getBytes(StandardCharsets.UTF_8));
-//
-//        StringBuilder result = new StringBuilder();
-//        for (byte b : hmacBytes) {
-//            result.append(String.format("%02x", b));
-//        }
-//        return result.toString();
-//    }
-//}
 package com.ToyRentalService.service;
 import com.ToyRentalService.Dtos.Request.OrderRequest.OrderPostTicketItemRequest;
 import com.ToyRentalService.Dtos.Request.OrderRequest.OrderPostTicketRequest;
@@ -156,7 +5,10 @@ import com.ToyRentalService.Dtos.Response.OrderHistoryResponse;
 import com.ToyRentalService.entity.*;
 import com.ToyRentalService.enums.OrderStatus;
 import com.ToyRentalService.enums.OrderType;
+import com.ToyRentalService.enums.PaymentStatus;
+import com.ToyRentalService.exception.exceptions.NotFoundException;
 import com.ToyRentalService.repository.*;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.crypto.Mac;
@@ -180,7 +32,7 @@ public class OrderService {
     private OrderRepository orderRepository;
 
     @Autowired
-    private OrderHistoryRepository orderHistoryRepository;
+    private OrderItemRepository orderItemRepository;
 
     @Autowired
     private AccountRepository accountRepository;
@@ -188,61 +40,12 @@ public class OrderService {
     @Autowired
     private PostRepository postRepository;
 
-//    public String createOrderFromCart() throws Exception {
-//        // Lấy thông tin tài khoản hiện tại
-//        Account customer = authenticationService.getCurrentAccount();
-//        Cart cart = cartRepository.findByCustomer(customer)
-//                .orElseThrow(() -> new Exception("Cart not found"));
-//
-//        // Kiểm tra nếu giỏ hàng rỗng
-//        if (cart.getCartItems().isEmpty()) {
-//            throw new Exception("Cart is empty");
-//        }
-//
-//        Orders order = new Orders();
-//        order.setCustomer(customer);
-//        order.setCreateAt(new Date());
-//        List<OrderItem> orderItems = new ArrayList<>();
-//        double total = 0;
-//
-//        // Tạo danh sách OrderItems từ các CartItems
-//        for (CartItem cartItem : cart.getCartItems()) {
-//            OrderItem orderItem = new OrderItem();
-//            orderItem.setQuantity(cartItem.getQuantity());
-//            orderItem.setPost(cartItem.getPost());
-//            orderItem.setOrders(order);
-//            orderItem.setDayToRent(cartItem.getDayToRent());
-//            orderItem.setType(cartItem.getType());
-//            orderItem.setPrice(cartItem.getPrice());  // Sử dụng giá của CartItem
-//            orderItems.add(orderItem);
-//
-//            // Tính tổng giá trị cho Order
-//            total += cartItem.getPrice();  // Tổng giá trị của từng mục
-//        }
-//
-//        // Đặt danh sách OrderItems và tổng giá trị đơn hàng
-//        order.setOrderItems(orderItems);
-//        order.setTotalPrice(total);
-//
-//        // Đặt loại đơn hàng dựa trên mục đầu tiên
-//        order.setType(cart.getCartItems().get(0).getType());
-//
-//        // Lưu đơn hàng
-//        Orders savedOrder = orderRepository.save(order);
-//
-//        // Xóa giỏ hàng sau khi tạo đơn hàng
-//        cart.getCartItems().clear();  // Xóa các mục trong giỏ
-//        cart.setTotalPrice(0);  // Đặt TotalPrice về 0
-//        cartRepository.save(cart);  // Lưu lại giỏ hàng
-//
-//        // Thêm lịch sử đơn hàng sau khi đơn hàng được tạo
-//        addOrderHistory(savedOrder, "CREATED", "Order created for purchasing toys.");
-//        // Gọi hàm createUrl để tạo URL thanh toán sau khi đơn hàng được lưu
-//        String paymentUrl = createUrl(savedOrder.getId());
-//
-//        // Trả về URL thanh toán
-//        return paymentUrl;
-//    }
+    @Autowired
+    private VNPayPaymentService vnpayPaymentService;
+
+    @Autowired
+    private PaymentRepository paymentRepository;
+
 public String createOrderFromCart() throws Exception {
     Account customer = authenticationService.getCurrentAccount();
     Cart cart = cartRepository.findByCustomer(customer)
@@ -282,45 +85,32 @@ public String createOrderFromCart() throws Exception {
     cart.getCartItems().clear();
     cart.setTotalPrice(0);
     cartRepository.save(cart);
-
-    //addOrderHistory(savedOrder, OrderStatus.CREATED, "Order created for purchasing toys.");
-    String paymentUrl = createUrl(savedOrder.getId());
-
+//    String paymentUrl = createUrl(savedOrder.getId());
+    String paymentUrl = initiateOrderBuyPayment(savedOrder.getId());
     return paymentUrl;
 }
-    public void updateOrderStatusAfterPayment(long orderId, OrderStatus status) throws Exception {
-        Orders order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new Exception("Order not found"));
-
-        order.setStatus(status);
-        orderRepository.save(order);
-
-        String description = status == OrderStatus.COMPLETED ? "Payment completed successfully." : "Payment failed or canceled.";
-        addOrderHistory(order, status, description);
+public void updateOrderStatusAfterPayment(long orderId, OrderStatus status) throws Exception {
+    Orders order = orderRepository.findById(orderId)
+            .orElseThrow(() -> new Exception("Order not found"));
+    order.setStatus(status);
+    orderRepository.save(order);
+    String description = status == OrderStatus.COMPLETED ? "Payment completed successfully." : "Payment failed or canceled.";
+    if (status == OrderStatus.COMPLETED) {
+        savePaymentRecord(order, order.getTotalPrice(), PaymentStatus.COMPLETED, false);
+    } else {
+        savePaymentRecord(order, order.getTotalPrice(), PaymentStatus.FAILED, false);
     }
-        public Orders createOrderPostTicket(OrderPostTicketRequest orderPostTicketRequest){
-        Account customer = authenticationService.getCurrentAccount();
-        Orders orders = new Orders();
-        List<OrderItem> orderItems= new ArrayList<>();
-        double total = 0;
+}
 
-        orders.setCustomer(customer);
-        orders.setCreateAt(new Date());
-        double postTicketPrice = 10000;
-        for (OrderPostTicketItemRequest orderPostTicketItemRequest : orderPostTicketRequest.getItem()){
-            OrderItem orderItem = new OrderItem();
-            orderItem.setQuantity(orderPostTicketItemRequest.getQuantity());
-
-            orderItem.setOrders(orders);
-
-            orderItems.add(orderItem);
-            total += postTicketPrice * orderPostTicketItemRequest.getQuantity();
-        }
-
-        orders.setOrderItems(orderItems);
-        orders.setTotalPrice(total);
-        orders.setType(OrderType.BUYPOST);
-        return orderRepository.save(orders);
+    private void savePaymentRecord(Orders order, double amount, PaymentStatus status, boolean isDeposit) {
+        Payment payment = new Payment();
+        payment.setOrder(order);
+        payment.setCreateAt(new Date());
+        payment.setPrice((float) amount);
+        payment.setPaymentStatus(status);
+        payment.setIsDeposit(isDeposit);
+        payment.setOrderType(OrderType.BUYTOY);
+        paymentRepository.save(payment);
     }
     public void updateStockAfterPayment(long orderId) throws Exception {
         Orders order = orderRepository.findById(orderId)
@@ -338,129 +128,44 @@ public String createOrderFromCart() throws Exception {
             }
         }
     }
-    public void addOrderHistory(Orders order, OrderStatus status, String description) {
-        OrderHistory orderHistory = OrderHistory.builder()
-                .order(order)
-                .orderDate(new Date())
-                .description(description)
-                .status(status)
-                .build();
-
-        orderHistoryRepository.save(orderHistory);
+    public List<OrderItem> getOrderHistoryByType(OrderType type) {
+        return orderItemRepository.findByType(type);
     }
-
-    public List<OrderHistory> getOrderHistoryByType(OrderType type) {
-        return orderHistoryRepository.findByOrderType(type);
-    }
-
-    public List<OrderHistoryResponse> getOrderHistoryForCurrentUser() {
+    public List<OrderHistoryResponse> getOrderItemHistoryForCurrentUser() {
         Account currentUser = authenticationService.getCurrentAccount();
-        List<OrderHistory> orderHistory = orderHistoryRepository.findByOrderCustomer(currentUser);
-        List<Post> posts = new ArrayList<>();
+        List<OrderItem> orderItems = orderItemRepository.findByOrdersCustomer(currentUser);
         List<OrderHistoryResponse> orderHistoryResponse = new ArrayList<>();
-        for (OrderHistory orderHistoryItem : orderHistory){
-            for(OrderItem orderItem : orderHistoryItem.getOrder().getOrderItems()){
-                posts.add(orderItem.getPost());
-            }
-            OrderHistoryResponse  orderHistoryResponse1 = OrderHistoryResponse.builder()
-                    .orderType(orderHistoryItem.getOrder().getType())
-                    .orderId(orderHistoryItem.getId())
-                    .orderDate(orderHistoryItem.getOrderDate())
-                    .posts(posts)
-                    .build();
-            if (orderHistoryItem.getStatus() == OrderStatus.COMPLETED) {
-                orderHistoryResponse.add(orderHistoryResponse1);
+
+        for (OrderItem orderItem : orderItems) {
+            Orders order = orderItem.getOrders();
+            OrderStatus status = order.getStatus();
+
+            if (status == OrderStatus.COMPLETED) {
+                OrderHistoryResponse historyResponse = OrderHistoryResponse.builder()
+                        .orderType(orderItem.getType())
+                        .orderId(order.getId())
+                        .orderDate(order.getCreateAt())
+                        .posts(Collections.singletonList(orderItem.getPost()))
+                        .build();
+                orderHistoryResponse.add(historyResponse);
             }
         }
 
         return orderHistoryResponse;
     }
-
-    public String createUrl(long orderId) throws Exception {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
-        LocalDateTime createDate = LocalDateTime.now();
-        String formattedCreateDate = createDate.format(formatter);
+    public String initiateOrderBuyPayment(Long orderId) throws Exception {
+        Account customer = authenticationService.getCurrentAccount();
+        if (customer == null) {
+            throw new NotFoundException("User not logged in");
+        }
 
         Orders orders = orderRepository.findById(orderId)
                 .orElseThrow(() -> new Exception("Order not found"));
-
-        double money = orders.getTotalPrice() * 100;
-        String amount = String.valueOf((int) money);
-        String tmnCode = "P5CWZRAS";
-        String secretKey = "74FW426Y4BRBGGIZ9HCR40EGGFXJ70IV";
-        String vnpUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
         String returnUrl = "http://localhost:5173/success?orderID=" + orders.getId();
-        String currCode = "VND";
-        Map<String, String> vnpParams = new TreeMap<>();
-        vnpParams.put("vnp_Version", "2.1.0");
-        vnpParams.put("vnp_Command", "pay");
-        vnpParams.put("vnp_TmnCode", tmnCode);
-        vnpParams.put("vnp_Locale", "vn");
-        vnpParams.put("vnp_CurrCode", currCode);
-        vnpParams.put("vnp_TxnRef", String.valueOf(orders.getId())); // Sử dụng orderId làm TxnRef
-        vnpParams.put("vnp_OrderInfo", "Thanh toán cho mã GD: " + orders.getId());
-        vnpParams.put("vnp_OrderType", "other");
-        vnpParams.put("vnp_Amount", amount);
-        vnpParams.put("vnp_ReturnUrl", returnUrl);
-        vnpParams.put("vnp_CreateDate", formattedCreateDate);
-        vnpParams.put("vnp_IpAddr", "128.199.178.23");
-
-        StringBuilder signDataBuilder = new StringBuilder();
-        for (Map.Entry<String, String> entry : vnpParams.entrySet()) {
-            signDataBuilder.append(URLEncoder.encode(entry.getKey(), StandardCharsets.UTF_8.toString()));
-            signDataBuilder.append("=");
-            signDataBuilder.append(URLEncoder.encode(entry.getValue(), StandardCharsets.UTF_8.toString()));
-            signDataBuilder.append("&");
-        }
-        signDataBuilder.deleteCharAt(signDataBuilder.length() - 1);
-
-        String signData = signDataBuilder.toString();
-        String signed = generateHMAC(secretKey, signData);
-
-        vnpParams.put("vnp_SecureHash", signed);
-
-        StringBuilder urlBuilder = new StringBuilder(vnpUrl);
-        urlBuilder.append("?");
-        for (Map.Entry<String, String> entry : vnpParams.entrySet()) {
-            urlBuilder.append(URLEncoder.encode(entry.getKey(), StandardCharsets.UTF_8.toString()));
-            urlBuilder.append("=");
-            urlBuilder.append(URLEncoder.encode(entry.getValue(), StandardCharsets.UTF_8.toString()));
-            urlBuilder.append("&");
-        }
-        urlBuilder.deleteCharAt(urlBuilder.length() - 1);
-
-        return urlBuilder.toString();
-    }
-
-    public void updatePostCountAfterPayment(long orderId) throws Exception {
-        Orders order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new Exception("Order not found"));
-
-        if (order.getType() == OrderType.BUYPOST && order.getStatus() == OrderStatus.COMPLETED) {
-            Account customer = order.getCustomer();
-            int totalPostCount = order.getOrderItems().stream()
-                    .mapToInt(OrderItem::getQuantity)
-                    .sum();
-
-            customer.setPostCount(customer.getPostCount() + totalPostCount);
-            accountRepository.save(customer);
-        }
-    }
-    public Orders createOrder(Orders order) {
-        return orderRepository.save(order);
-    }
-
-    private String generateHMAC(String secretKey, String signData) throws Exception {
-        Mac hmacSha512 = Mac.getInstance("HmacSHA512");
-        SecretKeySpec keySpec = new SecretKeySpec(secretKey.getBytes(StandardCharsets.UTF_8), "HmacSHA512");
-        hmacSha512.init(keySpec);
-        byte[] hmacBytes = hmacSha512.doFinal(signData.getBytes(StandardCharsets.UTF_8));
-
-        StringBuilder result = new StringBuilder();
-        for (byte b : hmacBytes) {
-            result.append(String.format("%02x", b));
-        }
-        return result.toString();
+        String orderInfo = "Thanh toán cho mã GD: " + orders.getId();
+        double money = orders.getTotalPrice() * 100;
+        int amount = (int) money;
+        return vnpayPaymentService.createPaymentUrl(amount, orderInfo, returnUrl);
     }
 }
 

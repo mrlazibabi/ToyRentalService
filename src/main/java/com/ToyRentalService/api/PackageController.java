@@ -5,6 +5,7 @@ import com.ToyRentalService.Dtos.Response.ResponseObject;
 import com.ToyRentalService.entity.RentalPackage;
 import com.ToyRentalService.service.PackageService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,6 +45,16 @@ public class PackageController {
     public ResponseEntity<Void> deletePackage(@PathVariable long id) {
         packageService.deletePackage(id);
         return ResponseEntity.noContent().build();
+    }
+    @PostMapping("/{packageId}/pay")
+    public ResponseEntity<String> initiatePackagePayment(HttpServletRequest request, @PathVariable Long packageId) {
+        String paymentUrl = packageService.initiatePackagePayment(request, packageId);
+        return ResponseEntity.status(HttpStatus.OK).body(paymentUrl);
+    }
+
+    @GetMapping("/{packageId}/payment-return")
+    public ResponseEntity<ResponseObject> handlePaymentReturn(HttpServletRequest request, @PathVariable Long packageId) {
+        return packageService.handlePaymentReturn(request, packageId);
     }
 }
 

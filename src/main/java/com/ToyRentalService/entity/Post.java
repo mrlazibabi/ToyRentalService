@@ -61,7 +61,11 @@ public class Post {
             )
     @JsonIgnore
     Set<Category> categories = new HashSet<>();
-
+    @ManyToMany
+    @JoinTable(name = "order_post",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "order_id"))
+    private List<Orders> orders;
     @ManyToMany
     Set<Account> accounts;
 

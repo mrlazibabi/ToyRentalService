@@ -49,7 +49,6 @@
 package com.ToyRentalService.api;
 import com.ToyRentalService.Dtos.Request.OrderRequest.OrderPostTicketRequest;
 import com.ToyRentalService.Dtos.Response.OrderHistoryResponse;
-import com.ToyRentalService.entity.OrderHistory;
 import com.ToyRentalService.entity.Orders;
 import com.ToyRentalService.enums.OrderStatus;
 import com.ToyRentalService.enums.OrderType;
@@ -80,38 +79,21 @@ public class OrderController {
             return ResponseEntity.badRequest().body("Failed to create order: " + e.getMessage());
         }
     }
-    @PostMapping("/buy-post")
-    public ResponseEntity<String> createOrderForPost(@RequestBody OrderPostTicketRequest orderPostTicketRequest) {
-        try {
-            Orders order = orderService.createOrderPostTicket(orderPostTicketRequest);
-            String paymentUrl = orderService.createUrl(order.getId());
-            return ResponseEntity.ok(paymentUrl);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Failed to create order for post: " + e.getMessage());
-        }
-    }
-
-    @GetMapping("/history/type")
-    public List<OrderHistory> getOrderHistoryByType(@RequestParam("type") OrderType type) {
-        return orderService.getOrderHistoryByType(type);
-    }
-
+//    @GetMapping("/history/type")
+//    public List<OrderHistory> getOrderHistoryByType(@RequestParam("type") OrderType type) {
+//        return orderService.getOrderHistoryByType(type);
+//    }
     @GetMapping("/history")
     public ResponseEntity  getOrderHistoryByAccount() {
-        return ResponseEntity.ok(orderService.getOrderHistoryForCurrentUser());
+        return ResponseEntity.ok(orderService.getOrderItemHistoryForCurrentUser());
     }
     @PostMapping("/update-status")
     public ResponseEntity<String> updateOrderStatusAfterPayment(@RequestParam long orderId, @RequestParam OrderStatus status) {
         try {
             orderService.updateOrderStatusAfterPayment(orderId, status);
-
-            if (status == OrderStatus.COMPLETED) {
-                orderService.updatePostCountAfterPayment(orderId);
-            }
             if (status == OrderStatus.COMPLETED) {
                 orderService.updateStockAfterPayment(orderId);
             }
-
             return ResponseEntity.ok("Order status and relevant data updated successfully.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update order status: " + e.getMessage());

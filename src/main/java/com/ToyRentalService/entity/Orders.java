@@ -27,8 +27,6 @@ public class Orders {
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
-    private int quantity;
-
     private double totalPrice;
 
     @ManyToOne
@@ -38,8 +36,4 @@ public class Orders {
 
     @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL)
     List<OrderItem> orderItems;
-
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private List<OrderHistory> orderHistories;
 }

@@ -1,8 +1,12 @@
 package com.ToyRentalService.entity;
 
+import com.ToyRentalService.enums.OrderType;
+import com.ToyRentalService.enums.PaymentStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.Date;
 
 @Entity
 @Table(name = "Payment")
@@ -12,11 +16,20 @@ public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
+
+    @OneToOne
     @JoinColumn(name = "orderId")
+
     private Orders order;
+    Date createAt;
+
     private float price;
-    private String paymentMethod;
-    private String paymentStatus;
+
+    @Enumerated(EnumType.STRING)
+    private PaymentStatus paymentStatus;
+
+    @Enumerated(EnumType.STRING)
+    private OrderType orderType;
+
     private Boolean isDeposit;
 }

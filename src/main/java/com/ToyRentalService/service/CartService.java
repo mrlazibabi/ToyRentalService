@@ -98,6 +98,45 @@ public class CartService {
             cartRepository.save(cart);
         }
     }
+    public void removeItemFromCart(long postId, OrderType type) throws Exception {
+        Account customer = authenticationService.getCurrentAccount();
+        Cart cart = cartRepository.findByCustomer(customer)
+                .orElseThrow(() -> new Exception("Cart not found"));
+
+        CartItem existingItem = cart.getCartItems().stream()
+                .filter(item -> item.getPost().getId() == postId && item.getType() == type)
+                .findFirst()
+                .orElseThrow(() -> new Exception("Item not found in cart"));
+
+        cartItemRepository.delete(existingItem);
+        cart.getCartItems().remove(existingItem);
+        cart.setTotalPrice(cart.getCartItems().stream().mapToDouble(CartItem::getPrice).sum());
+        cartRepository.save(cart);
+    }
+    public void updateItemQuantity(long postId, OrderType type, int quantity, int dayToRent) throws Exception {
+        Account customer = authenticationService.getCurrentAccount();
+        Cart cart = cartRepository.findByCustomer(customer)
+                .orElseThrow(() -> new Exception("Cart not found"));
+
+        CartItem existingItem = cart.getCartItems().stream()
+                .filter(item -> item.getPost().getId() == postId && item.getType() == type)
+                .findFirst()
+                .orElseThrow(() -> new Exception("Item not found in cart"));
+
+        existingItem.setQuantity(quantity);
+
+        if (type == OrderType.RENTTOY) {
+            existingItem.setDayToRent(dayToRent);
+            existingItem.setPrice(existingItem.getPost().getPriceByDay() * dayToRent + existingItem.getPost().getDepositFee());
+        } else if (type == OrderType.BUYTOY) {
+            existingItem.setPrice(existingItem.getPost().getPrice() * quantity);
+        }
+
+        cartItemRepository.save(existingItem);
+        cart.setTotalPrice(cart.getCartItems().stream().mapToDouble(CartItem::getPrice).sum());
+        cartRepository.save(cart);
+    }
+
 
 }
 
