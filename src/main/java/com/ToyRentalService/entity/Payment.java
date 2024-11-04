@@ -19,7 +19,6 @@ public class Payment {
 
     @OneToOne
     @JoinColumn(name = "orderId")
-
     private Orders order;
     Date createAt;
 
@@ -32,4 +31,7 @@ public class Payment {
     private OrderType orderType;
 
     private Boolean isDeposit;
+    @OneToOne
+    @JoinColumn(name = "order_rent_id")
+    private OrderRent orderRent;
 }
