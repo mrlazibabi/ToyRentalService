@@ -31,8 +31,11 @@ public class CategoryService {
 
 
     //Read
-    public List<Category> getAllCategories(){
-        return categoryRepository.findAll();
+//    public List<Category> getAllCategories(){
+//        return categoryRepository.findAll();
+//    }
+    public List<Category> getAllCategories() {
+        return categoryRepository.findByIsDelete(false);
     }
 
     //Read id

@@ -47,19 +47,13 @@
 
 
 package com.ToyRentalService.api;
-import com.ToyRentalService.Dtos.Request.OrderRequest.OrderPostTicketRequest;
-import com.ToyRentalService.Dtos.Response.OrderHistoryResponse;
-import com.ToyRentalService.entity.Orders;
 import com.ToyRentalService.enums.OrderStatus;
-import com.ToyRentalService.enums.OrderType;
 import com.ToyRentalService.service.OrderService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @CrossOrigin("*")
