@@ -36,8 +36,4 @@ public class Orders {
 
     @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL)
     List<OrderItem> orderItems;
-
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private List<OrderHistory> orderHistories;
 }

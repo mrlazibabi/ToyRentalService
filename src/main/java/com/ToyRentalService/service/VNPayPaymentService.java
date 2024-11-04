@@ -11,11 +11,12 @@ import java.util.*;
 @Service
 public class VNPayPaymentService {
 
-    public String createPaymentUrl(HttpServletRequest request, int amount, String orderInfo, String returnUrl) {
+    public String createPaymentUrl(int amount, String orderInfo, String returnUrl) {
         String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
         String vnp_TxnRef = VNPAYConfig.getRandomNumber(8);
-        String vnp_IpAddr = VNPAYConfig.getIpAddress(request);
+//        String vnp_IpAddr = VNPAYConfig.getIpAddress(request);
+        String vnp_IpAddr = "127.0.0.1";
         String vnp_TmnCode = VNPAYConfig.vnp_TmnCode;
 
         Map<String, String> vnp_Params = new HashMap<>();

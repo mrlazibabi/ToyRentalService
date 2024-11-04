@@ -4,6 +4,7 @@ import com.ToyRentalService.Dtos.Response.ResponseObject;
 import com.ToyRentalService.entity.Account;
 import com.ToyRentalService.entity.Payment;
 import com.ToyRentalService.entity.RentalPackage;
+import com.ToyRentalService.enums.OrderType;
 import com.ToyRentalService.enums.PaymentStatus;
 import com.ToyRentalService.exception.exceptions.NotFoundException;
 import com.ToyRentalService.repository.AccountRepository;
@@ -13,7 +14,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Enumeration;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -102,7 +102,7 @@ public String initiatePackagePayment(HttpServletRequest request, Long packageId)
     String orderInfo = "Payment for package: " + rentalPackage.getPackageName();
     int amount = (int) rentalPackage.getPackagePrice();
 
-    return vnpayPaymentService.createPaymentUrl(request, amount, orderInfo, returnUrl);
+    return vnpayPaymentService.createPaymentUrl(amount, orderInfo, returnUrl);
 }
 
 //    public ResponseEntity<ResponseObject> handlePaymentReturn(HttpServletRequest request, Long accountId, Long packageId) {
@@ -136,7 +136,6 @@ public String initiatePackagePayment(HttpServletRequest request, Long packageId)
 //        }
 //    }
 public ResponseEntity<ResponseObject> handlePaymentReturn(HttpServletRequest request, Long packageId) {
-    // Lấy accountId từ người dùng hiện tại
     Account account = authenticationService.getCurrentAccount();
     if (account == null) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
@@ -147,15 +146,12 @@ public ResponseEntity<ResponseObject> handlePaymentReturn(HttpServletRequest req
 
     if (validationStatus == 0) {
         RentalPackage rentalPackage = getPackageById(packageId);
-
-        // Tạo và lưu đối tượng Payment với trạng thái COMPLETED
         Payment payment = new Payment();
         payment.setPrice((float) rentalPackage.getPackagePrice());
         payment.setPaymentStatus(PaymentStatus.COMPLETED);
         payment.setIsDeposit(false);
+        payment.setOrderType(OrderType.BUYPOST);
         paymentRepository.save(payment);
-
-        // Cập nhật số lượng bài đăng cho tài khoản
         account.setPostCount(account.getPostCount() + rentalPackage.getNumberPost());
         accountRepository.save(account);
 

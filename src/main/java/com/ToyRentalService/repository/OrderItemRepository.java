@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface OrderItemRepository extends JpaRepository<OrderItem,Long> {
-//    List<OrderItem> findByOrderTypes(OrderType type);
-    List<OrderItem> findByOrderCustomers(Account customer);
+    List<OrderItem> findByOrdersCustomer(Account customer);
+    List<OrderItem> findByType(OrderType type);
+
 }
