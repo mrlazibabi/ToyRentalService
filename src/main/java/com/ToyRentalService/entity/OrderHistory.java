@@ -31,6 +31,4 @@ public class OrderHistory
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Orders order;
-
-
 }

@@ -27,8 +27,6 @@ public class Orders {
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
-    private int quantity;
-
     private double totalPrice;
 
     @ManyToOne

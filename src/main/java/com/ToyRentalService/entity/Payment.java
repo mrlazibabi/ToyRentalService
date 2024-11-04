@@ -1,5 +1,6 @@
 package com.ToyRentalService.entity;
 
+import com.ToyRentalService.enums.PaymentStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,8 +16,11 @@ public class Payment {
     @ManyToOne
     @JoinColumn(name = "orderId")
     private Orders order;
+
     private float price;
-    private String paymentMethod;
-    private String paymentStatus;
+
+    @Enumerated(EnumType.STRING)
+    private PaymentStatus paymentStatus;
+
     private Boolean isDeposit;
 }
