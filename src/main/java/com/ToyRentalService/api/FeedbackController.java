@@ -25,7 +25,7 @@ public class FeedbackController {
     }
 
     @GetMapping("/{postId}")
-    public ResponseEntity<List<Feedback>> getFeedbackByPostId(@PathVariable Long postId) {
+    public ResponseEntity<List<Feedback>> getFeedbackByToyId(@PathVariable Long postId) {
         List<Feedback> feedbacks = feedbackService.getFeedback(postId);
         return ResponseEntity.ok(feedbacks);
     }

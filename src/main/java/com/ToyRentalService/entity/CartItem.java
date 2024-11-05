@@ -21,8 +21,8 @@ public class CartItem {
 
 
     @ManyToOne
-    @JoinColumn(name = "post_id")
-    private Post post;
+    @JoinColumn(name = "toy_id")
+    private Toy toy;
 
     private int quantity;
 

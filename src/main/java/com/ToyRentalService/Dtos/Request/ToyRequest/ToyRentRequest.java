@@ -1,4 +1,4 @@
-package com.ToyRentalService.Dtos.Request.PostRequest;
+package com.ToyRentalService.Dtos.Request.ToyRequest;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -8,7 +8,7 @@ import lombok.Data;
 import java.util.Set;
 
 @Data
-public class PostRentRequest {
+public class ToyRentRequest {
     private String toyName;
 
     //private String category;

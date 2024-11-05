@@ -1,13 +1,12 @@
 package com.ToyRentalService.service;
 
 import com.ToyRentalService.Dtos.Request.FeedbackRequest;
-import com.ToyRentalService.entity.Account;
 import com.ToyRentalService.entity.Feedback;
-import com.ToyRentalService.entity.Post;
+import com.ToyRentalService.entity.Toy;
 import com.ToyRentalService.exception.exceptions.EntityNotFoundException;
 import com.ToyRentalService.repository.AccountRepository;
 import com.ToyRentalService.repository.FeedbackRepository;
-import com.ToyRentalService.repository.PostRepository;
+import com.ToyRentalService.repository.ToyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,35 +22,35 @@ public class FeedbackService {
     AccountRepository accountRepository;
 
     @Autowired
-    PostRepository postRepository;
+    ToyRepository toyRepository;
 
     @Autowired
-    PostService postService;
+    ToyService toyService;
 
     @Autowired
     AuthenticationService authenticationService;
 
     public Feedback createNewFeedback(FeedbackRequest feedbackRequest){
-        Post post = postRepository.findById(feedbackRequest.getPostId())
+        Toy toy = toyRepository.findById(feedbackRequest.getPostId())
                 .orElseThrow(() -> new EntityNotFoundException("Shop Not Found"));
         Feedback feedback = new Feedback();
         feedback.setContent(feedbackRequest.getContent());
         feedback.setRating(feedbackRequest.getRating());
         feedback.setCustomer(authenticationService.getCurrentAccount());
-        feedback.setPost(post);
+        feedback.setToy(toy);
 
         return feedbackRepository.save(feedback);
     }
 
-    public List<Feedback> getFeedback(long postId) {
-        Optional<Post> postOptional = postService.getPostById(postId);
+    public List<Feedback> getFeedback(long toyId) {
+        Optional<Toy> toyOptional = toyService.getToyById(toyId);
 
-        // Check if the post is found
-        if (postOptional.isPresent()) {
-            Post post = postOptional.get();
-            return feedbackRepository.findFeedbackByPostId(post.getId());
+        // Check if the toy is found
+        if (toyOptional.isPresent()) {
+            Toy toy = toyOptional.get();
+            return feedbackRepository.findFeedbackByToyId(toy.getId());
         } else {
-            throw new EntityNotFoundException("Post not found with id: " + postId);
+            throw new EntityNotFoundException("Toy not found with id: " + toyId);
         }
     }
 }

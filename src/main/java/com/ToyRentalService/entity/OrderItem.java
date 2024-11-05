@@ -7,8 +7,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-
 @Entity
 @Getter
 @Setter
@@ -33,8 +31,8 @@ public class OrderItem {
     private OrderStatus status;
 
     @ManyToOne
-    @JoinColumn(name = "post_id")
-    Post post;
+    @JoinColumn(name = "toy_id")
+    Toy toy;
 
     @Enumerated(EnumType.STRING)
     private OrderType type;

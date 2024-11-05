@@ -19,7 +19,7 @@ public class Feedback {
     Account customer;
 
     @ManyToOne
-    @JoinColumn(name = "post_id")
+    @JoinColumn(name = "toy_id")
     @JsonIgnore
-    Post post;
+    Toy toy;
 }

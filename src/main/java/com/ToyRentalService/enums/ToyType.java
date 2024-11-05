@@ -1,6 +1,6 @@
 package com.ToyRentalService.enums;
 
-public enum PostType {
+public enum ToyType {
     RENT,
     SELL
 }

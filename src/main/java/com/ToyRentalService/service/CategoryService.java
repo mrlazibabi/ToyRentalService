@@ -47,7 +47,7 @@ public class CategoryService {
     public Category updateCategory(long id, CategoryRequest categoryRequest){
         Category updateCategory = categoryRepository.findCategoryById(id);
         if(updateCategory == null){
-            throw new EntityNotFoundException("Post not found!");
+            throw new EntityNotFoundException("Toy not found!");
         }
         updateCategory.setCategoryName(categoryRequest.getCategoryName());
         updateCategory.setDescription(categoryRequest.getDescription());
