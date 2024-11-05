@@ -35,7 +35,14 @@ public class NotificationService {
         }
     }
 
-    public void sendNotificationToAccount(NotificationFCM notificationFCM, Account account){
+    public void sendNotificationToAccount(NotificationFCM notificationFCM, Account account) {
+        String fcmToken = account.getFcmToken();
+
+        if (fcmToken == null || fcmToken.isEmpty()) {
+            System.out.println("No valid FCM token available for the account: " + account.getId());
+            return; // Skip sending the notification
+        }
+
         Notification notification = Notification.builder()
                 .setTitle(notificationFCM.getTitle())
                 .setBody(notificationFCM.getMessage())
@@ -43,12 +50,12 @@ public class NotificationService {
 
         Message message = Message.builder()
                 .setNotification(notification)
-                .setToken(account.getFcmToken())
+                .setToken(fcmToken)
                 .build();
 
         try {
             firebaseMessaging.send(message);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
