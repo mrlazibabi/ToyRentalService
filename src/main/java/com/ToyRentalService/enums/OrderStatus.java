@@ -1,5 +1,5 @@
 package com.ToyRentalService.enums;
 
 public enum OrderStatus {
-    PENDING, COMPLETED, CANCELED;
+    PENDING, COMPLETED, CANCELED, CREATED
 }

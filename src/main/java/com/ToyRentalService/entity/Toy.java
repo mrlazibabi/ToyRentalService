@@ -1,12 +1,9 @@
 package com.ToyRentalService.entity;
 
-import com.ToyRentalService.enums.PostType;
+import com.ToyRentalService.enums.ToyType;
 import com.ToyRentalService.enums.Status;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,7 +18,7 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Post {
+public class Toy {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -50,13 +47,14 @@ public class Post {
     private boolean isDelete;
 
     @Enumerated(EnumType.STRING)
-    private PostType postType;
+    private ToyType toyType;
 
     @Enumerated(EnumType.STRING)
     private Status status;
+
     @ManyToMany
-    @JoinTable(name = "Post_Category",
-            joinColumns = @JoinColumn(name = "post_id"),
+    @JoinTable(name = "Toy_Category",
+            joinColumns = @JoinColumn(name = "toy_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id")
             )
     @JsonIgnore
@@ -69,7 +67,7 @@ public class Post {
     @ManyToMany
     Set<Account> accounts;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "toy")
     @JsonIgnore
     List<OrderItem> orderItems;
 
@@ -79,9 +77,9 @@ public class Post {
     @JsonIgnore
     private Account customer;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "toy")
     @JsonIgnore
-    Set<Feedback> post_feedbacks;
+    Set<Feedback> toy_feedbacks;
 
 
     public void decrementQuantity(int amount) {

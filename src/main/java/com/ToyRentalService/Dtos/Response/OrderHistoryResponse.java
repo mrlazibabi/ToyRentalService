@@ -1,7 +1,6 @@
 package com.ToyRentalService.Dtos.Response;
 
-import com.ToyRentalService.entity.OrderItem;
-import com.ToyRentalService.entity.Post;
+import com.ToyRentalService.entity.Toy;
 import com.ToyRentalService.enums.OrderType;
 import lombok.*;
 
@@ -15,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 public class OrderHistoryResponse {
     private long orderId;
-    private List<Post> posts;
+    private List<Toy> toys;
     private OrderType orderType;
     private double totalPrice;
     private Date orderDate;

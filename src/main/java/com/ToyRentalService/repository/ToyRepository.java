@@ -1,6 +1,6 @@
 package com.ToyRentalService.repository;
 
-import com.ToyRentalService.entity.Post;
+import com.ToyRentalService.entity.Toy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,8 +11,8 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface PostRepository extends JpaRepository<Post, Long>, JpaSpecificationExecutor<Post> {
-    Optional<Post> findPostByToyNameOrDescription(String toyName, String description);
-    Post findPostById(long id);
-    Page<Post> findAll(Pageable pageable);
+public interface ToyRepository extends JpaRepository<Toy, Long>, JpaSpecificationExecutor<Toy> {
+    Optional<Toy> findToyByToyNameOrDescription(String toyName, String description);
+    Toy findToyById(long id);
+    Page<Toy> findAll(Pageable pageable);
 }

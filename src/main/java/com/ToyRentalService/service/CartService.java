@@ -13,7 +13,7 @@ import java.util.Optional;
 public class CartService {
 
     @Autowired
-    private PostRepository postRepository;
+    private ToyRepository toyRepository;
 
     @Autowired
     private CartRepository cartRepository;
@@ -25,8 +25,8 @@ public class CartService {
     private AuthenticationService authenticationService;
 
     public void addItemToCart(long postId, int quantity, OrderType type, int dayToRent) throws Exception {
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new Exception("Post not found"));
+        Toy toy = toyRepository.findById(postId)
+                .orElseThrow(() -> new Exception("Toy not found"));
 
         Account customer = authenticationService.getCurrentAccount();
 
@@ -40,7 +40,7 @@ public class CartService {
 
         // Kiểm tra xem item đã có trong cart chưa
         Optional<CartItem> existingItemOpt = cart.getCartItems().stream()
-                .filter(item -> item.getPost().getId() == postId && item.getType() == type)
+                .filter(item -> item.getToy().getId() == postId && item.getType() == type)
                 .findFirst();
 
         if (existingItemOpt.isPresent()) {
@@ -50,24 +50,24 @@ public class CartService {
 
             if (type == OrderType.RENTTOY) {
                 existingItem.setDayToRent(dayToRent);
-                existingItem.setPrice(post.getPriceByDay() * existingItem.getDayToRent() + post.getDepositFee());
+                existingItem.setPrice(toy.getPriceByDay() * existingItem.getDayToRent() + toy.getDepositFee());
             } else if (type == OrderType.BUYTOY) {
-                existingItem.setPrice(post.getPrice() * existingItem.getQuantity());
+                existingItem.setPrice(toy.getPrice() * existingItem.getQuantity());
             }
 
             cartItemRepository.save(existingItem);
         } else {
             // Thêm mới CartItem
             CartItem newItem = new CartItem();
-            newItem.setPost(post);
+            newItem.setToy(toy);
             newItem.setQuantity(quantity);
             newItem.setType(type);
             newItem.setCart(cart);
             if (type == OrderType.RENTTOY) {
                 newItem.setDayToRent(dayToRent);
-                newItem.setPrice(post.getPriceByDay() * dayToRent + post.getDepositFee());
+                newItem.setPrice(toy.getPriceByDay() * dayToRent + toy.getDepositFee());
             } else if (type == OrderType.BUYTOY) {
-                newItem.setPrice(post.getPrice() * quantity);
+                newItem.setPrice(toy.getPrice() * quantity);
             } else if (type == OrderType.BUYPOST) {
                 double postTicketPrice = 10000;
                 newItem.setPrice(postTicketPrice * quantity);

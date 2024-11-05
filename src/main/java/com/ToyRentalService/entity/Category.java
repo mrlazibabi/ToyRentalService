@@ -27,5 +27,5 @@ public class Category {
     private boolean isDelete = false;
 
     @ManyToMany(mappedBy = "categories",cascade = CascadeType.ALL)
-    Set<Post> posts = new HashSet<>();
+    Set<Toy> toys = new HashSet<>();
 }

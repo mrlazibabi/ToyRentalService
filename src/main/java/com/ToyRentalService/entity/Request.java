@@ -22,7 +22,7 @@ public class Request {
 
     @ManyToOne
     @JoinColumn(name = "toyId")
-    private Post toy;
+    private Toy toy;
 
     private String requestType;
     private Status status;
