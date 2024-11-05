@@ -1,6 +1,7 @@
 package com.ToyRentalService.api;
 
 import com.ToyRentalService.Dtos.Request.AccountRequest.AccountUpdateRequest;
+import com.ToyRentalService.Dtos.Request.AccountRequest.UpdateFCMRequest;
 import com.ToyRentalService.entity.Account;
 import com.ToyRentalService.enums.Role;
 import com.ToyRentalService.service.AccountService;
@@ -75,6 +76,12 @@ public class AccountController {
         List<Account> userAccounts = accountService.getAccountsByRoles(Role.USER);
         System.out.println("User Accounts: " + userAccounts); // Ghi log
         return ResponseEntity.ok(userAccounts);
+    }
+
+    @PatchMapping("fcm")
+    public ResponseEntity updateFCM(@RequestBody UpdateFCMRequest updateFCMRequest){
+        Account  account = accountService.updateFCM(updateFCMRequest);
+        return ResponseEntity.ok(account);
     }
 }
 

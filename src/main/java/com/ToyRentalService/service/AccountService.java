@@ -1,6 +1,7 @@
 package com.ToyRentalService.service;
 
 import com.ToyRentalService.Dtos.Request.AccountRequest.AccountUpdateRequest;
+import com.ToyRentalService.Dtos.Request.AccountRequest.UpdateFCMRequest;
 import com.ToyRentalService.Dtos.Response.ResponseObject;
 import com.ToyRentalService.entity.Account;
 import com.ToyRentalService.enums.Role;
@@ -22,6 +23,9 @@ import java.util.Optional;
 public class AccountService {
     @Autowired
     AccountRepository accountRepository;
+
+    @Autowired
+    AuthenticationService authenticationService;
 
     //Get All
     public ResponseEntity<ResponseObject> getAllUser() {
@@ -107,4 +111,12 @@ public class AccountService {
     public List<Account> getAccountsByRoles(Role role) {
         return accountRepository.findByRole(role);
     }
+
+    public Account updateFCM(UpdateFCMRequest updateFCMRequest){
+        Account account = authenticationService.getCurrentAccount();
+        account.setFcmToken(updateFCMRequest.getFcmToken());
+        return accountRepository.save(account);
+    }
+
+
 }

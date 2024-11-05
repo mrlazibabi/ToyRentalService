@@ -19,9 +19,6 @@ public class OrderItem {
 
     private int quantity;
 
-    @Column(nullable = true)
-    private int dayToRent;
-
     @ManyToOne
     @JoinColumn(name = "order_id")
     @JsonIgnore
