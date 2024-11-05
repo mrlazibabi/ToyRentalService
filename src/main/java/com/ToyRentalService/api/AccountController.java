@@ -67,7 +67,6 @@ public class AccountController {
     @GetMapping("/staff")
     public ResponseEntity<List<Account>> getAllStaff() {
         List<Account> staffAccounts = accountService.getAccountsByRoles(Role.STAFF);
-        System.out.println("Staff Accounts: " + staffAccounts); // Ghi log
         return ResponseEntity.ok(staffAccounts);
     }
 

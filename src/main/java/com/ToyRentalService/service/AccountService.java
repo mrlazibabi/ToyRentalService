@@ -75,7 +75,8 @@ public class AccountService {
     }
     // Lấy tài khoản theo ID
     public Optional<Account> getAccountById(Long id) {
-        return accountRepository.findById(id);
+        return Optional.ofNullable(accountRepository.findAccountByIdAndIsActive(id, true))
+                .or(() -> { throw new EntityNotFoundException("Account not found or is deleted"); });
     }
 
     public Page<Account> getAllAccounts(Role role, boolean isActive, int page, int size) {
@@ -108,6 +109,7 @@ public class AccountService {
         account.setActive(true);
         return accountRepository.save(account);
     }
+
     public List<Account> getAccountsByRoles(Role role) {
         return accountRepository.findByRole(role);
     }
