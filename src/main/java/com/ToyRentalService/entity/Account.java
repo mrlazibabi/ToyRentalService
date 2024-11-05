@@ -28,11 +28,15 @@ public class Account implements UserDetails {
 
     @Pattern(regexp = "(84|0[3|5|7|8|9])+([0-9]{8})\\b", message = "Phone number invalid!")
     private String phone;
+
     @Column(name = "status")
     private Boolean status;//ko can
+
     @Email(message = "Invalid Email!")
     @Column(nullable = false, unique = true)
     private String email;
+
+    private String fcmToken;
 
     private String address;
 
@@ -90,4 +94,11 @@ public class Account implements UserDetails {
     @OneToMany(mappedBy = "customer")
     Set<Feedback> customer_feedbacks;
 
+    public void decrementPostCount() {
+        if (this.postCount > 0) {
+            this.postCount--;
+        } else {
+            throw new IllegalArgumentException("No more posts can be created.");
+        }
+    }
 }

@@ -29,7 +29,7 @@ public class OrderService {
     private AccountRepository accountRepository;
 
     @Autowired
-    private PostRepository postRepository;
+    private ToyRepository toyRepository;
 
     @Autowired
     private VNPayPaymentService vnpayPaymentService;
@@ -57,9 +57,8 @@ public String createOrderFromCart() throws Exception {
     for (CartItem cartItem : cart.getCartItems()) {
         OrderItem orderItem = new OrderItem();
         orderItem.setQuantity(cartItem.getQuantity());
-        orderItem.setPost(cartItem.getPost());
+        orderItem.setToy(cartItem.getToy());
         orderItem.setOrders(order);
-        orderItem.setDayToRent(cartItem.getDayToRent());
         orderItem.setType(cartItem.getType());
         orderItem.setPrice(cartItem.getPrice());
         orderItems.add(orderItem);
@@ -109,12 +108,12 @@ public void updateOrderStatusAfterPayment(long orderId, OrderStatus status) thro
 
         if (order.getStatus() == OrderStatus.COMPLETED && order.getType() != OrderType.BUYPOST) {
             for (OrderItem item : order.getOrderItems()) {
-                Post post = item.getPost();
-                if (post != null) {
-                    post.decrementQuantity(item.getQuantity());
-                    postRepository.save(post);
+                Toy toy = item.getToy();
+                if (toy != null) {
+                    toy.decrementQuantity(item.getQuantity());
+                    toyRepository.save(toy);
                 } else {
-                    throw new Exception("Post not found for order item.");
+                    throw new Exception("Toy not found for order item.");
                 }
             }
         }
@@ -136,7 +135,7 @@ public void updateOrderStatusAfterPayment(long orderId, OrderStatus status) thro
                         .orderType(orderItem.getType())
                         .orderId(order.getId())
                         .orderDate(order.getCreateAt())
-                        .posts(Collections.singletonList(orderItem.getPost()))
+                        .toys(Collections.singletonList(orderItem.getToy()))
                         .build();
                 orderHistoryResponse.add(historyResponse);
             }

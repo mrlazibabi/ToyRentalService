@@ -23,7 +23,7 @@ public class OrderRentService {
     @Autowired
     private AuthenticationService authenticationService;
     @Autowired
-    private PostRepository postRepository;
+    private ToyRepository toyRepository;
 
     @Autowired
     private VNPayPaymentService vnpayPaymentService;
@@ -33,26 +33,26 @@ public class OrderRentService {
     @Autowired
     private PaymentRepository paymentRepository;
 
-    public String createOrderRent(Long postId, int quantity, int daysToRent) throws Exception {
-        Post post = postRepository.findById(postId).orElseThrow(() -> new NotFoundException("Post not found"));
+    public String createOrderRent(Long toyId, int quantity, int daysToRent) throws Exception {
+        Toy toy = toyRepository.findById(toyId).orElseThrow(() -> new NotFoundException("Toy not found"));
 
         Account customer = authenticationService.getCurrentAccount();
         if (customer == null) {
             throw new NotFoundException("User not logged in");
         }
 
-        if (post.getQuantity() < quantity) {
+        if (toy.getQuantity() < quantity) {
             throw new Exception("Insufficient stock");
         }
 
         OrderRent orderRent = new OrderRent();
         orderRent.setCustomer(customer);
-        orderRent.setTotalPrice(post.getPriceByDay()* quantity * daysToRent+post.getDepositFee());
+        orderRent.setTotalPrice(toy.getPriceByDay()* quantity * daysToRent+toy.getDepositFee());
         orderRent.setStatus(OrderRentStatus.PENDING);
         orderRent.setDueDate(calculateDueDate(daysToRent));
 
-        post.decrementQuantity(quantity);
-        postRepository.save(post);
+        toy.decrementQuantity(quantity);
+        toyRepository.save(toy);
         OrderRent savedOrderRent = orderRentRepository.save(orderRent);
 
         return initiateOrderRentPayment(savedOrderRent.getId());

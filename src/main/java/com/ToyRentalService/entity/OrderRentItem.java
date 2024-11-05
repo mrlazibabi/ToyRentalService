@@ -21,6 +21,6 @@ public class OrderRentItem {
     private OrderRent orderRent;
 
     @ManyToOne
-    @JoinColumn(name = "post_id")
-    private Post post;
+    @JoinColumn(name = "toy_id")
+    private Toy toy;
 }

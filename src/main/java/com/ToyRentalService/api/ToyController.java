@@ -52,11 +52,11 @@ public class ToyController {
     }
 
     //approve toy
-    @PutMapping("/approve/{id}")
-    public ResponseEntity<Toy> approveToy(@PathVariable long id) {
-        Toy approvedToy = toyService.approveToyPost(id);
-        return ResponseEntity.ok(approvedToy);
-    }
+//    @PutMapping("/approve/{id}")
+//    public ResponseEntity<Toy> approveToy(@PathVariable long id) {
+//        Toy approvedToy = toyService.approveToyPost(id);
+//        return ResponseEntity.ok(approvedToy);
+//    }
 
     //reject toy
     @PutMapping("/reject/{id}")

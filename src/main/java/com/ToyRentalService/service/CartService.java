@@ -104,7 +104,7 @@ public class CartService {
                 .orElseThrow(() -> new Exception("Cart not found"));
 
         CartItem existingItem = cart.getCartItems().stream()
-                .filter(item -> item.getPost().getId() == postId && item.getType() == type)
+                .filter(item -> item.getToy().getId() == postId && item.getType() == type)
                 .findFirst()
                 .orElseThrow(() -> new Exception("Item not found in cart"));
 
@@ -119,7 +119,7 @@ public class CartService {
                 .orElseThrow(() -> new Exception("Cart not found"));
 
         CartItem existingItem = cart.getCartItems().stream()
-                .filter(item -> item.getPost().getId() == postId && item.getType() == type)
+                .filter(item -> item.getToy().getId() == postId && item.getType() == type)
                 .findFirst()
                 .orElseThrow(() -> new Exception("Item not found in cart"));
 
@@ -127,9 +127,9 @@ public class CartService {
 
         if (type == OrderType.RENTTOY) {
             existingItem.setDayToRent(dayToRent);
-            existingItem.setPrice(existingItem.getPost().getPriceByDay() * dayToRent + existingItem.getPost().getDepositFee());
+            existingItem.setPrice(existingItem.getToy().getPriceByDay() * dayToRent + existingItem.getToy().getDepositFee());
         } else if (type == OrderType.BUYTOY) {
-            existingItem.setPrice(existingItem.getPost().getPrice() * quantity);
+            existingItem.setPrice(existingItem.getToy().getPrice() * quantity);
         }
 
         cartItemRepository.save(existingItem);

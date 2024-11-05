@@ -1,5 +1,6 @@
 package com.ToyRentalService.service;
 
+import com.ToyRentalService.Dtos.NotificationFCM;
 import com.ToyRentalService.Dtos.Request.ToyRequest.ToyBuyRequest;
 import com.ToyRentalService.Dtos.Request.ToyRequest.ToyRentRequest;
 import com.ToyRentalService.entity.Account;
@@ -34,6 +35,9 @@ public class ToyService {
     @Autowired
     AuthenticationService authenticationService;
 
+    @Autowired
+    NotificationService notificationService;
+
     //make a rent toy
     public Toy toyRent(ToyRentRequest toyRentRequest){
         Account customer = authenticationService.getCurrentAccount();
@@ -56,8 +60,16 @@ public class ToyService {
         newToy.setCategories(categories);
 
         try{
-            newToy.setStatus(Status.WAITING_FOR_APPROVAL);
+            newToy.setStatus(Status.CREATED);
             newToy.setToyType(ToyType.RENT);
+            customer.decrementPostCount();
+            NotificationFCM notificationFCM = new NotificationFCM();
+            notificationFCM.setTitle("New Toy For Rental Created");
+            notificationFCM.setMessage("Your toy rental request for " + newToy.getToyName() + " has been created.");
+            notificationFCM.setFcmToken(customer.getFcmToken());
+
+            // Send notification
+            notificationService.sendNotificationToAccount(notificationFCM, customer);
             toyRepository.save(newToy);
             return newToy;
         } catch (RuntimeException e) {
@@ -85,8 +97,18 @@ public class ToyService {
         }
         newToy.setCategories(categories);
         try{
-            newToy.setStatus(Status.WAITING_FOR_APPROVAL);
+            newToy.setStatus(Status.CREATED);
             newToy.setToyType(ToyType.SELL);
+            customer.decrementPostCount();
+
+            NotificationFCM notificationFCM = new NotificationFCM();
+            notificationFCM.setTitle("New Toy For Sale Created");
+            notificationFCM.setMessage("Your buy request for " + newToy.getToyName() + " has been created.");
+            notificationFCM.setFcmToken(customer.getFcmToken());
+
+            // Send notification
+            notificationService.sendNotificationToAccount(notificationFCM, customer);
+
             toyRepository.save(newToy);
             return newToy;
         } catch (RuntimeException e) {
@@ -95,16 +117,16 @@ public class ToyService {
     }
 
     //approve toy post
-    public Toy approveToyPost(Long id) {
-        Optional<Toy> postOptional = toyRepository.findById(id);
-        if (postOptional.isPresent()) {
-            Toy toy = postOptional.get();
-            toy.setStatus(Status.APPROVED);
-            return toyRepository.save(toy);
-        } else {
-            throw new NotFoundException("Bài đăng không tồn tại");
-        }
-    }
+//    public Toy approveToyPost(Long id) {
+//        Optional<Toy> postOptional = toyRepository.findById(id);
+//        if (postOptional.isPresent()) {
+//            Toy toy = postOptional.get();
+//            toy.setStatus(Status.CREATED);
+//            return toyRepository.save(toy);
+//        } else {
+//            throw new NotFoundException("Bài đăng không tồn tại");
+//        }
+//    }
 
     //reject toy post
     public Toy rejectToyPost(Long id) {

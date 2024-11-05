@@ -33,7 +33,8 @@ public class Filter extends OncePerRequestFilter {
             "/api/register",
             "/api/forgot-password",
             "/api/reset-password",
-            "/api/toy"
+            "/api/toy",
+            "/api/notification"
 
     );
     @Autowired
