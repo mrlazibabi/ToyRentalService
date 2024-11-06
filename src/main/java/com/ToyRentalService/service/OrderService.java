@@ -9,6 +9,7 @@ import com.ToyRentalService.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
@@ -116,27 +117,121 @@ public void updateOrderStatusAfterPayment(long orderId, OrderStatus status) thro
             }
         }
     }
-    public List<OrderHistoryResponse> getOrderItemHistoryForCurrentUser() {
-        Account currentUser = authenticationService.getCurrentAccount();
-        List<OrderItem> orderItems = orderItemRepository.findByOrdersCustomer(currentUser);
-        List<OrderHistoryResponse> orderHistoryResponse = new ArrayList<>();
+//    public List<OrderHistoryResponse> getOrderItemHistoryForCurrentUser() {
+//        Account currentUser = authenticationService.getCurrentAccount();
+//        List<OrderItem> orderItems = orderItemRepository.findByOrdersCustomer(currentUser);
+//        List<OrderHistoryResponse> orderHistoryResponse = new ArrayList<>();
+//
+//        for (OrderItem orderItem : orderItems) {
+//            Orders order = orderItem.getOrders();
+//            OrderStatus status = order.getStatus();
+//
+//            if (status == OrderStatus.COMPLETED) {
+//                OrderHistoryResponse historyResponse = OrderHistoryResponse.builder()
+//                        .orderId(order.getId())
+//                        .orderDate(order.getCreateAt())
+//                        .toys(Collections.singletonList(orderItem.getToy()))
+//                        .build();
+//                orderHistoryResponse.add(historyResponse);
+//            }
+//        }
+//
+//        return orderHistoryResponse;
+//    }
+//public List<OrderHistoryResponse> getOrderItemHistoryForCurrentUser() {
+//    Account currentUser = authenticationService.getCurrentAccount();
+//    List<OrderItem> orderItems = orderItemRepository.findByOrdersCustomer(currentUser);
+//    Map<Long, OrderHistoryResponse> orderHistoryMap = new HashMap<>();
+//
+//    for (OrderItem orderItem : orderItems) {
+//        Orders order = orderItem.getOrders();
+//        OrderStatus status = order.getStatus();
+//
+//        if (status == OrderStatus.COMPLETED) {
+//            long orderId = order.getId();
+//            double itemPrice = orderItem.getPrice(); // Lấy giá của từng OrderItem
+//            Toy toy = orderItem.getToy();
+//
+//            if (orderHistoryMap.containsKey(orderId)) {
+//                OrderHistoryResponse existingResponse = orderHistoryMap.get(orderId);
+//                existingResponse.getToys().add(toy);
+//                existingResponse.setTotalPrice(existingResponse.getTotalPrice() + itemPrice);
+//            } else {
+//                OrderHistoryResponse historyResponse = OrderHistoryResponse.builder()
+//                        .orderId(orderId)
+//                        .orderDate(order.getCreateAt())
+//                        .toys(new ArrayList<>(Collections.singletonList(toy)))
+//                        .totalPrice(itemPrice)
+//                        .build();
+//                orderHistoryMap.put(orderId, historyResponse);
+//            }
+//        }
+//    }
+//
+//    return new ArrayList<>(orderHistoryMap.values());
+//}
+public List<OrderHistoryResponse> getOrderHistoryForCurrentUser() {
+    Account currentUser = authenticationService.getCurrentAccount();
+    List<Payment> payments = paymentRepository.findByOrder_Customer_IdOrOrderRent_Customer_Id(
+            currentUser.getId(), currentUser.getId()
+    );
+    List<OrderHistoryResponse> orderHistoryResponse = new ArrayList<>();
 
-        for (OrderItem orderItem : orderItems) {
-            Orders order = orderItem.getOrders();
-            OrderStatus status = order.getStatus();
+    for (Payment payment : payments) {
+        if (payment.getPaymentStatus() == PaymentStatus.COMPLETED) {
+            Long orderId = payment.getOrder() != null ? payment.getOrder().getId() : null;
+            Long orderRentId = payment.getOrderRent() != null ? payment.getOrderRent().getId() : null;
+            Long finalOrderId = orderId != null ? orderId : orderRentId;
 
-            if (status == OrderStatus.COMPLETED) {
-                OrderHistoryResponse historyResponse = OrderHistoryResponse.builder()
-                        .orderId(order.getId())
-                        .orderDate(order.getCreateAt())
-                        .toys(Collections.singletonList(orderItem.getToy()))
-                        .build();
-                orderHistoryResponse.add(historyResponse);
-            }
+            // Lấy thông tin toys từ Order hoặc OrderRent
+            List<Toy> toys = getToysFromOrderOrOrderRent(payment);
+
+            // Tạo response với thông tin cần thiết
+            OrderHistoryResponse historyResponse = OrderHistoryResponse.builder()
+                    .orderId(finalOrderId)
+                    .orderDate(payment.getCreateAt())
+                    .totalPrice(payment.getPrice())
+                    .orderType(payment.getOrderType())
+                    .toys(toys)  // Gán thông tin toys vào response
+                    .build();
+
+            orderHistoryResponse.add(historyResponse);
         }
-
-        return orderHistoryResponse;
     }
+
+    return orderHistoryResponse;
+}
+
+    private List<Toy> getToysFromOrderOrOrderRent(Payment payment) {
+        if (payment.getOrder() != null) {
+            // Lấy toys từ Order nếu là đơn mua
+            return payment.getOrder().getOrderItems().stream()
+                    .map(OrderItem::getToy)
+                    .collect(Collectors.toList());
+        } else if (payment.getOrderRent() != null) {
+            return payment.getOrderRent().getOrderRentItems().stream()
+                    .map(OrderRentItem::getToy)
+                    .collect(Collectors.toList());
+        }
+        return new ArrayList<>();
+    }
+//    private List<Toy> getToysFromOrderOrOrderRent(Payment payment) {
+//        List<Toy> toys = new ArrayList<>();
+//        if (payment.getOrder() != null) {
+//            toys = payment.getOrder().getOrderItems().stream()
+//                    .map(OrderItem::getToy)
+//                    .collect(Collectors.toList());
+//            System.out.println("Toys from Order: " + toys);
+//        } else if (payment.getOrderRent() != null) {
+//            toys = payment.getOrderRent().getOrderRentItems().stream()
+//                    .map(OrderRentItem::getToy)
+//                    .collect(Collectors.toList());
+//            System.out.println("Toys from OrderRent: " + toys);
+//        }
+//        return toys;
+//    }
+
+
     public String initiateOrderBuyPayment(Long orderId) throws Exception {
         Account customer = authenticationService.getCurrentAccount();
         if (customer == null) {

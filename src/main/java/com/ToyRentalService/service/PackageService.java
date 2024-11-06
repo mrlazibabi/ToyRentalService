@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,16 +33,15 @@ public class PackageService {
     @Autowired
     private PaymentRepository paymentRepository;
 
-    public ResponseEntity<ResponseObject> getAllPackages() {
+    public ResponseEntity<List<RentalPackage>> getAllPackages() {
         try {
             List<RentalPackage> packages = rentalPackageRepository.findAll();
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(new ResponseObject("Successful", "Found packages", packages));
+            return ResponseEntity.status(HttpStatus.OK).body(packages);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseObject("Failed", "Error retrieving packages", null));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.emptyList());
         }
     }
+
 
     public RentalPackage getPackageById(Long id) {
         return rentalPackageRepository.findById(id)
