@@ -59,7 +59,6 @@ public String createOrderFromCart() throws Exception {
         orderItem.setQuantity(cartItem.getQuantity());
         orderItem.setToy(cartItem.getToy());
         orderItem.setOrders(order);
-        orderItem.setType(cartItem.getType());
         orderItem.setPrice(cartItem.getPrice());
         orderItems.add(orderItem);
 
@@ -75,7 +74,6 @@ public String createOrderFromCart() throws Exception {
     cart.getCartItems().clear();
     cart.setTotalPrice(0);
     cartRepository.save(cart);
-//    String paymentUrl = createUrl(savedOrder.getId());
     String paymentUrl = initiateOrderBuyPayment(savedOrder.getId());
     return paymentUrl;
 }
@@ -106,7 +104,7 @@ public void updateOrderStatusAfterPayment(long orderId, OrderStatus status) thro
         Orders order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new Exception("Order not found"));
 
-        if (order.getStatus() == OrderStatus.COMPLETED && order.getType() != OrderType.BUYPOST) {
+        if (order.getStatus() == OrderStatus.COMPLETED) {
             for (OrderItem item : order.getOrderItems()) {
                 Toy toy = item.getToy();
                 if (toy != null) {
@@ -117,9 +115,6 @@ public void updateOrderStatusAfterPayment(long orderId, OrderStatus status) thro
                 }
             }
         }
-    }
-    public List<OrderItem> getOrderHistoryByType(OrderType type) {
-        return orderItemRepository.findByType(type);
     }
     public List<OrderHistoryResponse> getOrderItemHistoryForCurrentUser() {
         Account currentUser = authenticationService.getCurrentAccount();
@@ -132,7 +127,6 @@ public void updateOrderStatusAfterPayment(long orderId, OrderStatus status) thro
 
             if (status == OrderStatus.COMPLETED) {
                 OrderHistoryResponse historyResponse = OrderHistoryResponse.builder()
-                        .orderType(orderItem.getType())
                         .orderId(order.getId())
                         .orderDate(order.getCreateAt())
                         .toys(Collections.singletonList(orderItem.getToy()))

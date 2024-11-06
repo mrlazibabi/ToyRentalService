@@ -22,12 +22,11 @@ public class CartController {
 
     @PostMapping("/add")
     public ResponseEntity<?> addItemToCart(@RequestParam long postId,
-                                           @RequestParam int quantity,
-                                           @RequestParam OrderType type,
-                                           @RequestParam(required = false) Integer dayToRent) {
+                                           @RequestParam int quantity
+                                           ) {
 
         try {
-            cartService.addItemToCart(postId, quantity, type, dayToRent != null ? dayToRent : 0);
+            cartService.addItemToCart(postId, quantity);
             return ResponseEntity.ok("Item added to cart successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
@@ -36,7 +35,7 @@ public class CartController {
     @PostMapping("/remove")
     public ResponseEntity<?> removeItemFromCart(@RequestParam long postId, @RequestParam OrderType type) {
         try {
-            cartService.removeItemFromCart(postId, type);
+            cartService.removeItemFromCart(postId);
             return ResponseEntity.ok("Item removed from cart successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
@@ -44,11 +43,10 @@ public class CartController {
     }
     @PostMapping("/update")
     public ResponseEntity<?> updateItemQuantity(@RequestParam long postId,
-                                                @RequestParam OrderType type,
-                                                @RequestParam int quantity,
-                                                @RequestParam(required = false) Integer dayToRent) {
+                                                @RequestParam int quantity
+                                                ) {
         try {
-            cartService.updateItemQuantity(postId, type, quantity, dayToRent != null ? dayToRent : 0);
+            cartService.updateItemQuantity(postId,  quantity);
             return ResponseEntity.ok("Item quantity updated successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
