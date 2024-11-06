@@ -35,9 +35,9 @@ public class OrderRentController {
         }
     }
     @PostMapping("/create")
-    public ResponseEntity<String> createOrderRent(@RequestParam Long postId, @RequestParam int quantity, @RequestParam int daysToRent) {
+    public ResponseEntity<String> createOrderRent(@RequestParam Long toyId, @RequestParam int quantity, @RequestParam int daysToRent) {
         try {
-            String paymentUrl = orderRentService.createOrderRent(postId, quantity, daysToRent);
+            String paymentUrl = orderRentService.createOrderRent(toyId, quantity, daysToRent);
             return ResponseEntity.ok(paymentUrl);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error creating order: " + e.getMessage());

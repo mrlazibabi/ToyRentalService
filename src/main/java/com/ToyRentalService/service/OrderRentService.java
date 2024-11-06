@@ -54,6 +54,13 @@ public class OrderRentService {
         toy.decrementQuantity(quantity);
         toyRepository.save(toy);
         OrderRent savedOrderRent = orderRentRepository.save(orderRent);
+        OrderRentItem orderRentItem = new OrderRentItem();
+        orderRentItem.setOrderRent(savedOrderRent);
+        orderRentItem.setToy(toy);
+        orderRentItem.setPrice(toy.getPriceByDay());
+        orderRentItem.setQuantity(quantity);
+        orderRentItem.setDaysToRent(daysToRent);
+        orderRentItemRepository.save(orderRentItem);
 
         return initiateOrderRentPayment(savedOrderRent.getId());
     }

@@ -79,7 +79,7 @@ public class OrderController {
 //    }
     @GetMapping("/history")
     public ResponseEntity  getOrderHistoryByAccount() {
-        return ResponseEntity.ok(orderService.getOrderItemHistoryForCurrentUser());
+        return ResponseEntity.ok(orderService.getOrderHistoryForCurrentUser());
     }
     @PostMapping("/update-status")
     public ResponseEntity<String> updateOrderStatusAfterPayment(@RequestParam long orderId, @RequestParam OrderStatus status) {

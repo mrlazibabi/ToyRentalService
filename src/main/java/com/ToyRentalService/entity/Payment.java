@@ -34,4 +34,9 @@ public class Payment {
     @OneToOne
     @JoinColumn(name = "order_rent_id")
     private OrderRent orderRent;
+
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private Account customer;
+
 }
