@@ -30,7 +30,4 @@ public class OrderItem {
     @ManyToOne
     @JoinColumn(name = "toy_id")
     Toy toy;
-
-    @Enumerated(EnumType.STRING)
-    private OrderType type;
 }

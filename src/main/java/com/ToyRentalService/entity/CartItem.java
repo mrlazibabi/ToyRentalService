@@ -26,10 +26,10 @@ public class CartItem {
 
     private int quantity;
 
-    private int dayToRent; // Số ngày thuê, nếu loại đơn hàng là thuê
+    private int dayToRent;
 
     private double price;
 
     @Enumerated(EnumType.STRING)
-    private OrderType type; // BUYTOY, RENTTOY, BUYPOST
+    private OrderType type;
 }
