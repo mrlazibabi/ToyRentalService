@@ -81,4 +81,9 @@ public class ToyController {
         toyService.removeToy(id);
         return ResponseEntity.noContent().build();
     }
+    @GetMapping("/search")
+    public ResponseEntity<List<Toy>> searchToys(@RequestParam String toyName) {
+        List<Toy> toys = toyService.searchToysByName(toyName);
+        return ResponseEntity.ok(toys);
+    }
 }

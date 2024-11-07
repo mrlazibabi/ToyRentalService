@@ -1,0 +1,65 @@
+<table class="body-wrap" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; width: 100%; background-color: #f6f6f6; margin: 0;" bgcolor="#f6f6f6">
+    <tbody>
+    <tr>
+        <td></td>
+        <td class="container" width="600" style="display: block; max-width: 600px; clear: both; margin: 0 auto;">
+            <div class="content" style="max-width: 600px; margin: 0 auto; padding: 20px;">
+                <table class="main" width="100%" cellpadding="0" cellspacing="0" bgcolor="#fff" style="border-radius: 3px; background-color: #fff; border: 1px solid #e9e9e9;">
+                    <tbody>
+                    <tr>
+                        <td style="background-color: #38414a; padding: 20px; text-align: center; color: #fff;">
+                            <h2 style="margin: 0; font-size: 24px;">ToyRentalService</h2>
+                            <span style="font-size: 16px;">Order Confirmation</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="content-wrap" style="padding: 20px;">
+                            <p>Dear <strong>[[${customerName}]]</strong>,</p>
+                            <p>Thank you for your order. Here are the details:</p>
+                            <table style="width: 100%; margin-bottom: 20px;">
+                                <tr>
+                                    <td><strong>Order ID:</strong></td>
+                                    <td>[[${orderId}]]</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Order Date:</strong></td>
+                                    <td>[[${orderDate}]]</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Order Type:</strong></td>
+                                    <td>[[${orderType}]]</td> <!-- E.g., Purchase or Rent -->
+                                </tr>
+                            </table>
+                            <table style="width: 100%; margin-bottom: 20px; border-top: 1px solid #e9e9e9; border-bottom: 1px solid #e9e9e9; padding: 10px 0;">
+                                <thead>
+                                <tr>
+                                    <th style="text-align: left;">Item</th>
+                                    <th style="text-align: left;">Quantity</th>
+                                    <th style="text-align: left;">Price</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>[[${productName}]]</td>
+                                    <td>[[${quantity}]]</td>
+                                    <td>[[${price}]]</td>
+                                </tr>
+                                <!-- Repeat this row for multiple items -->
+                                </tbody>
+                            </table>
+                            <p><strong>Total Amount:</strong> [[${totalAmount}]]</p>
+                            <p>For further assistance, feel free to contact us. Thank you for choosing ToyRentalService.</p>
+                            <p>Best Regards,<br>ToyRentalService Team</p>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="footer" style="width: 100%; text-align: center; color: #999; padding: 20px;">
+                    <p style="margin: 0;">Need help? <a href="mailto:support@toyrentalservice.com" style="color: #999; text-decoration: underline;">Contact Support</a></p>
+                </div>
+            </div>
+        </td>
+        <td></td>
+    </tr>
+    </tbody>
+</table>

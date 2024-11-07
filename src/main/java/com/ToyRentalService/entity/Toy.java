@@ -83,7 +83,6 @@ public class Toy {
     @JsonIgnore
     Set<Feedback> toy_feedbacks;
 
-
     public void decrementQuantity(int amount) {
         if (this.quantity >= amount) {
             this.quantity -= amount;

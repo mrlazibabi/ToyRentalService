@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import jakarta.persistence.criteria.Predicate;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ToyService {
@@ -145,6 +146,10 @@ public class ToyService {
 
     public Optional<Toy> searchToyByName(String toyName) {
         return toyRepository.findToyByToyName(toyName);
+    }
+    public List<Toy> searchToysByName(String toyName) {
+        return toyRepository.findToyByToyNameContainingIgnoreCase(toyName)
+                .stream().collect(Collectors.toList());
     }
 
     public List<Toy> getAllToys(Status status, ToyType toyType, Double minPrice, Double maxPrice, int page, int size) {
