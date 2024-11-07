@@ -59,9 +59,24 @@ public class EmailService {
 
         javaMailSender.send(message);
     }
-    public void sendOrderEmails(String buyerEmail, String sellerEmail, String subject, String templateName, Map<String, Object> buyerTemplateModel, Map<String, Object> sellerTemplateModel) throws MessagingException {
-        sendOrderConfirmationEmail(buyerEmail, subject, templateName, buyerTemplateModel);
-
-        sendOrderConfirmationEmail(sellerEmail, subject, templateName, sellerTemplateModel);
+    public void sendOrderEmails(
+            String buyerEmail,
+            String sellerEmail,
+            String subject,
+            Map<String, Object> buyerTemplateModel,
+            Map<String, Object> sellerTemplateModel
+    ) throws MessagingException {
+        sendOrderConfirmationEmail(buyerEmail, subject, "orderRent-template", buyerTemplateModel);
+        sendOrderConfirmationEmail(sellerEmail, subject, "seller-orderRent-template", sellerTemplateModel);
+    }
+    public void sendOrderEmail(
+            String buyerEmail,
+            String sellerEmail,
+            String subject,
+            Map<String, Object> buyerTemplateModel,
+            Map<String, Object> sellerTemplateModel
+    ) throws MessagingException {
+        sendOrderConfirmationEmail(buyerEmail, subject, "order-template", buyerTemplateModel);
+        sendOrderConfirmationEmail(sellerEmail, subject, "seller-orderBuy-template", sellerTemplateModel);
     }
 }

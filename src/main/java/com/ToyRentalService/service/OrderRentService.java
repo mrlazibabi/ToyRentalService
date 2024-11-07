@@ -97,7 +97,6 @@ public class OrderRentService {
         Account buyer = authenticationService.getCurrentAccount();
         String buyEmail = buyer.getEmail();
         String sellEmail = seller.getEmail();
-
         Map<String, Object> buyerTemplateModel = new HashMap<>();
         buyerTemplateModel.put("customerName", orderRent.getCustomer().getUsername());
         buyerTemplateModel.put("orderId", orderRent.getId());
@@ -110,11 +109,25 @@ public class OrderRentService {
         buyerTemplateModel.put("DepositFee", orderRent.getOrderRentItems().get(0).getToy().getDepositFee());
         buyerTemplateModel.put("totalAmount", orderRent.getTotalPrice());
 
-        Map<String, Object> sellerTemplateModel = new HashMap<>(buyerTemplateModel);
-        sellerTemplateModel.put("customerName", buyer.getUsername());
-
+        // Model dành cho người bán (có thông tin người mua)
+        Map<String, Object> sellerTemplateModel = new HashMap<>();
+        sellerTemplateModel.put("customerName", seller.getUsername());
+        sellerTemplateModel.put("orderId", orderRent.getId());
+        sellerTemplateModel.put("orderDate", orderRent.getCreatedAt());
+        sellerTemplateModel.put("orderType", "RentToy");
+        sellerTemplateModel.put("buyercustomers", orderRent.getCustomer().getUsername());
+        sellerTemplateModel.put("productName", orderRent.getOrderRentItems().get(0).getToy().getToyName());
+        buyerTemplateModel.put("price", orderRent.getOrderRentItems().get(0).getPrice());
+        sellerTemplateModel.put("DepositFee", orderRent.getOrderRentItems().get(0).getToy().getDepositFee());
+        sellerTemplateModel.put("quantity", orderRent.getOrderRentItems().get(0).getQuantity());
+        sellerTemplateModel.put("totalAmount", orderRent.getTotalPrice());
+        emailService.sendOrderEmails(
+                buyEmail, sellEmail,
+                "Order Confirmation",
+                buyerTemplateModel, sellerTemplateModel
+        );
         // Gửi email cho cả người mua và người bán
-        emailService.sendOrderEmails(buyEmail, sellEmail, "Order Confirmation", "orderRent-template", buyerTemplateModel, sellerTemplateModel);
+//        emailService.sendOrderEmails(buyEmail, sellEmail, "Order Confirmation", "orderRent-template", buyerTemplateModel, sellerTemplateModel);
     }
 
 
