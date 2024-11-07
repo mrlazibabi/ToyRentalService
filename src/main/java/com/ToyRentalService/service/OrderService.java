@@ -67,21 +67,20 @@ public String createOrderFromCart() throws Exception {
         orderItem.setPrice(cartItem.getPrice());
         orderItems.add(orderItem);
 
-        total += cartItem.getPrice();
+        total += cartItem.getPrice() ;
     }
 
     order.setOrderItems(orderItems);
     order.setTotalPrice(total);
     order.setType(cart.getCartItems().get(0).getType());
-
     Orders savedOrder = orderRepository.save(order);
-
     cart.getCartItems().clear();
     cart.setTotalPrice(0);
     cartRepository.save(cart);
     String paymentUrl = initiateOrderBuyPayment(savedOrder.getId());
     return paymentUrl;
 }
+
     public void updateOrderStatusAfterPayment(long orderId, OrderStatus status) throws Exception {
         Orders order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new Exception("Order not found"));
@@ -91,11 +90,11 @@ public String createOrderFromCart() throws Exception {
 
         if (status == OrderStatus.COMPLETED) {
             savePaymentRecord(order, order.getTotalPrice(), PaymentStatus.COMPLETED, false);
-            Account seller = order.getOrderItems().get(0).getToy().getCustomer();
-            Account buyer = authenticationService.getCurrentAccount();
-            String buyEmail = buyer.getEmail();
-            String sellEmail = seller.getEmail();
 
+            Account buyer = authenticationService.getCurrentAccount();
+            String buyerEmail = buyer.getEmail();
+
+            // Chuẩn bị dữ liệu email cho người mua
             List<Map<String, Object>> productList = new ArrayList<>();
             for (OrderItem item : order.getOrderItems()) {
                 Map<String, Object> productInfo = new HashMap<>();
@@ -104,28 +103,51 @@ public String createOrderFromCart() throws Exception {
                 productInfo.put("price", item.getToy().getPrice());
                 productList.add(productInfo);
             }
+
             Map<String, Object> buyerTemplateModel = new HashMap<>();
-            buyerTemplateModel.put("customerName", order.getCustomer().getUsername());
+            buyerTemplateModel.put("customerName", buyer.getUsername());
             buyerTemplateModel.put("orderId", order.getId());
             buyerTemplateModel.put("orderDate", order.getCreateAt());
             buyerTemplateModel.put("orderType", "Purchase");
             buyerTemplateModel.put("products", productList);
             buyerTemplateModel.put("totalAmount", order.getTotalPrice());
-            // Dữ liệu cho email của người bán
-            Map<String, Object> sellerTemplateModel = new HashMap<>();
-            sellerTemplateModel.put("customerName", buyer.getUsername());
-            sellerTemplateModel.put("orderId", order.getId());
-            sellerTemplateModel.put("orderDate", order.getCreateAt());
-            sellerTemplateModel.put("orderType", "Purchase");
-            sellerTemplateModel.put("products", productList);
-            sellerTemplateModel.put("totalAmount", order.getTotalPrice());
 
-            // Gửi email
-            emailService.sendOrderEmails(buyEmail, sellEmail, "Order Confirmation", "order-template", buyerTemplateModel, sellerTemplateModel);
+            // Gửi email cho người mua
+            emailService.sendOrderEmail(buyerEmail, buyerEmail, "Order Confirmation", buyerTemplateModel, buyerTemplateModel);
+            // Gửi email cho từng người bán về các sản phẩm họ bán trong đơn hàng
+            Map<Account, List<Map<String, Object>>> sellerProductsMap = new HashMap<>();
+            for (OrderItem item : order.getOrderItems()) {
+                Account seller = item.getToy().getCustomer();
+                sellerProductsMap
+                        .computeIfAbsent(seller, k -> new ArrayList<>())
+                        .add(createProductInfo(item));
+            }
+
+            // Gửi một email duy nhất cho mỗi người bán với danh sách sản phẩm của họ
+            for (Map.Entry<Account, List<Map<String, Object>>> entry : sellerProductsMap.entrySet()) {
+                Account seller = entry.getKey();
+                List<Map<String, Object>> productsForSeller = entry.getValue();
+
+                Map<String, Object> sellerTemplateModel = new HashMap<>(buyerTemplateModel);
+                sellerTemplateModel.put("customerName", seller.getUsername());
+                sellerTemplateModel.put("buyerName", buyer.getUsername());
+                sellerTemplateModel.put("products", productsForSeller);
+
+                emailService.sendOrderEmail(buyerEmail, seller.getEmail(), "New Order Notification", buyerTemplateModel, sellerTemplateModel);
+            }
         } else {
             savePaymentRecord(order, order.getTotalPrice(), PaymentStatus.FAILED, false);
         }
     }
+    private Map<String, Object> createProductInfo(OrderItem item) {
+        Map<String, Object> productInfo = new HashMap<>();
+        productInfo.put("productName", item.getToy().getToyName());
+        productInfo.put("quantity", item.getQuantity());
+        productInfo.put("price", item.getToy().getPrice());
+        return productInfo;
+    }
+
+
 
 
     private void savePaymentRecord(Orders order, double amount, PaymentStatus status, boolean isDeposit) {

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>New Order Notification</title>
+</head>
+<body>
+<h2>New Order for Your Product</h2>
+<p>Hello, <span th:text="${customerName}">Seller</span>,</p>
+<p>You have a new order from <span th:text="${buyerName}">Buyer</span>!</p>
+
+<h3>Order Details</h3>
+<ul>
+  <li>Order ID: <span th:text="${orderId}">Order ID</span></li>
+  <li>Order Date: <span th:text="${orderDate}">Order Date</span></li>
+  <li>Total Amount: <span th:text="${totalAmount} + ' VND'">Total Amount</span></li>
+</ul>
+
+<h3>Your Product Details</h3>
+<ul>
+  <li th:each="product : ${products}">
+    Product: <span th:text="${product['productName']}">Product Name</span>,
+    Quantity: <span th:text="${product['quantity']}">Quantity</span>,
+    Price: <span th:text="${product['price']} + ' VND'">Price</span>
+  </li>
+</ul>
+
+<p>Please prepare the product for shipping. Contact support if you have any questions.</p>
+</body>
+</html>
