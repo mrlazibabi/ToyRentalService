@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Confirmation - Seller</title>
+</head>
+<body>
+<h2>Thông báo đơn hàng từ ToyRentalService</h2>
+
+<p>Xin chào, <span th:text="${customerName}">Customer Name</span>!</p>
+
+<p>Bạn đã nhận được một đơn hàng mới cho sản phẩm bạn đã đăng bán. Dưới đây là chi tiết đơn hàng:</p>
+
+<h3>Thông tin đơn hàng</h3>
+<ul>
+  <li><strong>Mã đơn hàng:</strong> <span th:text="${orderId}">Order ID</span></li>
+  <li><strong>Ngày đặt hàng:</strong> <span th:text="${orderDate}">Order Date</span></li>
+  <li><strong>Loại đơn hàng:</strong> <span th:text="${orderType}">Order Type</span></li>
+</ul>
+
+<h3>Thông tin sản phẩm</h3>
+<ul>
+  <li><strong>Khách hàng:</strong> <span th:text="${buyercustomers}">Buyer Customers</span></li>
+  <li><strong>Tên sản phẩm:</strong> <span th:text="${productName}">Product Name</span></li>
+  <li><strong>Số lượng:</strong> <span th:text="${quantity}">Quantity</span></li>
+  <li><strong>Giá thuê:</strong> <span th:text="${price} + ' VND'">Price</span></li>
+  <li><strong>Phí đặt cọc:</strong> <span th:text="${DepositFee} + ' VND'">Deposit Fee</span></li>
+</ul>
+
+<h3>Thông tin thanh toán</h3>
+<ul>
+  <li><strong>Tổng số tiền:</strong> <span th:text="${totalAmount} + ' VND'">Total Amount</span></li>
+</ul>
+
+<p>Vui lòng chuẩn bị sản phẩm để giao cho khách hàng. Nếu bạn có bất kỳ thắc mắc nào, hãy liên hệ với chúng tôi để được hỗ trợ.</p>
+
+<p>Trân trọng,<br>ToyRentalService Team</p>
+</body>
+</html>
