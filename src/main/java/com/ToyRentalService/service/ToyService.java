@@ -63,13 +63,13 @@ public class ToyService {
             newToy.setStatus(Status.CREATED);
             newToy.setToyType(ToyType.RENT);
             customer.decrementPostCount();
-//            NotificationFCM notificationFCM = new NotificationFCM();
-//            notificationFCM.setTitle("New Toy For Rental Created");
-//            notificationFCM.setMessage("Your toy rental request for " + newToy.getToyName() + " has been created.");
-//            notificationFCM.setFcmToken(customer.getFcmToken());
+            NotificationFCM notificationFCM = new NotificationFCM();
+            notificationFCM.setTitle("New Toy For Rental Created");
+            notificationFCM.setMessage("Your toy rental request for " + newToy.getToyName() + " has been created.");
+            notificationFCM.setFcmToken(customer.getFcmToken());
 
             // Send notification
-            //notificationService.sendNotificationToAccount(notificationFCM, customer);
+            notificationService.sendNotificationToAccount(notificationFCM, customer);
             toyRepository.save(newToy);
             return newToy;
         } catch (RuntimeException e) {

@@ -13,7 +13,9 @@ public class OrderRentItem {
     private long id;
 
     private double price;
+
     private int quantity;
+
     private int daysToRent;
 
     @ManyToOne

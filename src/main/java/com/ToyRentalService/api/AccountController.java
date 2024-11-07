@@ -42,6 +42,12 @@ public class AccountController {
         return account.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/name")
+    public ResponseEntity<Account> getAccountByUsername(@PathVariable String username){
+        Optional<Account> account = accountService.getAccountByUsername(username);
+        return account.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
     // Cập nhật tài khoản
     @PutMapping("/{id}")
     public ResponseEntity<?> updateAccount(@PathVariable Long id, @RequestBody AccountUpdateRequest accountUpdateRequest) {

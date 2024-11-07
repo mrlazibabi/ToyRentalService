@@ -40,7 +40,7 @@ public class NotificationService {
 
         if (fcmToken == null || fcmToken.isEmpty()) {
             System.out.println("No valid FCM token available for the account: " + account.getId());
-            return; // Skip sending the notification
+            return;
         }
 
         Notification notification = Notification.builder()
