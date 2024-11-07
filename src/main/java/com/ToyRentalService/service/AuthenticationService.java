@@ -142,7 +142,8 @@ public Account getCurrentAccount() {
             EmailDetail emailDetail = new EmailDetail();
             emailDetail.setReceiver(account);
             emailDetail.setSubject("Reset password");
-            emailDetail.setLink("https://www.google.com/?token=" + tokenService.generateToken(account));
+            String baseUrl = System.getenv("RESET_PASSWORD_URL");
+            emailDetail.setLink(baseUrl + "/resetpassword/?token=" + tokenService.generateToken(account));
 
             emailService.sendMail(emailDetail);
         }
