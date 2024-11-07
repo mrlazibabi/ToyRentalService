@@ -154,59 +154,7 @@ public String createOrderFromCart() throws Exception {
             }
         }
     }
-//    public List<OrderHistoryResponse> getOrderItemHistoryForCurrentUser() {
-//        Account currentUser = authenticationService.getCurrentAccount();
-//        List<OrderItem> orderItems = orderItemRepository.findByOrdersCustomer(currentUser);
-//        List<OrderHistoryResponse> orderHistoryResponse = new ArrayList<>();
-//
-//        for (OrderItem orderItem : orderItems) {
-//            Orders order = orderItem.getOrders();
-//            OrderStatus status = order.getStatus();
-//
-//            if (status == OrderStatus.COMPLETED) {
-//                OrderHistoryResponse historyResponse = OrderHistoryResponse.builder()
-//                        .orderId(order.getId())
-//                        .orderDate(order.getCreateAt())
-//                        .toys(Collections.singletonList(orderItem.getToy()))
-//                        .build();
-//                orderHistoryResponse.add(historyResponse);
-//            }
-//        }
-//
-//        return orderHistoryResponse;
-//    }
-//public List<OrderHistoryResponse> getOrderItemHistoryForCurrentUser() {
-//    Account currentUser = authenticationService.getCurrentAccount();
-//    List<OrderItem> orderItems = orderItemRepository.findByOrdersCustomer(currentUser);
-//    Map<Long, OrderHistoryResponse> orderHistoryMap = new HashMap<>();
-//
-//    for (OrderItem orderItem : orderItems) {
-//        Orders order = orderItem.getOrders();
-//        OrderStatus status = order.getStatus();
-//
-//        if (status == OrderStatus.COMPLETED) {
-//            long orderId = order.getId();
-//            double itemPrice = orderItem.getPrice(); // Lấy giá của từng OrderItem
-//            Toy toy = orderItem.getToy();
-//
-//            if (orderHistoryMap.containsKey(orderId)) {
-//                OrderHistoryResponse existingResponse = orderHistoryMap.get(orderId);
-//                existingResponse.getToys().add(toy);
-//                existingResponse.setTotalPrice(existingResponse.getTotalPrice() + itemPrice);
-//            } else {
-//                OrderHistoryResponse historyResponse = OrderHistoryResponse.builder()
-//                        .orderId(orderId)
-//                        .orderDate(order.getCreateAt())
-//                        .toys(new ArrayList<>(Collections.singletonList(toy)))
-//                        .totalPrice(itemPrice)
-//                        .build();
-//                orderHistoryMap.put(orderId, historyResponse);
-//            }
-//        }
-//    }
-//
-//    return new ArrayList<>(orderHistoryMap.values());
-//}
+
 public List<OrderHistoryResponse> getOrderHistoryForCurrentUser() {
     Account currentUser = authenticationService.getCurrentAccount();
     List<Payment> payments = paymentRepository.findByOrder_Customer_IdOrOrderRent_Customer_Id(

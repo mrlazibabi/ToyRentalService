@@ -72,6 +72,43 @@ public class VNPayPaymentService {
         return VNPAYConfig.vnp_PayUrl + "?" + query.toString();
     }
 
+    public int validatePaymentReturn(HttpServletRequest request) {
+        Map<String, String> fields = new HashMap<>();
+
+    // Log các tham số trả về từ VNPay
+        for (Enumeration<String> params = request.getParameterNames(); params.hasMoreElements(); ) {
+            String fieldName = params.nextElement();
+            String fieldValue = request.getParameter(fieldName);
+            System.out.println("Parameter is: " + fieldName + " = " + fieldValue);  // Log giá trị của từng tham số
+            if (fieldValue != null && !fieldValue.isEmpty()) {
+                fields.put(fieldName, fieldValue);
+            }
+        }
+
+        String vnp_SecureHash = request.getParameter("vnp_SecureHash");
+        fields.remove("vnp_SecureHash");
+        fields.remove("vnp_SecureHashType");
+
+        String signValue = VNPAYConfig.hashAllFields(fields);
+
+        // Kiểm tra giá trị `vnp_TransactionStatus` và `vnp_ResponseCode`
+        String transactionStatus = request.getParameter("vnp_TransactionStatus");
+        String responseCode = request.getParameter("vnp_ResponseCode");
+        System.out.println("Transaction Status: " + transactionStatus);
+        System.out.println("Response Code: " + responseCode);
+
+        // Kiểm tra điều kiện thành công
+        return signValue.equals(vnp_SecureHash) && "00".equals(transactionStatus) ? 1 : 0;
+}
+
+
+
+
+
+
+
+
+
 //    public int validatePaymentReturn(HttpServletRequest request) {
 //        Map<String, String> fields = new HashMap<>();
 //        for (Enumeration<String> params = request.getParameterNames(); params.hasMoreElements(); ) {
@@ -116,33 +153,5 @@ public class VNPayPaymentService {
 //    // Kiểm tra điều kiện thành công
 //    return signValue.equals(vnp_SecureHash) && "00".equals(transactionStatus) ? 1 : 0;
 //}
-public int validatePaymentReturn(HttpServletRequest request) {
-    Map<String, String> fields = new HashMap<>();
-
-    // Log các tham số trả về từ VNPay
-    for (Enumeration<String> params = request.getParameterNames(); params.hasMoreElements(); ) {
-        String fieldName = params.nextElement();
-        String fieldValue = request.getParameter(fieldName);
-        System.out.println("Parameter is: " + fieldName + " = " + fieldValue);  // Log giá trị của từng tham số
-        if (fieldValue != null && !fieldValue.isEmpty()) {
-            fields.put(fieldName, fieldValue);
-        }
-    }
-
-    String vnp_SecureHash = request.getParameter("vnp_SecureHash");
-    fields.remove("vnp_SecureHash");
-    fields.remove("vnp_SecureHashType");
-
-    String signValue = VNPAYConfig.hashAllFields(fields);
-
-    // Kiểm tra giá trị `vnp_TransactionStatus` và `vnp_ResponseCode`
-    String transactionStatus = request.getParameter("vnp_TransactionStatus");
-    String responseCode = request.getParameter("vnp_ResponseCode");
-    System.out.println("Transaction Status: " + transactionStatus);
-    System.out.println("Response Code: " + responseCode);
-
-    // Kiểm tra điều kiện thành công
-    return signValue.equals(vnp_SecureHash) && "00".equals(transactionStatus) ? 1 : 0;
-}
 
 }

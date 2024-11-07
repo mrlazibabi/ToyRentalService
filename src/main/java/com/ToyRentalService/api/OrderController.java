@@ -73,10 +73,6 @@ public class OrderController {
             return ResponseEntity.badRequest().body("Failed to create order: " + e.getMessage());
         }
     }
-//    @GetMapping("/history/type")
-//    public List<OrderHistory> getOrderHistoryByType(@RequestParam("type") OrderType type) {
-//        return orderService.getOrderHistoryByType(type);
-//    }
     @GetMapping("/history")
     public ResponseEntity  getOrderHistoryByAccount() {
         return ResponseEntity.ok(orderService.getOrderHistoryForCurrentUser());

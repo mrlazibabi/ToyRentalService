@@ -78,17 +78,6 @@ public class PackageService {
         }
     }
 
-//    public String initiatePackagePayment(HttpServletRequest request, Long packageId, Long accountId) {
-//        RentalPackage rentalPackage = getPackageById(packageId);
-//        Account account = accountRepository.findById(accountId)
-//                .orElseThrow(() -> new NotFoundException("Account not found with id: " + accountId));
-//
-//        String returnUrl = "https://www.facebook.com/" + packageId + "/payment-return?accountId=" + accountId;
-//        String orderInfo = "Payment for package: " + rentalPackage.getPackageName();
-//        int amount = (int) rentalPackage.getPackagePrice();
-//
-//        return vnpayPaymentService.createPaymentUrl(request, amount, orderInfo, returnUrl);
-//    }
 public String initiatePackagePayment(HttpServletRequest request, Long packageId) {
     // Lấy accountId từ người dùng hiện tại
     Account customer = authenticationService.getCurrentAccount();
