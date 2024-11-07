@@ -6,6 +6,7 @@ import com.ToyRentalService.enums.OrderType;
 import com.ToyRentalService.enums.PaymentStatus;
 import com.ToyRentalService.exception.exceptions.NotFoundException;
 import com.ToyRentalService.repository.*;
+import jakarta.persistence.criteria.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.*;
@@ -37,6 +38,9 @@ public class OrderService {
 
     @Autowired
     private PaymentRepository paymentRepository;
+
+    @Autowired
+    private EmailService emailService;
 
 public String createOrderFromCart() throws Exception {
     Account customer = authenticationService.getCurrentAccount();
@@ -78,6 +82,9 @@ public String createOrderFromCart() throws Exception {
     String paymentUrl = initiateOrderBuyPayment(savedOrder.getId());
     return paymentUrl;
 }
+
+
+
 public void updateOrderStatusAfterPayment(long orderId, OrderStatus status) throws Exception {
     Orders order = orderRepository.findById(orderId)
             .orElseThrow(() -> new Exception("Order not found"));
@@ -86,6 +93,32 @@ public void updateOrderStatusAfterPayment(long orderId, OrderStatus status) thro
     String description = status == OrderStatus.COMPLETED ? "Payment completed successfully." : "Payment failed or canceled.";
     if (status == OrderStatus.COMPLETED) {
         savePaymentRecord(order, order.getTotalPrice(), PaymentStatus.COMPLETED, false);
+        Account seller = order.getOrderItems().get(0).getToy().getCustomer();
+        Account buyer = authenticationService.getCurrentAccount();
+        String buyEmail= buyer.getEmail();
+        String sellEmail= seller.getEmail();
+        Map<String, Object> buyerTemplateModel = new HashMap<>();
+        buyerTemplateModel.put("customerName", order.getCustomer().getUsername());
+        buyerTemplateModel.put("orderId", order.getId());
+        buyerTemplateModel.put("orderDate", order.getCreateAt());
+        buyerTemplateModel.put("orderType", "Purchase"); // hoặc "Rent"
+        buyerTemplateModel.put("productName", order.getOrderItems().get(0).getToy().getToyName());
+        buyerTemplateModel.put("quantity", order.getOrderItems().get(0).getQuantity());
+        buyerTemplateModel.put("price", order.getOrderItems().get(0).getToy().getPrice());
+        buyerTemplateModel.put("totalAmount", order.getTotalPrice());
+
+        Map<String, Object> sellerTemplateModel = new HashMap<>();
+        sellerTemplateModel.put("customerName", buyer.getUsername());
+        sellerTemplateModel.put("orderId", order.getId());
+        sellerTemplateModel.put("orderDate", order.getCreateAt());
+        sellerTemplateModel.put("orderType", "Purchase"); // hoặc "Rent"
+        sellerTemplateModel.put("productName", order.getOrderItems().get(0).getToy().getToyName());
+        sellerTemplateModel.put("quantity", order.getOrderItems().get(0).getQuantity());
+        sellerTemplateModel.put("price", order.getOrderItems().get(0).getToy().getPrice());
+        sellerTemplateModel.put("totalAmount", order.getTotalPrice());
+
+        // Gọi service gửi email
+        emailService.sendOrderEmails(buyEmail, sellEmail, "Order Confirmation", "order-template", buyerTemplateModel, sellerTemplateModel);
     } else {
         savePaymentRecord(order, order.getTotalPrice(), PaymentStatus.FAILED, false);
     }
