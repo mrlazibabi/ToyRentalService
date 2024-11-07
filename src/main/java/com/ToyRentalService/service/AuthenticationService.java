@@ -117,10 +117,11 @@ public class  AuthenticationService implements UserDetailsService {
         return accountRepository.findByUsername(username);
     }
 
-//    public Account getCurrentAccount(){
+//    public Account getCurrentAccountResetPassword(){
 //        Account account = (Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //        return accountRepository.findAccountById(account.getId());
 //    }
+
 public Account getCurrentAccount() {
     Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -142,9 +143,7 @@ public Account getCurrentAccount() {
             EmailDetail emailDetail = new EmailDetail();
             emailDetail.setReceiver(account);
             emailDetail.setSubject("Reset password");
-            String baseUrl = System.getenv("RESET_PASSWORD_URL");
-            emailDetail.setLink(baseUrl + "/resetpassword/?token=" + tokenService.generateToken(account));
-
+            emailDetail.setLink("http://localhost:5173/resetpassword/?token=" + tokenService.generateToken(account));
             emailService.sendMail(emailDetail);
         }
     }

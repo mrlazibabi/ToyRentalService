@@ -237,5 +237,16 @@ public List<OrderHistoryResponse> getOrderHistoryForCurrentUser() {
         int amount = (int) money;
         return vnpayPaymentService.createPaymentUrl(amount, orderInfo, returnUrl);
     }
+
+    public List<OrderItem> getAllOrderItemsByCurrentAccount() {
+        Account customer = authenticationService.getCurrentAccount();
+        List<Orders> orders = orderRepository.findOrderByCustomer(customer);
+        List<OrderItem> orderItems = new ArrayList<>();
+        for (Orders order : orders){
+            List<OrderItem> orderItem = orderItemRepository.findOrderItemsByOrders(order);
+            orderItems.addAll(orderItem);
+        }
+        return orderItems;
+    }
 }
 

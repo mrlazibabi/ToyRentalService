@@ -87,7 +87,7 @@ public String initiatePackagePayment(HttpServletRequest request, Long packageId)
 
     RentalPackage rentalPackage = getPackageById(packageId);
 
-    String returnUrl = "http://localhost:5173/successpackage?" + packageId;
+    String returnUrl = "http://localhost:5173/successpackage?packageId="+ packageId;
     String orderInfo = "Payment for package: " + rentalPackage.getPackageName();
     int amount = (int) rentalPackage.getPackagePrice();
 

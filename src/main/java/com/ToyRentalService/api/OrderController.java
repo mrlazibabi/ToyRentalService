@@ -73,10 +73,16 @@ public class OrderController {
             return ResponseEntity.badRequest().body("Failed to create order: " + e.getMessage());
         }
     }
+//    @GetMapping("/history")
+//    public ResponseEntity  getOrderHistoryByAccount() {
+//        return ResponseEntity.ok(orderService.getOrderHistoryForCurrentUser());
+//    }
+
     @GetMapping("/history")
     public ResponseEntity  getOrderHistoryByAccount() {
-        return ResponseEntity.ok(orderService.getOrderHistoryForCurrentUser());
+        return ResponseEntity.ok(orderService.getAllOrderItemsByCurrentAccount());
     }
+
     @PostMapping("/update-status")
     public ResponseEntity<String> updateOrderStatusAfterPayment(@RequestParam long orderId, @RequestParam OrderStatus status) {
         try {
@@ -89,5 +95,6 @@ public class OrderController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update order status: " + e.getMessage());
         }
     }
+
 }
 

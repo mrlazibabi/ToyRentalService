@@ -31,7 +31,7 @@ public class  FeedbackService {
     public Feedback createNewFeedback(FeedbackRequest feedbackRequest){
         Account customer = authenticationService.getCurrentAccount();
         Toy toy = toyRepository.findById(feedbackRequest.getPostId())
-                .orElseThrow(() -> new EntityNotFoundException("Shop Not Found"));
+                .orElseThrow(() -> new EntityNotFoundException("Toy Not Found"));
 
         Feedback feedback = new Feedback();
         feedback.setCustomer(customer);
