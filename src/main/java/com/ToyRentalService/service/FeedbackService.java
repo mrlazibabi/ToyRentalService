@@ -1,6 +1,7 @@
 package com.ToyRentalService.service;
 
 import com.ToyRentalService.Dtos.Request.FeedbackRequest;
+import com.ToyRentalService.entity.Account;
 import com.ToyRentalService.entity.Feedback;
 import com.ToyRentalService.entity.Toy;
 import com.ToyRentalService.exception.exceptions.EntityNotFoundException;
@@ -14,12 +15,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class FeedbackService {
+public class  FeedbackService {
     @Autowired
     FeedbackRepository feedbackRepository;
-
-    @Autowired
-    AccountRepository accountRepository;
 
     @Autowired
     ToyRepository toyRepository;
@@ -31,9 +29,13 @@ public class FeedbackService {
     AuthenticationService authenticationService;
 
     public Feedback createNewFeedback(FeedbackRequest feedbackRequest){
+        Account customer = authenticationService.getCurrentAccount();
         Toy toy = toyRepository.findById(feedbackRequest.getPostId())
                 .orElseThrow(() -> new EntityNotFoundException("Shop Not Found"));
+
         Feedback feedback = new Feedback();
+        feedback.setCustomer(customer);
+        feedback.setFromUser(customer.getUsername());
         feedback.setContent(feedbackRequest.getContent());
         feedback.setRating(feedbackRequest.getRating());
         feedback.setCustomer(authenticationService.getCurrentAccount());

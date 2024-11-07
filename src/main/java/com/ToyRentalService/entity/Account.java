@@ -92,7 +92,8 @@ public class Account implements UserDetails {
     List<Toy> toys;
 
     @OneToMany(mappedBy = "customer")
-    Set<Feedback> customer_feedbacks;
+    //Set<Feedback> customer_feedbacks;
+    List<Feedback> feedbacks;
 
     public void decrementPostCount() {
         if (this.postCount > 0) {

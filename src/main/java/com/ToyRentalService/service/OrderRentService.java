@@ -69,7 +69,6 @@ public class OrderRentService {
 
         OrderRent savedOrderRent = orderRentRepository.save(orderRent);
         orderRentItemRepository.save(orderRentItem);
-
         return initiateOrderRentPayment(savedOrderRent.getId());
     }
         public String initiateOrderRentPayment(Long orderRentId) throws Exception {

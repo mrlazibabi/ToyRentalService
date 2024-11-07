@@ -4,10 +4,14 @@ import com.ToyRentalService.enums.ToyType;
 import com.ToyRentalService.enums.Status;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.URL;
 
 import java.util.HashSet;
 import java.util.List;
@@ -22,27 +26,32 @@ public class Toy {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
- 
-    
+
+    @NotBlank(message = "ToyName can not be blank!")
     @Column(nullable = false)
     private String toyName;
 
     private String fromUser;
 
+    @Min(value = 1, message = "Quantity must be at least 1")
     private int quantity;
-    
+
+    @URL(message = "Invalid URL format for image URL")
     private String imageUrl;
 
+    @Size(max = 500, message = "Description can be at most 500 characters")
     private String description;
 
+
+    @Min(value = 0, message = "Price must be a positive value")
     @Column(nullable = true)
     private double price;
 
-
+    @Min(value = 0, message = "Price by day must be a positive value")
     @Column(nullable = true)
     private double priceByDay;
 
-
+    @Min(value = 0, message = "Deposit fee must be a positive value")
     @Column(nullable = true)
     private double depositFee;
 

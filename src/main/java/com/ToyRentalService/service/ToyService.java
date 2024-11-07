@@ -12,6 +12,7 @@ import com.ToyRentalService.exception.exceptions.NotFoundException;
 import com.ToyRentalService.exception.exceptions.EntityNotFoundException;
 import com.ToyRentalService.repository.CategoryRepository;
 import com.ToyRentalService.repository.ToyRepository;
+import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -40,7 +41,7 @@ public class ToyService {
     NotificationService notificationService;
 
     //make a rent toy
-    public Toy toyRent(ToyRentRequest toyRentRequest){
+    public Toy toyRent(@Valid ToyRentRequest toyRentRequest){
         Account customer = authenticationService.getCurrentAccount();
         Toy newToy = new Toy();
         newToy.setCustomer(customer);
@@ -65,6 +66,7 @@ public class ToyService {
             newToy.setStatus(Status.CREATED);
             newToy.setToyType(ToyType.RENT);
             customer.decrementPostCount();
+
             NotificationFCM notificationFCM = new NotificationFCM();
             notificationFCM.setTitle("New Toy For Rental Created");
             notificationFCM.setMessage("Your toy rental request for " + newToy.getToyName() + " has been created.");
@@ -80,7 +82,7 @@ public class ToyService {
     }
 
     //make a buy toy
-    public Toy toyBuy(ToyBuyRequest toyBuyRequest){
+    public Toy toyBuy(@Valid ToyBuyRequest toyBuyRequest){
         Account customer = authenticationService.getCurrentAccount();
         Toy newToy = new Toy();
         newToy.setCustomer(customer);
@@ -180,7 +182,7 @@ public class ToyService {
     }
 
     //Update
-    public Toy updateToy(long id, ToyRentRequest toyRentRequest){
+    public Toy updateToy(long id,@Valid ToyRentRequest toyRentRequest){
         Toy updateToy = toyRepository.findToyById(id);
         if(updateToy == null){
             throw new EntityNotFoundException("Toy not found!");
