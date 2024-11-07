@@ -60,36 +60,8 @@ public class EmailService {
         javaMailSender.send(message);
     }
     public void sendOrderEmails(String buyerEmail, String sellerEmail, String subject, String templateName, Map<String, Object> buyerTemplateModel, Map<String, Object> sellerTemplateModel) throws MessagingException {
-        // Gửi email cho người mua
         sendOrderConfirmationEmail(buyerEmail, subject, templateName, buyerTemplateModel);
 
-        // Gửi email cho người bán
         sendOrderConfirmationEmail(sellerEmail, subject, templateName, sellerTemplateModel);
     }
-//    public void sendOrderRentConfirmationEmail(OrderRent orderRent, String recipientEmail) throws MessagingException {
-//        MimeMessage message = javaMailSender.createMimeMessage();
-//        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-//
-//        // Chuẩn bị các biến để truyền vào template
-//        Context context = new Context();
-//        context.setVariable("name", orderRent.getCustomer().getEmail()); // Đặt tên người nhận dựa trên email
-//        context.setVariable("orderRentId", orderRent.getId());
-//        context.setVariable("createdAt", orderRent.getCreatedAt());
-//        context.setVariable("status", orderRent.getStatus());
-//        context.setVariable("totalPrice", orderRent.getTotalPrice());
-//        context.setVariable("rentalDays", orderRent.getRentalDays());
-//        context.setVariable("lateFee", orderRent.getLateFee());
-//        context.setVariable("orderRentItems", orderRent.getOrderRentItems());
-//
-//        // Xử lý template với các biến đã cung cấp
-//        String htmlContent = templateEngine.process("order-rent-confirmation-template", context);
-//
-//        // Cấu hình chi tiết email
-//        helper.setTo(recipientEmail);
-//        helper.setSubject("Xác nhận đơn hàng thuê đồ chơi #" + orderRent.getId());
-//        helper.setText(htmlContent, true);
-//
-//        // Gửi email
-//        javaMailSender.send(message);
-//    }
 }
