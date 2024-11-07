@@ -1,8 +1,16 @@
-<table class="body-wrap" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; width: 100%; background-color: #f6f6f6; margin: 0;" bgcolor="#f6f6f6">
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation - ToyRentalService</title>
+</head>
+<body style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; width: 100%; background-color: #f6f6f6; margin: 0;" bgcolor="#f6f6f6">
+<table class="body-wrap" style="width: 100%; background-color: #f6f6f6; margin: 0;" bgcolor="#f6f6f6">
     <tbody>
     <tr>
         <td></td>
-        <td class="container" width="600" style="display: block; max-width: 600px; clear: both; margin: 0 auto;">
+        <td class="container" width="600" style="display: block; max-width: 600px; margin: 0 auto;">
             <div class="content" style="max-width: 600px; margin: 0 auto; padding: 20px;">
                 <table class="main" width="100%" cellpadding="0" cellspacing="0" bgcolor="#fff" style="border-radius: 3px; background-color: #fff; border: 1px solid #e9e9e9;">
                     <tbody>
@@ -27,7 +35,7 @@
                                 </tr>
                                 <tr>
                                     <td><strong>Order Type:</strong></td>
-                                    <td>[[${orderType}]]</td> <!-- E.g., Purchase or Rent -->
+                                    <td>[[${orderType}]]</td>
                                 </tr>
                             </table>
                             <table style="width: 100%; margin-bottom: 20px; border-top: 1px solid #e9e9e9; border-bottom: 1px solid #e9e9e9; padding: 10px 0;">
@@ -39,15 +47,15 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td>[[${productName}]]</td>
-                                    <td>[[${quantity}]]</td>
-                                    <td>[[${price}]]</td>
+                                <!-- Lặp qua các sản phẩm -->
+                                <tr th:each="product : ${products}">
+                                    <td th:text="${product.productName}"></td>
+                                    <td th:text="${product.quantity}"></td>
+                                    <td th:text="${product.price} + ' VND'"></td>
                                 </tr>
-                                <!-- Repeat this row for multiple items -->
                                 </tbody>
                             </table>
-                            <p><strong>Total Amount:</strong> [[${totalAmount}]]</p>
+                            <p><strong>Total Amount:</strong> [[${totalAmount}]] VND</p>
                             <p>For further assistance, feel free to contact us. Thank you for choosing ToyRentalService.</p>
                             <p>Best Regards,<br>ToyRentalService Team</p>
                         </td>
@@ -63,3 +71,5 @@
     </tr>
     </tbody>
 </table>
+</body>
+</html>

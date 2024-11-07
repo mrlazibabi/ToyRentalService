@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation</title>
+</head>
+<body>
+<h2>Order Confirmation - Toy Rental</h2>
+<p>Hi, <strong th:text="${customerName}">Customer Name</strong>,</p>
+<p>Your rental order (Order ID: <strong th:text="${orderId}">Order ID</strong>) has been placed successfully on <strong th:text="${orderDate}">Order Date</strong>.</p>
+
+<h3>Order Details</h3>
+<ul>
+    <li><strong>Order Type:</strong> <span th:text="${orderType}">Rent Toy</span></li>
+    <li><strong>Product Name:</strong> <span th:text="${productName}">Toy Name</span></li>
+    <li><strong>Rental Days:</strong> <span th:text="${rentalDays}+ ' days'">Rental Days</span></li>
+    <li><strong>Quantity:</strong> <span th:text="${quantity}+ ' Toys'">Quantity</span></li>
+    <li><strong>Price per Day:</strong> <span th:text="${price}+ ' VND'">Price</span></li>
+    <li><strong>Deposit Fee:</strong> <span th:text="${DepositFee}+ ' VND'">Deposit Fee</span></li>
+    <li><strong>Total Amount:</strong> <span th:text="${totalAmount}+ ' VND'">Total Amount</span></li>
+</ul>
+
+<p>Thank you for choosing our toy rental service!</p>
+<div class="footer" style="width: 100%; text-align: center; color: #999; padding: 20px;">
+    <p style="margin: 0;">Need help? <a href="mailto:support@toyrentalservice.com" style="color: #999; text-decoration: underline;">Contact Support</a></p>
+</div>
+</body>
+</html>

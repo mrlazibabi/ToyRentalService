@@ -82,47 +82,51 @@ public String createOrderFromCart() throws Exception {
     String paymentUrl = initiateOrderBuyPayment(savedOrder.getId());
     return paymentUrl;
 }
+    public void updateOrderStatusAfterPayment(long orderId, OrderStatus status) throws Exception {
+        Orders order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new Exception("Order not found"));
+        order.setStatus(status);
+        orderRepository.save(order);
+        String description = status == OrderStatus.COMPLETED ? "Payment completed successfully." : "Payment failed or canceled.";
 
+        if (status == OrderStatus.COMPLETED) {
+            savePaymentRecord(order, order.getTotalPrice(), PaymentStatus.COMPLETED, false);
+            Account seller = order.getOrderItems().get(0).getToy().getCustomer();
+            Account buyer = authenticationService.getCurrentAccount();
+            String buyEmail = buyer.getEmail();
+            String sellEmail = seller.getEmail();
 
+            List<Map<String, Object>> productList = new ArrayList<>();
+            for (OrderItem item : order.getOrderItems()) {
+                Map<String, Object> productInfo = new HashMap<>();
+                productInfo.put("productName", item.getToy().getToyName());
+                productInfo.put("quantity", item.getQuantity());
+                productInfo.put("price", item.getToy().getPrice());
+                productList.add(productInfo);
+            }
+            Map<String, Object> buyerTemplateModel = new HashMap<>();
+            buyerTemplateModel.put("customerName", order.getCustomer().getUsername());
+            buyerTemplateModel.put("orderId", order.getId());
+            buyerTemplateModel.put("orderDate", order.getCreateAt());
+            buyerTemplateModel.put("orderType", "Purchase");
+            buyerTemplateModel.put("products", productList);
+            buyerTemplateModel.put("totalAmount", order.getTotalPrice());
+            // Dữ liệu cho email của người bán
+            Map<String, Object> sellerTemplateModel = new HashMap<>();
+            sellerTemplateModel.put("customerName", buyer.getUsername());
+            sellerTemplateModel.put("orderId", order.getId());
+            sellerTemplateModel.put("orderDate", order.getCreateAt());
+            sellerTemplateModel.put("orderType", "Purchase");
+            sellerTemplateModel.put("products", productList);
+            sellerTemplateModel.put("totalAmount", order.getTotalPrice());
 
-public void updateOrderStatusAfterPayment(long orderId, OrderStatus status) throws Exception {
-    Orders order = orderRepository.findById(orderId)
-            .orElseThrow(() -> new Exception("Order not found"));
-    order.setStatus(status);
-    orderRepository.save(order);
-    String description = status == OrderStatus.COMPLETED ? "Payment completed successfully." : "Payment failed or canceled.";
-    if (status == OrderStatus.COMPLETED) {
-        savePaymentRecord(order, order.getTotalPrice(), PaymentStatus.COMPLETED, false);
-        Account seller = order.getOrderItems().get(0).getToy().getCustomer();
-        Account buyer = authenticationService.getCurrentAccount();
-        String buyEmail= buyer.getEmail();
-        String sellEmail= seller.getEmail();
-        Map<String, Object> buyerTemplateModel = new HashMap<>();
-        buyerTemplateModel.put("customerName", order.getCustomer().getUsername());
-        buyerTemplateModel.put("orderId", order.getId());
-        buyerTemplateModel.put("orderDate", order.getCreateAt());
-        buyerTemplateModel.put("orderType", "Purchase"); // hoặc "Rent"
-        buyerTemplateModel.put("productName", order.getOrderItems().get(0).getToy().getToyName());
-        buyerTemplateModel.put("quantity", order.getOrderItems().get(0).getQuantity());
-        buyerTemplateModel.put("price", order.getOrderItems().get(0).getToy().getPrice());
-        buyerTemplateModel.put("totalAmount", order.getTotalPrice());
-
-        Map<String, Object> sellerTemplateModel = new HashMap<>();
-        sellerTemplateModel.put("customerName", buyer.getUsername());
-        sellerTemplateModel.put("orderId", order.getId());
-        sellerTemplateModel.put("orderDate", order.getCreateAt());
-        sellerTemplateModel.put("orderType", "Purchase"); // hoặc "Rent"
-        sellerTemplateModel.put("productName", order.getOrderItems().get(0).getToy().getToyName());
-        sellerTemplateModel.put("quantity", order.getOrderItems().get(0).getQuantity());
-        sellerTemplateModel.put("price", order.getOrderItems().get(0).getToy().getPrice());
-        sellerTemplateModel.put("totalAmount", order.getTotalPrice());
-
-        // Gọi service gửi email
-        emailService.sendOrderEmails(buyEmail, sellEmail, "Order Confirmation", "order-template", buyerTemplateModel, sellerTemplateModel);
-    } else {
-        savePaymentRecord(order, order.getTotalPrice(), PaymentStatus.FAILED, false);
+            // Gửi email
+            emailService.sendOrderEmails(buyEmail, sellEmail, "Order Confirmation", "order-template", buyerTemplateModel, sellerTemplateModel);
+        } else {
+            savePaymentRecord(order, order.getTotalPrice(), PaymentStatus.FAILED, false);
+        }
     }
-}
+
 
     private void savePaymentRecord(Orders order, double amount, PaymentStatus status, boolean isDeposit) {
         Payment payment = new Payment();
@@ -248,22 +252,6 @@ public List<OrderHistoryResponse> getOrderHistoryForCurrentUser() {
         }
         return new ArrayList<>();
     }
-//    private List<Toy> getToysFromOrderOrOrderRent(Payment payment) {
-//        List<Toy> toys = new ArrayList<>();
-//        if (payment.getOrder() != null) {
-//            toys = payment.getOrder().getOrderItems().stream()
-//                    .map(OrderItem::getToy)
-//                    .collect(Collectors.toList());
-//            System.out.println("Toys from Order: " + toys);
-//        } else if (payment.getOrderRent() != null) {
-//            toys = payment.getOrderRent().getOrderRentItems().stream()
-//                    .map(OrderRentItem::getToy)
-//                    .collect(Collectors.toList());
-//            System.out.println("Toys from OrderRent: " + toys);
-//        }
-//        return toys;
-//    }
-
 
     public String initiateOrderBuyPayment(Long orderId) throws Exception {
         Account customer = authenticationService.getCurrentAccount();
