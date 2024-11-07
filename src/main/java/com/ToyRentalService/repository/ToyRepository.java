@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Repository
 public interface ToyRepository extends JpaRepository<Toy, Long>, JpaSpecificationExecutor<Toy> {
-    Optional<Toy> findToyByToyNameOrDescription(String toyName, String description);
+    Optional<Toy> findToyByToyName(String toyName);
     Toy findToyById(long id);
     Page<Toy> findAll(Pageable pageable);
 }

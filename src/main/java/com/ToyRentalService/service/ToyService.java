@@ -45,6 +45,7 @@ public class ToyService {
         newToy.setCustomer(customer);
 
         newToy.setToyName(toyRentRequest.getToyName());
+        newToy.setFromUser(customer.getUsername());
         newToy.setQuantity(toyRentRequest.getQuantity());
         newToy.setImageUrl(toyRentRequest.getImageUrl());
         newToy.setDescription(toyRentRequest.getDescription());
@@ -84,6 +85,7 @@ public class ToyService {
         newToy.setCustomer(customer);
 
         newToy.setToyName(toyBuyRequest.getToyName());
+        newToy.setFromUser(customer.getUsername());
         newToy.setQuantity(toyBuyRequest.getQuantity());
         newToy.setImageUrl(toyBuyRequest.getImageUrl());
         newToy.setDescription(toyBuyRequest.getDescription());
@@ -141,8 +143,8 @@ public class ToyService {
         }
     }
 
-    public Optional<Toy> searchToys(String toyName, String description) {
-        return toyRepository.findToyByToyNameOrDescription(toyName, description);
+    public Optional<Toy> searchToyByName(String toyName) {
+        return toyRepository.findToyByToyName(toyName);
     }
 
     public List<Toy> getAllToys(Status status, ToyType toyType, Double minPrice, Double maxPrice, int page, int size) {
