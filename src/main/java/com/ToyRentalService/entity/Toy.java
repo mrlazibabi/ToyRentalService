@@ -27,6 +27,8 @@ public class Toy {
     @Column(nullable = false)
     private String toyName;
 
+    private String fromUser;
+
     private int quantity;
     
     private String imageUrl;

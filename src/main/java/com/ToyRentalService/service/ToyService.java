@@ -45,6 +45,7 @@ public class ToyService {
         newToy.setCustomer(customer);
 
         newToy.setToyName(toyRentRequest.getToyName());
+        newToy.setFromUser(customer.getUsername());
         newToy.setQuantity(toyRentRequest.getQuantity());
         newToy.setImageUrl(toyRentRequest.getImageUrl());
         newToy.setDescription(toyRentRequest.getDescription());
@@ -63,13 +64,13 @@ public class ToyService {
             newToy.setStatus(Status.CREATED);
             newToy.setToyType(ToyType.RENT);
             customer.decrementPostCount();
-//            NotificationFCM notificationFCM = new NotificationFCM();
-//            notificationFCM.setTitle("New Toy For Rental Created");
-//            notificationFCM.setMessage("Your toy rental request for " + newToy.getToyName() + " has been created.");
-//            notificationFCM.setFcmToken(customer.getFcmToken());
+            NotificationFCM notificationFCM = new NotificationFCM();
+            notificationFCM.setTitle("New Toy For Rental Created");
+            notificationFCM.setMessage("Your toy rental request for " + newToy.getToyName() + " has been created.");
+            notificationFCM.setFcmToken(customer.getFcmToken());
 
             // Send notification
-            //notificationService.sendNotificationToAccount(notificationFCM, customer);
+            notificationService.sendNotificationToAccount(notificationFCM, customer);
             toyRepository.save(newToy);
             return newToy;
         } catch (RuntimeException e) {
@@ -84,6 +85,7 @@ public class ToyService {
         newToy.setCustomer(customer);
 
         newToy.setToyName(toyBuyRequest.getToyName());
+        newToy.setFromUser(customer.getUsername());
         newToy.setQuantity(toyBuyRequest.getQuantity());
         newToy.setImageUrl(toyBuyRequest.getImageUrl());
         newToy.setDescription(toyBuyRequest.getDescription());
@@ -141,8 +143,8 @@ public class ToyService {
         }
     }
 
-    public Optional<Toy> searchToys(String toyName, String description) {
-        return toyRepository.findToyByToyNameOrDescription(toyName, description);
+    public Optional<Toy> searchToyByName(String toyName) {
+        return toyRepository.findToyByToyName(toyName);
     }
 
     public List<Toy> getAllToys(Status status, ToyType toyType, Double minPrice, Double maxPrice, int page, int size) {

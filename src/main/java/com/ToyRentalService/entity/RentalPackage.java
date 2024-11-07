@@ -20,7 +20,9 @@ public class RentalPackage {
     private String packageName;
 
     private double packagePrice;
+
     private int numberPost;
+
     private String description;
 
     @ManyToOne

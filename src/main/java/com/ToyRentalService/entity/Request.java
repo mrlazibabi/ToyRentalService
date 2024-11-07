@@ -25,6 +25,8 @@ public class Request {
     private Toy toy;
 
     private String requestType;
+
     private Status status;
+
     private LocalDateTime createdAt;
 }

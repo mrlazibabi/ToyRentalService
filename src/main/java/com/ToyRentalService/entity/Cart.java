@@ -19,7 +19,9 @@ public class Cart {
     @JoinColumn(name = "customer_id")
     @JsonIgnore
     private Account customer;
+
     private double TotalPrice;
+
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartItem> cartItems;
 

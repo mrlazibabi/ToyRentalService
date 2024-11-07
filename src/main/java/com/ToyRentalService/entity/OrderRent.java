@@ -20,15 +20,22 @@ public class OrderRent {
     private long id;
 
     private Date createdAt;
+
     private double totalPrice;
+
     private int rentalDays;
+
     private Date deliveredAt;
+
     private Date dueDate;
+
     private Date returnDate;
 
     @Enumerated(EnumType.STRING)
     private OrderRentStatus status;
+
     private double lateFee;
+
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Account customer;

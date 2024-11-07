@@ -22,6 +22,7 @@ public class Message {
     private Account sender;
 
     private String content;
+
     private Date timestamp;
 
 }

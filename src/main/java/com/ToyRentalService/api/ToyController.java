@@ -2,6 +2,7 @@ package com.ToyRentalService.api;
 
 import com.ToyRentalService.Dtos.Request.ToyRequest.ToyBuyRequest;
 import com.ToyRentalService.Dtos.Request.ToyRequest.ToyRentRequest;
+import com.ToyRentalService.entity.Account;
 import com.ToyRentalService.entity.Toy;
 import com.ToyRentalService.enums.ToyType;
 import com.ToyRentalService.enums.Status;
@@ -50,6 +51,7 @@ public class ToyController {
         List<Toy> toys = toyService.getAllToys(status, type, minPrice, maxPrice, page, size);
         return ResponseEntity.ok(toys);
     }
+
 
     //approve toy
     @PutMapping("/approve/{id}")

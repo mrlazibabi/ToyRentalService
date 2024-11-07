@@ -70,12 +70,18 @@ public class AccountService {
     }
 
     // Tạo tài khoản mới
+
     public Account createAccount(Account account) {
         return accountRepository.save(account);
     }
     // Lấy tài khoản theo ID
     public Optional<Account> getAccountById(Long id) {
         return Optional.ofNullable(accountRepository.findAccountByIdAndIsActive(id, true))
+                .or(() -> { throw new EntityNotFoundException("Account not found or is deleted"); });
+    }
+
+    public Optional<Account> getAccountByUsername(String username){
+        return Optional.ofNullable(accountRepository.findByUsername(username))
                 .or(() -> { throw new EntityNotFoundException("Account not found or is deleted"); });
     }
 

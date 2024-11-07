@@ -11,8 +11,6 @@ import java.util.Set;
 public class ToyRentRequest {
     private String toyName;
 
-    //private String category;
-
     @Min(value = 0, message = "Quantity must be non-negative")
     private int quantity;
 
